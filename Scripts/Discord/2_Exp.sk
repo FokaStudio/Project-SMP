@@ -1,0 +1,201 @@
+init:
+# > The bot's prefix
+	set {EXPCONFIG::PREFIXES} to "!"
+	# > The max EXP the member have to get for each level
+	set {EXPCONFIG::MAXEXPLEVEL::1} to 200
+	set {EXPCONFIG::MAXEXPLEVEL::2} to 300
+	set {EXPCONFIG::MAXEXPLEVEL::3} to 500
+	set {EXPCONFIG::MAXEXPLEVEL::4} to 800
+	set {EXPCONFIG::MAXEXPLEVEL::5} to 1000
+	set {EXPCONFIG::MAXEXPLEVEL::6} to 1300
+	set {EXPCONFIG::MAXEXPLEVEL::7} to 1500
+	set {EXPCONFIG::MAXEXPLEVEL::8} to 1800
+	set {EXPCONFIG::MAXEXPLEVEL::9} to 2100
+	# > If it's not set, it will make a x1.2 multiplier from the last max EXP
+
+	# > The min and max amount of EXP an user can have per message
+	set {EXPCONFIG::MINEXP} to 2
+	set {EXPCONFIG::MAXEXP} to 7
+	
+	# > The change (in percent) for the EXP system to start on a message receive.
+	set {EXPCONFIG::EXPCHANCE} to 80
+
+	# > Role multiplier. Use the Role ID, then the amount of XP multiplier.
+	# > For example:
+	# set {EXPCONFIG::MULTIPLIER::818182471215743019} to 10
+
+# > Do not edit anything, except if you know what you are doing :)
+
+function genCode2(length: number) :: text:
+	set {_chars::*} to split "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789" at ""
+	set {_b} to ""
+	loop {_length} times:
+		set {_b} to "%{_b}%%random element out of {_chars::*}%"
+	return {_b}
+
+function checkXPMember(m: member):
+	setValue2({_m}, "Current", 0) if checkValue2({_m}, "Current") is not set
+	setValue2({_m}, "Max", 200) if checkValue2({_m}, "Max") is not set
+	setValue2({_m}, "Level", 1) if checkValue2({_m}, "Level") is not set
+
+function checkValue2(m: member, node: text) :: object:
+	set {_code} to genCode2(5)
+	load yaml "plugins/ExpSystem/%discord id of guild of {_m}%.yml" as {_code}
+	set {_value} to yaml value "Exp.%discord id of {_m}%.%{_node}%" from {_code}
+	save yaml {_code}
+	unload yaml {_code}
+	return {_value}
+
+function setValue2(m: member, node: text, value: object):
+	set {_code} to genCode2(5)
+	load yaml "plugins/ExpSystem/%discord id of guild of {_m}%.yml" as {_code}
+	set yaml value "Exp.%discord id of {_m}%.%{_node}%" from {_code} to {_value}
+	save yaml {_code}
+	unload yaml {_code}
+
+member property [e]xp [amount]:
+	return type: number
+	get:
+		checkXPMember(expr-1)
+		return checkValue2(expr-1, "Current")
+	set:
+		checkXPMember(expr-1)
+		setValue2(expr-1, "Current", change value)
+	add:
+		checkXPMember(expr-1)
+		setValue2(expr-1, "Current", ((xp of expr-1) + change value))
+	remove:
+		checkXPMember(expr-1)
+		setValue2(expr-1, "Current", ((xp of expr-1) - change value))
+	
+member property max [e]xp [amount]:
+	return type: number
+	get:
+		checkXPMember(expr-1)
+		return checkValue2(expr-1, "Max")
+	set:
+		checkXPMember(expr-1)
+		setValue2(expr-1, "Max", change value)
+	add:
+		checkXPMember(expr-1)
+		setValue2(expr-1, "Max", ((max xp of expr-1) + change value))
+	remove:
+		checkXPMember(expr-1)
+		setValue2(expr-1, "Max", ((max xp of expr-1) - change value))
+
+member property [e]xp level [amount]:
+	return type: number
+	get:
+		checkXPMember(expr-1)
+		return checkValue2(expr-1, "Level")
+	set:
+		checkXPMember(expr-1)
+		setValue2(expr-1, "Level", change value)
+	add:
+		checkXPMember(expr-1)
+		setValue2(expr-1, "Level", ((xp level of expr-1) + change value))
+	remove:
+		checkXPMember(expr-1)
+		setValue2(expr-1, "Level", ((xp level of expr-1) - change value))
+
+discord command exp [<member=%event-member%>]:
+	prefixes: %{EXPCONFIG::PREFIXES}%
+	executable in: guild
+	trigger:
+		if arg-1 is a discord bot:
+			reply to event-message with ":x: **Bots can't gather EXP, neither can they have their own cards...**"
+			stop
+		set {_card} to genCard(arg-1)
+		make embed:
+			set author of embed to "%discord name of arg-1%'s Experience:"
+			set author icon of embed to avatar of arg-1
+			set color of embed to lime
+			set image of embed to "attachment://image.png"
+			set footer of embed to "Asked by %discord name of event-user%##%tag of event-user%"
+			set timestamp of embed to now
+		upload {_card} with last embed to event-channel
+
+on message receive:
+	if event-member is a discord bot:
+		stop
+	chance of {EXPCONFIG::EXPCHANCE}%:
+		
+		set {_mu} to 1
+		loop {EXPCONFIG::MULTIPLIER::*}:
+			event-member has role role with id loop-index
+			set {_mu} to {EXPCONFIG::MULTIPLIER::%loop-index%}
+			exit loop
+		set {_xp} to random integer between {EXPCONFIG::MINEXP} and {EXPCONFIG::MAXEXP}
+		set {_xp} to ({_xp} * {_mu})
+
+		set {_current} to xp of event-member
+		set {_max} to max xp of event-member
+		if ({_current} + {_xp}) is bigger or equal to {_max}:
+			set {_reste} to ({_current} + {_xp}) - {_max}
+			
+			set xp level of event-member to (xp level of event-member) + 1
+			set {_newmax} to {_max} * 1.2
+			if {EXPCONFIG::MAXEXPLEVEL::%xp level of event-member%} is set:
+				set {_newmax} to {EXPCONFIG::MAXEXPLEVEL::%xp level of event-member%}
+			set max xp of event-member to {_newmax}
+			set xp of event-member to {_reste}
+
+			make embed:
+				set author of embed to "%discord name of event-user% has reached next level!"
+				set author icon of embed to avatar of event-user
+				set color of embed to green
+				set image of embed to "attachment://image.png"
+				set footer of embed to "Well Played %discord name of event-user%!"
+				set timestamp of embed to now
+			upload genLevelUp(event-member) with last embed to event-channel
+		else:
+			add {_xp} to exp of event-member
+
+function genLevelUp(m: member) :: image:
+
+	set {_avatar} to resized (rounded image (image from url "%avatar of {_m}%?size=1024")) to 300, 300 with algo 4
+	set {_lvl} to image from url "https://zupimages.net/up/21/23/rf4n.png"
+
+	set {_img} to new image with size 1500, 373
+	draw rect at 0, 0 with size 1500, 373 with color from rgb 35, 39, 42 on {_img}
+	draw image {_lvl} on {_img} at 313, 0
+	draw image {_avatar} on {_img} at 75, 35
+
+	return {_img}
+
+function genCard(m: member) :: image:
+	
+	set {_current} to xp of {_m}
+	set {_max} to max xp of {_m}
+	set {_level} to xp level of {_m}
+
+	set {_fname} to new font style with name "Dosis" and with size 24
+	set {_flvl} to new font style with name "Dosis" and with size 20
+	
+	set {_color} to main color of (image from url avatar of {_m})
+	set {_name} to "%discord name of {_m}%##%tag of {_m}%"
+	set {_avatar} to resized (rounded image (image from url avatar of {_m})) to 110, 110 with algo 4
+	
+	set {_img} to new image with size 720, 180
+	set {_sx} to ({_current} / {_max}) * 560
+	
+	# > Decoration
+	draw rect at 0, 0 with size 720, 180 with color from rgb 35, 39, 42 on {_img}
+	draw {_avatar} on {_img} at 15, 15
+	draw rounded rect at 140, 75 with size 320, 5 with {_color} with arc size 3, 3 on {_img}
+	
+	# > Text
+	draw {_name} with anti-aliases with font style {_fname} at 140, 60 with color from rgb 255, 255, 255 on {_img}
+	draw "Level: %{_level}%" with anti-aliases with font style {_flvl} at 145, 110 with color from rgb 255, 255, 255 on {_img}
+	draw "XP: %{_current}% / %{_max}%" with anti-aliases with font style {_flvl} at 280, 110 with color from rgb 255, 255, 255 on {_img}
+
+	# > EXP Bar
+	draw rounded rect with anti-aliases at 15, 135 with size 560, 30 with color from rgb 255, 255, 255 with arc size 12, 12 on {_img}
+	draw rounded rect with anti-aliases at 15, 135 with size {_sx}, 30 with {_color} with arc size 12, 12 on {_img}
+	draw rect with anti-aliases at 850, -400 with size 500, 500 with {_color} with rotation 54 degree on {_img}
+
+	if {_m} is a booster:
+		set {_lvl} to image from url "https://i0.wp.com/i.thexyznetwork.xyz/badges/nitroboost.png"
+		set {_lvl} to resized {_lvl} to size 64, 64
+		draw image {_lvl} on {_img} at 460, 43
+	return {_img}
