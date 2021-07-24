@@ -1,0 +1,86 @@
+options:
+	mending_fix: true
+
+import:
+	java.lang.Character
+	java.lang.Integer
+	org.bukkit.event.inventory.PrepareAnvilEvent
+
+condition:
+	patterns:
+		[SKill] infinite loop
+		[SKill] true
+	check:
+		continue
+
+condition [SKill] %entity% is wet:
+	check:
+		if weather in world of exprs-1 = rain or thunder:
+			set {_b::*} to (y-coord of location of highest solid block at location of exprs-1)
+			set {_a::*} to (y-coord of location of exprs-1)
+			{_a::*} > {_b::*}
+			continue
+		if block at exprs-1 = water or flowing water:
+			expr-1.getVehicle() != oak boat or acacia boat or birch boat or dark oak boat or spruce boat or jungle boat # Any boat wasn't working for some unkown reason :(
+			continue
+
+# Checks if an attack in a damage event is a critical one. May rarely false flag :(
+condition [SKill] %player%'s attack is critical:
+	check:
+		expr-1.getFallDistance() > 0.0F
+		!expr-1.isOnGround() = true
+		!expr-1.isInsideVehicle() = true
+		!expr-1.hasPotionEffect(BLINDNESS) = true
+		continue
+
+condition [SKill] %entity% (0¦has|1¦doesn't have) potion (of|effect) %potion effect type%:
+	check:
+		if parse mark = 1:
+			if expr-1.hasPotionEffect(exprs-2) = true:
+				continue
+		else:
+			if expr-1.hasPotionEffect(exprs-2) != true:
+				continue
+
+# Original by Anarchick#4128
+# Found on #code-snippets in Skript Chat's Discord
+# Made into expression from a function
+expression [SKill] unicode [from] %text%:
+	return type: text
+	get:
+		set {_unicode} to join (regex split exprs-1 by "[^\dA-F]+")
+		set {_n} to Integer.valueOf({_unicode} and 16)
+		set {_char::*} to ...Character.toChars({_n})
+		return "%{_char::1}%"
+
+# Original by fenish#1703
+# Found on #code-snippets in Skript Chat's Discord
+# Made into expression from a function
+expression [SKill] progress [bar] (all|full value) %number% (now|current value) %number%:
+	return type: text
+	get:
+		set {_percent} to floor((exprs-2 * 100) / exprs-1)
+		loop floor({_percent}/10) times:
+			add "&a▇" to {_list::*}
+		loop 10 - floor({_percent}/10) times:
+			add "&7▇" to {_list::*}
+		return "%join {_list::*} with """"% &8(&c%%%{_percent}%&8)"
+
+# Making entities disappear and reappear (visually)
+# Original by ShaneBee 🌴#0007, found on Skript Chat's Discord
+effect [SKill] make %entities% (0¦visible|1¦invisible):
+	trigger:
+		set {_t} to true if (parse mark = 1) otherwise false
+		loop exprs-1:
+			loop-value.getHandle().setInvisible({_t})
+
+# Grabs fall distance of any entity. Useful for making Anti-Cheats
+# Original from Skellet, but tbh - this addon is GARBAGE
+# Most features are in other Addons, other APIs or in Vanilla Skript...
+# Those that aren't are really wonky and barely working
+expression [SKill] fall distance of %entity%:
+	return type: number
+	get:
+		return expr-1.getFallDistance()
+	set:
+		expr-1.setFallDistance(change value)
