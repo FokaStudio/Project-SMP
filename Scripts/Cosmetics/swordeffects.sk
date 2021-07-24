@@ -1,0 +1,144 @@
+#====================
+# Sword Effects v3.0
+# By DinPro
+#====================
+
+options:
+	prefix: &eSword Effects &7»
+	permission: swordeffects.use
+	version: 3.0
+	color: &e
+	color2: &f
+	click: Click to set this as your current particle
+	set: Set your current Sword Particle to
+	
+on damage:
+	held item of attacker is a wooden sword, stone sword, iron sword, gold sword, diamond sword or netherite sword
+	if {particle.%attacker%} is 1:
+		show ender signal at the victim
+	else if {particle.%attacker%} is 2:
+		show mob spawner flames at the victim
+	else if {particle.%attacker%} is 3:
+		loop 5 times:
+			show snow shovel at the victim
+	else if {particle.%attacker%} is 4:
+		show hurt at the victim
+	else if {particle.%attacker%} is 5:
+		loop 5 times:
+			show smoke at the victim
+	else if {particle.%attacker%} is 6:
+		loop 5 times:
+			show firework spark at the victim
+	else if {particle.%attacker%} is 7:
+		loop 5 times:
+			show crit at the victim
+	else if {particle.%attacker%} is 8:
+		loop 5 times:
+			show spell at the victim
+	else if {particle.%attacker%} is 9:
+		loop 3 times:
+			show note at the victim
+	else if {particle.%attacker%} is 10:
+		loop 15 times:
+			show portal at the victim
+	else if {particle.%attacker%} is 11:
+		loop 3 times:
+			show flame at the victim
+	else if {particle.%attacker%} is 12:
+		loop 15 times:
+			show lava pop at the victim
+	else if {particle.%attacker%} is 13:
+		loop 15 times:
+			show splash at the victim
+	else if {particle.%attacker%} is 14:
+		show large explosion at the victim
+	else if {particle.%attacker%} is 15:
+		show cloud at the victim
+	else if {particle.%attacker%} is 16:
+		loop 15 times:
+			show slime at the victim
+	else if {particle.%attacker%} is 17:
+		loop 3 times:
+			show angry villager at the victim
+	else if {particle.%attacker%} is 18:
+		loop 3 times:
+			show happy villager at the victim	
+		
+command /swordeffects:
+	aliases: /se, /swords, /swordeffect, /sword
+	permission: {@permission}
+	trigger:
+		create a gui with virtual chest inventory with 2 rows named "&fSelect your Sword Effect":
+			make gui slot 0 with ender pearl named "{@color}Ender Signal" with lore "{@color2}{@click}":
+				set {particle.%player%} to 1
+				send "{@color2}{@set} {@color}Ender Signal"
+				close player's inventory
+			make gui slot 1 with blaze rod named "{@color}Mob Spawner Flames" with lore "{@color2}{@click}":
+				set {particle.%player%} to 2
+				send "{@color2}{@set} {@color}Mob Spawner Flames"
+				close player's inventory
+			make gui slot 2 with snowball named "{@color}Snow" with lore "{@color2}{@click}":
+				set {particle.%player%} to 3
+				send "{@color2}{@set} {@color}Potion"
+				close player's inventory				
+			make gui slot 3 with red concrete named "{@color}Hurt" with lore "{@color2}{@click}":
+				set {particle.%player%} to 4
+				send "{@color2}{@set} {@color}Hurt"
+				close player's inventory
+			make gui slot 4 with fire charge named "{@color}Smoke" with lore "{@color2}{@click}":
+				set {particle.%player%} to 5
+				send "{@color2}{@set} {@color}Smoke"
+				close player's inventory
+			make gui slot 5 with firework named "{@color}Fireworks" with lore "{@color2}{@click}":
+				set {particle.%player%} to 6
+				send "{@color2}{@set} {@color}Fireworks"
+				close player's inventory
+			make gui slot 6 with cyan wool named "{@color}Crit" with lore "{@color2}{@click}":
+				set {particle.%player%} to 7
+				send "{@color2}{@set} {@color}Crit"
+				close player's inventory
+			make gui slot 7 with glowstone named "{@color}Spell" with lore "{@color2}{@click}":
+				set {particle.%player%} to 8
+				send "{@color2}{@set} {@color}Spell"
+				close player's inventory
+			make gui slot 8 with jukebox named "{@color}Note" with lore "{@color2}{@click}":
+				set {particle.%player%} to 9
+				send "{@color2}{@set} {@color}Note"
+				close player's inventory
+			make gui slot 9 with obsidian named "{@color}Portal" with lore "{@color2}{@click}":
+				set {particle.%player%} to 10
+				send "{@color2}{@set} {@color}Obsidian"
+				close player's inventory
+			make gui slot 10 with blaze powder named "{@color}Flames" with lore "{@color2}{@click}":
+				set {particle.%player%} to 11
+				send "{@color2}{@set} {@color}Flames"
+				close player's inventory
+			make gui slot 11 with lava bucket named "{@color}Lava" with lore "{@color2}{@click}":
+				set {particle.%player%} to 12
+				send "{@color2}{@set} {@color}Lava"
+				close player's inventory
+			make gui slot 12 with water bucket named "{@color}Water" with lore "{@color2}{@click}":
+				set {particle.%player%} to 13
+				send "{@color2}{@set} {@color}Water"
+				close player's inventory
+			make gui slot 13 with tnt named "{@color}Explosion" with lore "{@color2}{@click}":
+				set {particle.%player%} to 14
+				send "{@color2}{@set} {@color}Explosion"
+				close player's inventory
+			make gui slot 14 with white wool named "{@color}Cloud" with lore "{@color2}{@click}":
+				set {particle.%player%} to 15
+				send "{@color2}{@set} {@color}Cloud"
+				close player's inventory
+			make gui slot 15 with slimeball named "{@color}Slime" with lore "{@color2}{@click}":
+				set {particle.%player%} to 16
+				send "{@color2}{@set} {@color}Slime"
+				close player's inventory
+			make gui slot 16 with poppy named "{@color}Angry Villager" with lore "{@color2}{@click}":
+				set {particle.%player%} to 17
+				send "{@color2}{@set} {@color}Angry Villager"
+				close player's inventory
+			make gui slot 17 with emerald named "{@color}Happy Villager" with lore "{@color2}{@click}":
+				set {particle.%player%} to 18
+				send "{@color2}{@set} {@color}Happy Villager"
+				close player's inventory
+		open the last gui for the player

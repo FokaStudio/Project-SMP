@@ -1,0 +1,48 @@
+on spawn of pig:
+	spawn reason is breeding
+	set {_loop} to a random integer between 0 and 3
+	loop {_loop} times:
+		spawn baby pig at event-entity
+
+on player toggle sneak:
+	if gliding state of player = on:
+		set gliding of player to off
+		send action bar "&fStopped gliding, press Space to resume" to player
+
+on consume of golden apple:
+	absorption hearts of player != 0
+	add 4 to absorption hearts of player
+	while player has absorption:
+		wait 1 second
+	set absorption hearts of player to 0
+
+on consume of enchanted golden apple:
+	absorption hearts of player != 0
+	add 16 to absorption hearts of player
+	while player has absorption:
+		wait 1 second
+	set absorption hearts of player to 0
+
+on damage:
+	victim has absorption
+	absorption hearts of victim = 0
+	remove absorption from victim
+
+on resurrect attempt:
+	if event is not canceled:
+		if block at event-entity is water or falling water:
+			wait 5 ticks
+			apply potion of water breathing to event-entity for 45 seconds
+
+on damage of player:
+	damage cause is void
+	cancel event
+	teleport victim to location((victim's x-coordinate * 4), 300, (victim's z-coordinate * 4), world("world"))
+	wait 5 ticks
+	if "%region at victim%" is "survival_off in world world":
+		make victim execute command "/spawn"
+	play sound "psmp:entity.enderman.teleport" with volume 1 and pitch 1 to victim
+
+on death of elder guardian:
+	loop all players in radius 16 around victim:
+		remove mining fatigue from loop-player

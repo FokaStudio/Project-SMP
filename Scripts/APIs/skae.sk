@@ -1,0 +1,81 @@
+# --------------------------------------------------
+# SkArmorEvent v. 1.2.1 (1.13.2+)
+# Skrypt na eventy wywołujące się przy zakładaniu i zdejmowaniu zbroi
+#
+# by Kormic
+# --------------------------------------------------
+import:
+    org.bukkit.event.block.BlockDispenseArmorEvent
+custom event "onArmorEquip":
+    pattern: sk(ae|ArmorEvent) armo[u]r (equip|wear)
+    event-values: player, item
+custom event "onArmorUnequip":
+    pattern: sk(ae|ArmorEvent) armo[u]r un(equip|wear)
+    event-values: player, item
+function skArmorEventCheckArmor(p: player, i: item) :: boolean:
+    return false if {_i} is not any armor
+    if {_i} is any helmet:
+        return false if {_p}'s helmet is not air
+    else if {_i} is any chestplate:
+        return false if {_p}'s chestplate is not air
+    else if {_i} is any leggings:
+        return false if {_p}'s leggings is not air
+    else if {_i} is any boots:
+        return false if {_p}'s boots is not air
+    return true
+function skArmorEventHotbarButtonCheckArmor(p: player, i: item type, s: slot, n: number) :: boolean:
+    slot {_n} of {_p}'s inventory is {_i}
+    return true if skArmorEventIsCancelled({_p}, "%slot {_n} of {_p}'s inventory%" parsed as item, "onArmorEquip") is true
+    {_s} is not air
+    set {_hb} to {_s}
+    return true if skArmorEventIsCancelled({_p}, {_hb}, "onArmorUnequip") is true
+    return false    
+function skArmorEventIsCancelled(p: player, i: item, n: text) :: boolean:
+    set {_e::player} to {_p}
+    set {_e::item} to {_i}
+    set {_event} to custom event "%{_n}%" with {_e::*}
+    call event {_event}
+    return true if {_event} is cancelled
+    return false
+right click:
+    clicked block is not interactable
+    set {_i} to player's tool
+    stop if skArmorEventCheckArmor(player, {_i}) is false
+    cancel event if skArmorEventIsCancelled(player, {_i}, "onArmorEquip") is true
+inventory click:
+    clicked inventory is player's inventory
+    player's current inventory's type is crafting table inventory
+    if click type is left mouse button or right mouse button:
+        clicked slot is between 36 and 39
+        if player's cursor slot is any armor:
+            set {_i} to player's cursor slot
+            cancel event if skArmorEventIsCancelled(player, {_i}, "onArmorEquip") is true
+        else if player's cursor slot is air:
+            {_i} is not air
+            cancel event if skArmorEventIsCancelled(player, "%event-slot%" parsed as item, "onArmorUnequip") is true
+    else if click type is left mouse button with shift or right mouse button with shift:
+        set {_i} to "%event-slot%" parsed as item
+        if clicked slot is between 36 and 39:
+            {_i} is not air
+            cancel event if skArmorEventIsCancelled(player, {_i}, "onArmorUnequip") is true
+        stop if skArmorEventCheckArmor(player, {_i}) is false
+        cancel event if skArmorEventIsCancelled(player, {_i}, "onArmorEquip") is true
+    else if click type is number key:
+        clicked slot is between 36 and 39
+        set {_i} to "%event-slot%" parsed as item
+        if {_i} is not air:
+            slot (hotbar button) of player's inventory is air
+            cancel event if skArmorEventIsCancelled(player, {_i}, "onArmorUnequip") is true
+            stop
+        if clicked slot is 39:
+            cancel event if skArmorEventHotbarButtonCheckArmor(player, any helmet, player's helmet, hotbar button) is true
+        else if clicked slot is 38:
+            cancel event if skArmorEventHotbarButtonCheckArmor(player, any chestplate, player's chestplate, hotbar button) is true        
+        else if clicked slot is 37:
+            cancel event if skArmorEventHotbarButtonCheckArmor(player, any leggings, player's leggings, hotbar button) is true
+        else if clicked slot is 36:
+            cancel event if skArmorEventHotbarButtonCheckArmor(player, any boots, player's boots, hotbar button) is true
+on BlockDispenseArmorEvent:
+    event.getTargetEntity() is a player
+    stop if skArmorEventCheckArmor(event.getTargetEntity(), event.getItem()) is false
+    event.setCancelled(true) if skArmorEventIsCancelled(event.getTargetEntity(), event.getItem(), "onArmorEquip") is true
