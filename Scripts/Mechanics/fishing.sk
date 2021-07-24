@@ -1,0 +1,129 @@
+# Made by FokaStudio#7055
+# Made with love <3
+
+#! REQUIRES SKRIPT-REFLECT
+#! WON'T WORK ON MC VERSIONS BELOW 1.13
+
+
+# Initiating the sequence of registering the Fish types
+on script load:
+	
+	# Clearing the lists, so they won't get overfilled with the same junk
+	clear {fishes::*}
+	clear {fishes.length.min::*}
+	clear {fishes.length.max::*}
+	
+	
+	#! THERE HAS TO BE ONE OF EACH KIND IN THERE! IF YOU DON'T WANT TO REGISTER NEW TYPES FOR THE FISH TO BE FISHED, THE BASIC ONES HAVE TO STAY
+	#! It is important that the codes after "::" when defining the lenght are THE SAME AS THE NAME (BUT WITH NO COLOR CODES)
+	#! They can't be same for 2 different fish too! Which means that if you have 2 fish with the same name,
+	#! 1 named "&eCod" and the other one named "&dCod", their min and max sizes will be identical (no clue how to change this)
+	
+
+	#!! BASIC ONES!! LET THOSE STAY IF YOU DON'T HAVE ANY OTHER FISH TYPE FOR A SUBSTITUTE FOR THEM!!
+	add tropical fish named "&fTropical Fish" with custom model data 1 to {fishes::*} # The fishes basic display - name, CMD, item. Can have more depending on what you want it to be!
+	set {fishes.length.min::Tropical Fish} to 15 # Minimum length of the fish
+	set {fishes.length.max::Tropical Fish} to 36 # Maximum length of the fish
+	
+	add cod named "&fCod" to {fishes::*}
+	set {fishes.length.min::Cod} to 10
+	set {fishes.length.max::Cod} to 20
+
+	add salmon named "&fSalmon" to {fishes::*}
+	set {fishes.length.min::Salmon} to 48
+	set {fishes.length.max::Salmon} to 84
+	
+	
+	add pufferfish named "&fPufferfish" to {fishes::*}
+	set {fishes.length.min::Pufferfish} to 5
+	set {fishes.length.max::Pufferfish} to 15
+
+
+#!  By adding more lines like this VVV you can add as many fish types as you wish and specify their parameters!
+#	add glowing cod named "&eEnchanted Cod" with custom model data 12345 to {fishes::*}
+#	set {fishes.length.min::Pufferfish} to 123
+#	set {fishes.length.max::Pufferfish} to 456
+#!! Yes, those settings can be whatever you want...
+#!! If you have SkRayfall/SkJade, you can make them glowing
+#!! If you have SkBee, you can add NBT tags to the fish
+#!! You can type more of those settings and addons they come from...
+#!! The possibilities are literally endless!
+
+
+
+# Actual code VVV
+# Fully documented, so people learning Skript and skript-reflect can use it as a tutorial (very complicated tutorial)
+
+# Importing the right class
+import:
+	org.bukkit.event.player.PlayerFishEvent
+
+# The function used for the fish to be spawned and being pushed in direction of player
+function Fishing_Utility(l: entity, i: item, p: entity):
+	set {fishing.global_util::1} to {_i} # Setting global variable to the #!item type
+	
+	# Spaning the Fish Entity
+	if {_i} is pufferfish:
+		set {_i} to puffer fish # The item and entity aliases for those are 2 different things, so we have to change the {_i}
+	set {_i} to "%{_i}%" parsed as entity type # {_i} is an item at first, so we transform it into an entity type
+	spawn {_i} at {_l} # Spawning the entity
+	set {fishing.global_util::2} to last spawned entity # Setting global variable to the #!entity
+	
+	# Vectors, so we can reel in the Fish Entity
+	set {_v} to vector between {_l} and location 1.5 meters above {_p} 
+	set {_u} to distance between location of {_l} and location 1.5 meters above {_p}
+	set {_u} to ({_u}/6.5)
+	set standard length of {_v} to {_u}
+	set velocity of {fishing.global_util::2} to {_v} # Reeling the entity in
+
+# Starting the whole sequence
+on PlayerFishEvent:
+	region at event.getPlayer() doesn't contain "spawn in world world"
+	"%event.getState().name()%" is "CAUGHT_FISH" # Checking the state of the fishing event
+	
+	# CORE of the sequence
+	set {_fish} to event.getCaught().getItemStack()
+	{_fish} is any fish # Checking if the item player fished is any kind of a fish 
+	event.setCancelled(true) # Canceling the event
+	set {_hook} to event.getHook() 
+	set {_player} to event.getPlayer()
+	Fishing_Utility({_hook}, {_fish}, {_player}) # Calling out the function
+	kill {_hook} # Removing the hook, because just canceling the event doesn't remove it (just removes the drops)
+
+	# Picking the Item Drop from the list specified at the top of the file
+	set {_fish.item} to a random element out of {fishes::*} where [type of input = type of {fishing.global_util::1}]
+	while type of {_fish.item} != type of {fishing.global_util::1}:
+		set {_fish.item} to a random element out of {fishes::*} where [type of input = type of {fishing.global_util::1}]
+	
+	# Grabbing the name if the Fish Item to use it in the lenght calculcations
+	# This is a orkaround, because 'name of {_fish.item}' wasn't working :(
+	# I had to do smth like this, where the tool of player is set
+	# to the {_fish.item} for a brief moment, and then we extract the
+	# name of the tool itself, just before we set it to the item it was before
+	set {_tool} to {_player}'s tool
+	set {_player}'s tool to {_fish.item}
+	set {_util} to uncolored name of {_player}'s tool
+	set {_player}'s tool to {_tool}
+
+	# Setting the lenght of the fish, you can have fun with selecting your equation!
+	set {_length} to a random number between {fishes.length.min::%{_util}%} and {fishes.length.max::%{_util}%}
+	set lore of {_fish.item} to "&7%{_length}% cm"
+
+	# Storing the drops in the metadata tag of the entity we have spawned
+	set metadata tag "fishing-drop" of {fishing.global_util::2} to {_fish.item}
+	wait 1 tick
+
+	# Clearing the global list so it stays empty after the code finishes
+	clear {fishing.global_util::*}
+
+# Idk if this is any useful, but it is an alias I used for the drops
+aliases:
+	any fish = minecraft:pufferfish, minecraft:cod, minecraft:salmon, minecraft:tropical_fish
+
+# And finally - drops!
+on death:
+	victim is any fish # Condition if the vicitm is actually a fish
+	cancel drops # Canceling regular drops
+	set {_drop} to metadata tag "fishing-drop" of victim # Extracting the Item Drop from the metadata tag we have set earlier on
+	clear metadata tag "fishing-drop" of victim # Idk if clearing the tag has any use, but I have added it just to be safe :D
+	drop {_drop} at victim # And finally dropping the right Item
