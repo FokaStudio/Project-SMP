@@ -1,0 +1,4 @@
+on first join:
+    console command "/scoreboard players set FokaStudio twsc.cfg_display 4"
+    console command "/scoreboard players set FokaStudio twsc.cfg_pos 1"
+    console command "/scoreboard players set FokaStudio twsc.cfg_title 2"
