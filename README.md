@@ -5,6 +5,7 @@
     <a href="https://github.com/FokaStudio/Project-SMP/issues"><img alt="GitHub issues" src="https://img.shields.io/github/issues/FokaStudio/Project-SMP"></a>
     <a href="https://github.com/FokaStudio/Project-SMP/network"><img alt="GitHub forks" src="https://img.shields.io/github/forks/FokaStudio/Project-SMP"></a>
     <a href="https://github.com/FokaStudio/Project-SMP/stargazers"><img alt="GitHub stars" src="https://img.shields.io/github/stars/FokaStudio/Project-SMP"></a>
+    <a href="https://discord.com/tHzyD84Ak6"><img alt="Discord server" src=https://img.shields.io/discord/727033287343734885.svg?label=&logo=discord&logoColor=ffffff&color=7389D8&labelColor=6A7EC2"></a>
 </p>
 The Official repository for Project: SMP server
 Yeah, that one
