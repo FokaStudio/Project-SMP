@@ -1,0 +1,251 @@
+on load:
+	register shapeless recipe for potion named "<##37E1D7>Recall Potion" with lore "&7Teleports you to", "&7your spawn point" with nbt "{CustomPotionColor:3725013,HideFlags:32,PSMPPotion:""Recall""}" using water bottle, ender pearl and sugar with id "recall_potion"
+	register shapeless recipe for potion named "<##B289B8>Return Potion" with lore "&7Teleports you to", "&7your last death spot" with nbt "{CustomPotionColor:16348917,HideFlags:32,PSMPPotion:""Return""}" using water bottle, ender pearl, bone, bone and bone with id "return_potion"
+	register shapeless recipe for paper named "&eScroll of Teleportation" with lore "&7Teleports you to", "&7the Server's Spawn" with custom model data 1 using paper, ender pearl, and glowstone dust with id "scroll_of_teleportation"
+	set {waystone.count} to 0 if {waystone.count} is not set
+
+on right click with paper:
+	name of event-item = "&eScroll of Teleportation"
+	remove 1 of player's tool from player
+	apply nausea without any particles to player for 7 seconds
+	play sound "block.portal.trigger" with volume 0.5 and pitch 1.15 at player for player
+	wait 3 seconds
+	play flash at player
+	play sound "block.portal.travel" with volume 0.5 and pitch 1.15 at player for player
+	play ender signal at player
+	teleport player to {spawn}
+
+on consume of potion:
+	if tag "PSMPPotion" of nbt of event-item = "Recall":
+		apply nausea without any particles to player for 7 seconds
+		play sound "block.portal.trigger" with volume 0.5 and pitch 1.15 at player for player
+		wait 3 seconds
+		if bed of player is set:
+			teleport player to player's bed
+		else:
+			teleport player to {spawn}
+		play flash at player
+		play sound "block.portal.travel" with volume 0.5 and pitch 1.15 at player for player
+		play ender signal at player
+	else if tag "PSMPPotion" of nbt of event-item = "Return":
+		if {last_death_location::%uuid of player%} is set:
+			apply nausea without any particles to player for 7 seconds
+			play sound "block.portal.trigger" with volume 0.5 and pitch 1.15 at player for player
+			wait 3 seconds
+			teleport player to {last_death_location::%uuid of player%}
+			delete {last_death_location::%uuid of player%}
+			play flash at player
+			play sound "block.portal.travel" with volume 0.5 and pitch 1.15 at player for player
+			play ender signal at player
+		else:
+			cancel event
+			send action bar "<##A54E59>You don't have a valid death location to return to" to player
+
+every 5 ticks:
+	loop {waystonelocation::*}:
+		play 4 of dust_color_transition using dustTransition((light gray or light blue), (magenta or purple), 1.5) at location 0.7 meter above loop-value
+		play 5 of enchant at loop-value
+
+on death of player:
+	set {last_death_location::%uuid of victim%} to event-location
+
+function lodestone_dimension(t: string) :: string:
+	if {_t} = "minecraft:overworld":
+		return "world"
+	else if {_t} = "minecraft:the_end":
+		return "world_the_end"
+	else if {_t} = "minecraft:the_nether":
+		return "world_nether"
+
+on chat:
+	if player has scoreboard tag "lodestone.waystone_name":
+		cancel event
+		set {waystone::%metadata value ""lodestone.waystone_name"" of player%::name} to colored message
+		remove "lodestone.waystone_name" from scoreboard tags of player
+		open chest with 1 row named "&7Editing Waystone (%metadata value ""lodestone.waystone_name"" of player%)" to the player
+		set slot 0 of player's current inventory to writable book named "&fChange Waystone's name"
+		set slot 1 of player's current inventory to painting named "&fChange Waystone's Icon"
+		remove "lodestone.waystone_name" from scoreboard tags of player
+		clear metadata value "lodestone.waystone_name" of player
+
+on right click on lodestone:
+	if player has scoreboard tag "lodestone.waystone_icon":
+		cancel event
+		set {waystone::%{waystoneid::%location of event-block%}%::icon} to type of player's tool
+		open chest with 1 row named "&7Editing Waystone (%{waystoneid::%location of event-block%}%)" to the player
+		set slot 0 of player's current inventory to writable book named "&fChange Waystone's name"
+		set slot 0 of player's current inventory to painting named "&fChange Waystone's Icon"
+		remove "lodestone.waystone_icon" from scoreboard tags of player
+	if player's tool is compass:
+		if player doesn't have ender pearl, blaze rod and emerald:
+			cancel event
+			send action bar "<##A54E59>You need Ender Pearl, Blaze Rod and Emerald in order to do this" to player
+		else:
+			remove ender pearl, blaze rod and emerald from player
+		stop
+	if {waystonelocation::*} doesn't contain location of event-block:
+		add 1 to {waystone.count}
+		set {_id} to {waystone.count}
+		set {waystoneid::%location of event-block%} to {_id}
+		set {waystone::%{_id}%::name} to "&7Waystone &b##%size of {waystone::*}%"
+		set {waystone::%{_id}%::owner} to event-player
+		set {waystone::%{_id}%::icon} to lodestone
+		set {waystonelocation::%{_id}%} to location of event-block
+		add location of event-block to {waystone.learned::%uuid of player%::*}
+		send action bar "&fNew Waystone discovered! %{waystone::%{_id}%::name}%" to player
+	else:
+		if {waystone.learned::%uuid of player%::*} doesn't contain location of event-block:
+			add location of event-block to {waystone.learned::%uuid of player%::*}
+		set {_id} to {waystoneid::%location of event-block%}
+		if {waystone::%{_id}%::owner} = player:
+			if player is sneaking:
+				open chest with 1 row named "&7Editing Waystone (%{waystoneid::%location of event-block%}%)" to the player
+				set slot 0 of player's current inventory to writable book named "&fChange Waystone's name"
+				set slot 1 of player's current inventory to painting named "&fChange Waystone's icon"
+				stop
+			else:
+				player command "/pagtest 1"
+				stop
+		player command "/pagtest 1"
+
+on break of lodestone:
+	{waystonelocation::*} contains location of event-block
+	loop {waystonelocation::*}:
+		if loop-value = location of event-block:
+			delete {waystoneid::%location of event-block%}
+			delete {waystone::%loop-index%::owner}
+			delete {waystone::%loop-index%::icon}
+			delete {waystone::%loop-index%::name}
+			delete {waystone::%loop-index%}
+			delete {waystonelocation::%loop-index%}
+			loop all offline players:
+				remove location of event-block from {waystone.learned::%uuid of loop-value-2%::*}
+			exit loop
+		else:
+			continue
+
+on inventory click:
+	name of player's current inventory contains "&7Editing Waystone"
+	cancel event
+	if index of event-slot = 1:
+		close player's inventory
+		send "&fRight-click the Waystone with the desired item as the icon"
+		add "lodestone.waystone_icon" to scoreboard tags of player
+	else if index of event-slot = 0:
+		set {_name} to name of event-inventory
+		replace all "&7Editing Waystone (" and ")" with "" in {_name}
+		close player's inventory
+		send "&fWrite the new name in chat"
+		add "lodestone.waystone_name" to scoreboard tags of player
+		set metadata tag "lodestone.waystone_name" of player to {_name} parsed as integer
+
+function checkForSpecifiedPage(slot: number, guiSize: number, list: objects) :: boolean:
+	set {_counter} and {_format} to 0
+	loop {_list::*}:
+		if {_counter}+1 is between {_slot} and {_slot}+({_guiSize}-1):
+			add 1 to {_format}
+		add 1 to {_counter}
+	if {_format} is 0:
+		return false
+	else:
+		return true
+ 
+# Example Paginated GUI
+command /pagtest [<integer=1>]:
+	trigger:
+ 
+		# Make sure to block anything below or equal to 0 as a page
+		if arg 1 is less than or equal to 0:
+			message "&c0 &7is not a valid page."
+			stop
+ 
+		# Example size of the inventory / Must be divisible by 9 and up to 54
+		# In the example I am using, I cannot use 54 size because I am going to
+		# dedicate 1 row for the page switchers, therefore the max size in this
+		# example can only be 45
+		set {_guiSize} to 45
+ 
+		# List to use as an example for the GUI
+		loop {waystone.count} times:
+			if {waystone.learned::%uuid of player%::*} contains {waystonelocation::%loop-value%}:
+				add 1 of {waystone::%loop-value%::icon} named "%{waystone::%loop-value%::name}%" with lore "&7Owner: %{waystone::%loop-value%::owner}%", "&7Location: %{waystonelocation::%loop-value%}%" and "&7ID: %loop-value%" to {_list::*}
+ 
+		# Gets the index to start at in the list variable when formatting the GUI
+		set {_slot} to ((arg 1 * {_guiSize}) + 1) - {_guiSize}
+ 
+		# Checks if the specified page has anything in it / Gets how many available pages there are
+		if checkForSpecifiedPage({_slot}, {_guiSize}, {_list::*}) is false:
+			set {_availablePages} to ceil(size of {_list::*}/{_guiSize})
+			message "&7Invalid page. &7You have &c%{_availablePages}% &7available pages."
+			stop
+ 
+		# Open the Gui to the player / I used +1 because I want a row dedicated for the page turners
+		open chest with ({_guiSize}/9) + 1 rows named "&7Available Waystones &8(&9Page %arg 1%&8)" to the player
+ 
+		# Example buttons to switch to different pages / The last row in this case is dedicated to these
+		set slot {_guiSize}+2 of player's current inventory to 1 of feather named "&c&l<- PREVIOUS PAGE&r"
+		set slot {_guiSize}+6 of player's current inventory to 1 of feather named "&a&lNEXT PAGE ->&r"
+ 
+		# Formats the gui
+		set {_counter} and {_format} to 0
+		loop {_list::*}:
+			if {_counter}+1 is between {_slot} and {_slot}+({_guiSize}-1):
+				set slot {_format} of player's current inventory to loop-value
+				add 1 to {_format}
+			add 1 to {_counter}
+
+# You need some kind of identifier to know what inventory your clicking in.
+# In this examples case, I will use the GUI name.
+# You also need an identifier to get what page you are currently on. I also used the name for this.
+on inventory click:
+	name of player's current inventory contains "&7Available Waystones &8(&9Page "
+	cancel event
+	if name of clicked item is "&a&lNEXT PAGE ->&r" or "&c&l<- PREVIOUS PAGE&r":
+		# Gets the page you are on
+		set {_getCurrentPage} to name of player's current inventory
+		# Removes all text other than page number from name of the GUI / This is one method
+		# of getting the page they are on
+		replace all "&7Available Waystones &8(&9Page " and "&8)" with "" in {_getCurrentPage}
+		set {_getCurrentPage} to {_getCurrentPage} parsed as integer
+		broadcast "%{_getCurrentPage}%"
+		# Adds 1 or removes 1 based on if your clicking next page or previous page
+		if name of clicked item is "&a&lNEXT PAGE ->&r":
+			add 1 to {_getCurrentPage}
+		else:
+			remove 1 from {_getCurrentPage}
+ 
+		# Makes sure the player doesn't open page 0
+		if {_getCurrentPage} is 0:
+			message "&c0 &7is not a valid page."
+			stop
+ 
+		# Open the new page to the player by command
+		# You can also create a function if you do not want
+		# to use a command for this
+		make player execute command "pagtest %{_getCurrentPage}%"
+	else:
+		set {_id::*} to uncolored line 3 of lore of event-slot parsed as "ID: %int%"
+		close player's inventory
+		apply nausea without any particles to player for 7 seconds
+		play sound "block.portal.trigger" with volume 0.5 and pitch 1.15 at player for player
+		wait 3 seconds
+		close player's inventory
+		play flash at player
+		play sound "block.portal.travel" with volume 0.5 and pitch 1.15 at player for player
+		play ender signal at player
+		teleport player to location 1 meter above {waystonelocation::%{_id::1}%}
+
+on player drop of compass:
+	if tag "LodestonePos" of nbt of event-item is set:
+		player is sneaking
+		kill the closest dropped compass to player
+		set {_x} to tag "LodestonePos;X" of nbt of event-item
+		increase {_y} by 0.5
+		set {_y} to tag "LodestonePos;Y" of nbt of event-item
+		increase {_y} by 1.5
+		set {_z} to tag "LodestonePos;Z" of nbt of event-item
+		increase {_z} by 0.5
+		set {_world} to tag "LodestoneDimension" of nbt of event-item
+		set {_world} to lodestone_dimension({_world})
+		teleport player to location({_x}, {_y}, {_z}, world({_world}))
+		give player compass

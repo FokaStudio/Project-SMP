@@ -1,0 +1,218 @@
+on script load:
+	create a gui with id "originGUI" with virtual chest inventory with 5 rows named "&bOrigins":
+		format gui slot 0 with player head named "&eHuman" with lore "&7Your normal Minecraft adventure awaits", "", "&fNo perks, but also no debuffs": 
+			send "&bYou picked the &eHuman&b origin."
+			set {origin::%uuid of player%} to "Human"
+			close player's inventory 
+		format gui slot 1 with Ender Pearl named "&5Enderian" with lore "&7Born in the End as sons and", "&7daughters of the Ender Dragon,", "&7Enderians are capable of understanding the", "&7ancient teleportation techniques", "", "&aTrue Ender Teleportation", "&fUses less pearls in order to teleport", "&ftakes no teleportation damage", "&fEnder Pearls fly further", "&aDragon's Bless", "&fDeals more damage while in The End", "&aPacifist", "&fEnderman's don't target you no matter what", "&aGraceful Swan", "&fTeleports to ground if the fall distance", "&fis too big", "&cTeleport Limits", "&7Ender Pearl cooldown is quadrupled", "&cWeakling", "&7Has only 8 Hearts of HP", "&CHydrophobic" and "&7Takes damage in rain and water":
+			set max health of player to 8
+			send "&bYou picked the &5Enderian&b origin."
+			set {origin::%uuid of player%} to "Enderian"
+			close player's inventory 
+		format gui slot 2 with Honey Bottle named "&eBee" with lore "&7A lone Bee decided to leave the Hive someday,", "&7and began its own adventure...", "", "&aBee Wings", "&fAbility to fly freely", "&aYummy!", "&fSneak + right-click Empty Bottles", "&fto fill them with Honey", "&cWeakling", "&7Only 6 hearts of HP and", "&7low flight speed", "&cHydrophobic", "&7Takes damage in water and rain":
+			set flight mode of player to true
+			set max health of player to 6
+			set the player's flight speed to 0.01666
+			send "&bYou picked the &eBee&b origin."
+			set {origin::%uuid of player%} to "Bee"
+			close player's inventory 
+		format gui slot 3 with Feather named "&fAvian" with lore "&aSlow Falling & Speed, &cNo Meat":
+			
+
+			send "&bYou picked the &fAvian&b origin."
+			set {origin::%uuid of player%} to "Avian"
+			close player's inventory 
+		format gui slot 4 with Orange Wool named "&6Feline" with lore "&7Some people call them 'Wicked Furries',", "&7but those are actual anthropomorphic entities,", "&7stealthy, quick and silent", "", "&aGraceful Landing", "&fNo fall damage", "&aNutritious!", "&fEvery piece food has increased", "&fsaturation boost", "&aFast and Furious", "&fIncreased Speed", "&cWeakling", "&7Only 8 hearts of HP", "&7and permanent mining fatigue":
+			set max health of player to 8
+			apply potion of mining fatigue without any particles to player for 9999 days
+			send "&bYou picked the &6Feline&b origin."
+			set {origin::%uuid of player%} to "Feline"
+			close player's inventory 
+#		format gui slot 5 with Prismarine Shard named "&bGuardian" with lore "&aWater Effects, 25Health, Strength, &cNo Land":
+#			
+#
+#			send "&bYou picked the Guardian &b origin."
+#			set {origin::%uuid of player%} to "Guardian"
+#			close player's inventory 
+#		format gui slot 6 with Phantom Membrane named "&8Phantom" with lore "&a/pm, Invis on sneak, &cDayBurn, 7 Hearts":
+#			add "{Purpur.ShouldBurnInDay:1b}" to the nbt of player
+#
+#			send "&bYou picked the &8Phantom &b origin."
+#			set {origin::%uuid of player%} to "Phantom"
+#			close player's inventory 
+#		format gui slot 7 with tnt named "&aCreeper" with lore "&aExplode on Death & Shift, &cNo Meat":
+#			
+#
+#			send "&bYou picked the &aCreeper &b origin."
+#			set {origin::%uuid of player%} to "Creeper" 
+#		format gui slot 8 with blaze rod named "&cBlazeborn" with lore "&aNether Fly, Fire Immue, Fire Aspect, &cWater DMG":
+#			
+#
+#			send "&bYou picked the &cBlazeborn &b origin."
+#			set {origin::%uuid of player%} to "Blazeborn" 
+#			close player's inventory 
+#		format gui slot 9 with saddle named "&7Ravager" with lore "&aStrength, Speed, Jump, Rideable, &cCannot Ride Boats and Horses":
+#			
+#
+#			send "&bYou picked the &7Ravager &b origin."
+#			set {origin::%uuid of player%} to "Ravager"
+#			close player's inventory 
+		format gui slot 10 with glass named "&fGlass Golem" with lore "&7Forged in an unknown place,", "&7possibly even in a different reality,", "&7Glass Golem (even if fragile)", "&7is the strongest entity in whole world", "", "&aSuper Strenght", "&fYou are a one-hit anything that sprays", "&fdeath upon those who try to overcome you", "&cFragile", "&7Only 1 heart of HP...":
+			set max health of player to 1
+			send "&bYou picked the &fGlass Golem &b origin."
+			set {origin::%uuid of player%} to "Glass Golem"
+			close player's inventory 
+		format gui slot 11 with snowball named "&8Snow Golem" with lore "&7The magic that has reanimated those things", "&7and made them able to live among us", "&7is yet to be discovered...", "", "&aFrost Walker", "&fWhen you walk on Water, it turns it", "&finto Ice temporarily", "&aEternal Frost", "&fNo Freezing damage, and also", "&fbonus damage in cold biomes", "&aSnowy Attack!", "&fYou don't use Snowballs on throws,", "&fyou also throw 3 more of them", "&cHeat Intolerancy", "&7Melts in hot biomes", "&cWeakling", "&7Only 9 hearts of HP", "&cHydrophobic" and "&7Takes damage in water and rain":
+			set max health of player to 9
+			send "&bYou picked the &8Snow Golem &b origin."
+			set {origin::%uuid of player%} to "Snow Golem"
+			close player's inventory 
+		format gui slot 12 with shulker shell named "&5Shulk" with lore "&7The descendant from the End dimension,", "&7Ancient Guardian with unbearable strength,", "&7but also several weaknesses", "", "&aShulker Shell", "&fPermanent Resistance", "&aShulker Storage", "&fNo Item loss on death,", "&fyou also keep items with", "&fCurse of Vanishing", "&aBeefy", "&fHas 25HP", "&cThe Limits", "&fNo Offhand at all":
+			set max health of player to 12.5
+			apply potion of resistance without any particles to player for 9999 days
+			send "&bYou picked the &5Shulk &b origin."
+			set {origin::%uuid of player%} to "Shulk"
+			close player's inventory 
+		run on gui close:
+			{origin::%uuid of player%} is not set
+			cancel gui close
+
+command /rechooseorigin:
+	permission: op
+	trigger:
+		delete {origin::%uuid of player%}
+		wait 1 tick
+		add "{Purpur.ShouldBurnInDay:0b}" to the nbt of player
+		set the player's flight speed to .1
+		set the player's walking speed to .2
+		set max health of player to 10
+		if player's gamemode is creative or spectator:
+			set flight mode of player to true
+		else:
+			set flight mode of player to false
+		console command "effect clear %player%"
+		open gui with id "originGUI" to player
+
+command /origingui:
+	permission: op
+	trigger:
+		if {origin::%uuid of player%} is not set:
+			open gui with id "originGUI" to player
+
+on damage of player:
+	{origin::%uuid of victim%} = "Enderian"
+	damage cause is fall
+	cancel event
+
+on respawn:
+	{origin::%uuid of player%} = "Bee"
+	set flight mode of player to true
+
+command /phantommode:
+	aliases: pm
+	trigger:
+		if {origin::%uuid of player%} != "Phantom":
+			send "&cOnly Phantom origins have access to that command!"
+			stop
+		set player's gamemode to spectator
+		wait 5 seconds
+		
+		
+on player world change:
+	{origin::%uuid of player%} = "Bee"
+	set flight mode of player to true
+
+every 1 tick:
+	loop all players where [{origin::%uuid of input%} = "Enderian"]:
+		if SKill fall distance of loop-player > 5:
+			loop blocks below loop-player:
+				if loop-block is not air or cave air:
+					teleport loop-player to location 1 meter above location of loop-block
+					play sound "entity.enderman.teleport" with volume 1 and pitch 1.15 at loop-player for all players
+					play ender signal at loop-player
+					set fall distance of loop-player to 0
+					exit 1 loop
+		if SKill loop-player is wet:
+			damage loop-player by 0.25
+	loop all players where [{origin::%uuid of input%} = "Snow Golem"]:
+		if SKill loop-player is wet:
+			damage loop-player by 0.25
+		if temperature of block at loop-player >= 1.0:
+			SKill loop-player doesn't have potion of fire resistance
+			damage loop-player by 0.25
+	loop all players where [{origin::%uuid of input%} = "Bee"]:
+		if SKill loop-player is wet:
+			damage loop-player by 0.25
+	loop all players where [{origin::%uuid of input%} = "Shulk"]:
+		if offhand tool of loop-player is set:
+			give loop-player's offhand tool to loop-player
+			set loop-player's offhand tool to air
+
+on right click with empty bottle:
+	{origin::%uuid of player%} = "Bee"
+	player is sneaking
+	remove 1 of player's tool from player
+	give player 1 honey bottle
+	play sound "item.bottle.fill" at event-player for all players
+
+on death of player:
+	if {origin::%uuid of victim%} = "Enderian":
+		damage cause is unknown
+		set death message to "%victim% went for a bath as and Enderian"
+	else if {origin::%uuid of victim%} = "Snow Golem":
+		damage cause is unknown
+		set death message to "%victim% melted away"
+	else if {origin::%uuid of victim%} = "Bee":
+		damage cause is unknown
+		set death message to "%victim% tried to take a swim as a Bee"
+	else if {origin::%uuid of victim%} = "Shulk":
+		stop
+
+on damage of player:
+	"%damage cause%" = "damage causes.freeze"
+	{origin::%uuid of victim%} = "Snow Golem"
+	cancel event
+
+on damage:
+	attacker is player
+	if {origin::%uuid of attacker%} = "Glass Golem":
+		increase damage by 99999
+	else if {origin::%uuid of attacker%} = "Enderian":
+		world of attacker is "world_the_end"
+		increase damage by 1
+	else if {origin::%uuid of attacker%} = "Snow Golem":
+		temperature of block at attacker <= 0
+		increase damage by 1
+
+on right click with ender pearl:
+	{origin::%uuid of player%} = "Enderian"
+	cooldown of ender pearl for player = 0 seconds
+	wait 1 tick
+	chance of 75%:
+		give player 1 ender pearl
+	set the cooldown of ender pearl for player to 4 seconds
+
+on right click with snowball:
+	{origin::%uuid of player%} = "Snow Golem"
+	give player 1 snowball
+	loop 3 times:
+		shoot snowball from player with speed 1.5
+		wait 1 tick
+
+on entity target:
+	event-entity is enderman
+	target is a player
+	{origin::%uuid of target%} = "Enderian"
+	cancel event
+
+on shoot:
+	event is not canceled
+	event-projectile is ender pearl
+	{origin::%uuid of shooter%} = "Enderian"
+	push event-projectile in direction of shooter with speed 0.5
+
+on walk on water:
+	{origin::%uuid of player%} = "Snow Golem"
+	event-block is water[level=0]
+	block 1 meter above event-block isn't water or flowing water
+	set event-block to frosted_ice[age=0]
