@@ -1,0 +1,187 @@
+effect make %entities% (0¦visible|1¦invisible):
+	trigger:
+		set {_t} to true if (parse mark = 1) otherwise false
+		loop exprs-1:
+			loop-value.getHandle().setInvisible({_t})
+
+effect push %entities% in random direction with speed %number%:
+	trigger:
+		set {_directions::*} to north, south, east, west, northwest, northeast, southwest and southeast
+		set {_push} to a random element out of {_directions::*}
+		push exprs-1 {_push} at speed exprs-2
+		chance of 50%:
+			set {_directions::*} to up and down
+			set {_push} to a random element out of {_directions::*}
+			push exprs-1 {_push} at speed exprs-2
+
+on death of iron golem:
+	damage cause is not unknown
+	cancel event
+	heal victim
+	make victim invisible
+	silence victim
+	set max health of victim to 1024
+	wait 1 tick
+	heal victim
+	set artificial intelligence of victim to false
+	spawn armor stand at location 1 meter below victim
+	make last spawned armor stand invisible
+	add "{Marker:1b}" to the nbt of last spawned armor stand
+	play sound "entity.iron_golem.death" with volume 1 and pitch 1 for all players at victim
+	set helmet of last spawned armor stand to dirt with custom model data 1
+	wait 1 second
+	play sound "entity.iron_golem.step" with volume 1 and pitch 1 for all players at victim
+	set helmet of last spawned armor stand to dirt with custom model data 2
+	wait 1 second
+	play sound "entity.iron_golem.step" with volume 1 and pitch 1 for all players at victim
+	set helmet of last spawned armor stand to dirt with custom model data 3
+	wait 0.3 second
+	play sound "entity.iron_golem.step" with volume 1 and pitch 1 for all players at victim
+	set helmet of last spawned armor stand to dirt with custom model data 4
+	wait 0.3 second
+	play sound "entity.iron_golem.step" with volume 1 and pitch 1 for all players at victim
+	set helmet of last spawned armor stand to dirt with custom model data 5
+	add "{Pose:{Head:[48f,0f,0f]}}" to the nbt of last spawned armor stand
+	wait 0.3 second
+	play sound "entity.iron_golem.step" with volume 1 and pitch 1 for all players at victim
+	set helmet of last spawned armor stand to dirt with custom model data 6
+	add "{Pose:{Head:[90f,0f,0f]}}" to the nbt of last spawned armor stand
+	wait 0.3 second
+	play sound "entity.iron_golem.step" with volume 1 and pitch 1 for all players at victim
+	set helmet of last spawned armor stand to dirt with custom model data 7
+	wait 0.3 second
+	play sound "entity.iron_golem.step" with volume 1 and pitch 1 for all players at victim
+	set helmet of last spawned armor stand to dirt with custom model data 8
+	wait 0.3 second
+	play sound "entity.iron_golem.step" with volume 1 and pitch 1 for all players at victim
+	set helmet of last spawned armor stand to dirt with custom model data 9
+	wait 6 seconds
+	kill victim
+	wait 0.9 seconds
+	kill last spawned armor stand
+
+on death of ravager:
+	damage cause is not unknown
+	cancel event
+	heal victim
+	make victim invisible
+	set max health of victim to 1024
+	wait 1 tick
+	heal victim
+	silence victim
+	set artificial intelligence of victim to false
+	spawn armor stand at victim
+	make last spawned armor stand invisible
+	add "{Marker:1b}" to the nbt of last spawned armor stand
+	play sound "entity.ravager.death" with volume 1 and pitch 1 for all players at victim
+	set helmet of last spawned armor stand to dirt with custom model data 25
+	wait 0.5 second
+	set helmet of last spawned armor stand to dirt with custom model data 26
+	play sound "entity.ravager.step" with volume 1 and pitch 1 for all players at victim
+	wait 0.5 second
+	set helmet of last spawned armor stand to dirt with custom model data 27
+	play sound "entity.ravager.step" with volume 1 and pitch 1 for all players at victim
+	wait 0.5 second
+	set helmet of last spawned armor stand to dirt with custom model data 28
+	play sound "entity.ravager.step" with volume 1 and pitch 1 for all players at victim
+	wait 0.5 second
+	set helmet of last spawned armor stand to dirt with custom model data 29
+	play sound "entity.ravager.step" with volume 1 and pitch 1 for all players at victim
+	wait 0.5 second
+	set helmet of last spawned armor stand to dirt with custom model data 30
+	play sound "entity.ravager.step" with volume 1 and pitch 1 for all players at victim
+	wait 0.5 second
+	set helmet of last spawned armor stand to dirt with custom model data 31
+	play sound "entity.ravager.step" with volume 1 and pitch 1 for all players at victim
+	wait 0.5 second
+	set helmet of last spawned armor stand to dirt with custom model data 32
+	play sound "entity.ravager.step" with volume 1 and pitch 1 for all players at victim
+	wait 6 seconds
+	kill victim
+	wait 0.9 seconds
+	kill last spawned armor stand
+
+on inventory pickup:
+	event-item is dirt
+	event-item has custom model data
+	cancel event
+
+on explode:
+	event-entity is creeper
+	wait 1 tick
+	spawn dropped dirt at event-entity
+	add "{Invulnerable:1b,Item:{id:""minecraft:dirt"",Count:1b,tag:{CustomModelData:10}},PickupDelay:32767,Age:5580}" to the nbt of last spawned dropped dirt
+	add "{Glowing:1b}" to the nbt of last spawned dropped dirt if event-entity is charged
+	push last spawned dropped dirt in random direction with speed 0.5
+	spawn dropped dirt at event-entity
+	add "{Invulnerable:1b,Item:{id:""minecraft:dirt"",Count:1b,tag:{CustomModelData:11}},PickupDelay:32767,Age:5580}" to the nbt of last spawned dropped dirt
+	add "{Glowing:1b}" to the nbt of last spawned dropped dirt if event-entity is charged
+	push last spawned dropped dirt in random direction with speed 0.5
+	loop 4 times:
+		spawn dropped dirt at event-entity
+		add "{Invulnerable:1b,Item:{id:""minecraft:dirt"",Count:1b,tag:{CustomModelData:12}},PickupDelay:32767,Age:5580}" to the nbt of last spawned dropped dirt
+		add "{Glowing:1b}" to the nbt of last spawned dropped dirt if event-entity is charged
+		push last spawned dropped dirt in random direction with speed 0.5
+	console command "/team join charged_creepers @e[type=item,nbt={Glowing:1b}]"
+on death of skeleton:
+	event-entity is not stray or wither skeleton
+	make victim invisible
+	play sound "entity.skeleton.death" with volume 1 and pitch 1 
+	spawn dropped dirt at event-entity
+	add "{Invulnerable:1b,Item:{id:""minecraft:dirt"",Count:1b,tag:{CustomModelData:13}},PickupDelay:32767,Age:5580}" to the nbt of last spawned dropped dirt
+	push last spawned dropped dirt in random direction with speed 0.1
+	spawn dropped dirt at event-entity
+	add "{Invulnerable:1b,Item:{id:""minecraft:dirt"",Count:1b,tag:{CustomModelData:14}},PickupDelay:32767,Age:5580}" to the nbt of last spawned dropped dirt
+	push last spawned dropped dirt in random direction with speed 0.1
+	loop 2 times:
+		spawn dropped dirt at event-entity
+		add "{Invulnerable:1b,Item:{id:""minecraft:dirt"",Count:1b,tag:{CustomModelData:15}},PickupDelay:32767,Age:5580}" to the nbt of last spawned dropped dirt
+		add "{Glowing:1b}" to the nbt of last spawned dropped dirt if event-entity is charged
+		push last spawned dropped dirt in random direction with speed 0.1
+	loop 2 times:
+		spawn dropped dirt at event-entity
+		add "{Invulnerable:1b,Item:{id:""minecraft:dirt"",Count:1b,tag:{CustomModelData:16}},PickupDelay:32767,Age:5580}" to the nbt of last spawned dropped dirt
+		add "{Glowing:1b}" to the nbt of last spawned dropped dirt if event-entity is charged
+		push last spawned dropped dirt in random direction with speed 0.1
+
+on death of skeleton:
+	wait 5 ticks
+	delete event-entity
+
+on death of stray:
+	make victim invisible
+	spawn dropped dirt at event-entity
+	add "{Invulnerable:1b,Item:{id:""minecraft:dirt"",Count:1b,tag:{CustomModelData:17}},PickupDelay:32767,Age:5580}" to the nbt of last spawned dropped dirt
+	push last spawned dropped dirt in random direction with speed 0.1
+	spawn dropped dirt at event-entity
+	add "{Invulnerable:1b,Item:{id:""minecraft:dirt"",Count:1b,tag:{CustomModelData:18}},PickupDelay:32767,Age:5580}" to the nbt of last spawned dropped dirt
+	push last spawned dropped dirt in random direction with speed 0.1
+	loop 2 times:
+		spawn dropped dirt at event-entity
+		add "{Invulnerable:1b,Item:{id:""minecraft:dirt"",Count:1b,tag:{CustomModelData:19}},PickupDelay:32767,Age:5800}" to the nbt of last spawned dropped dirt
+		add "{Glowing:1b}" to the nbt of last spawned dropped dirt if event-entity is charged
+		push last spawned dropped dirt in random direction with speed 0.1
+	loop 2 times:
+		spawn dropped dirt at event-entity
+		add "{Invulnerable:1b,Item:{id:""minecraft:dirt"",Count:1b,tag:{CustomModelData:20}},PickupDelay:32767,Age:5800}" to the nbt of last spawned dropped dirt
+		add "{Glowing:1b}" to the nbt of last spawned dropped dirt if event-entity is charged
+		push last spawned dropped dirt in random direction with speed 0.1
+	
+on death of wither skeleton:
+	make victim invisible
+	spawn dropped dirt at event-entity
+	add "{Invulnerable:1b,Item:{id:""minecraft:dirt"",Count:1b,tag:{CustomModelData:21}},PickupDelay:32767,Age:5580}" to the nbt of last spawned dropped dirt
+	push last spawned dropped dirt in random direction with speed 0.1
+	spawn dropped dirt at event-entity
+	add "{Invulnerable:1b,Item:{id:""minecraft:dirt"",Count:1b,tag:{CustomModelData:22}},PickupDelay:32767,Age:5580}" to the nbt of last spawned dropped dirt
+	push last spawned dropped dirt in random direction with speed 0.1
+	loop 2 times:
+		spawn dropped dirt at event-entity
+		add "{Invulnerable:1b,Item:{id:""minecraft:dirt"",Count:1b,tag:{CustomModelData:23}},PickupDelay:32767,Age:5800}" to the nbt of last spawned dropped dirt
+		add "{Glowing:1b}" to the nbt of last spawned dropped dirt if event-entity is charged
+		push last spawned dropped dirt in random direction with speed 0.1
+	loop 2 times:
+		spawn dropped dirt at event-entity
+		add "{Invulnerable:1b,Item:{id:""minecraft:dirt"",Count:1b,tag:{CustomModelData:24}},PickupDelay:32767,Age:5800}" to the nbt of last spawned dropped dirt
+		add "{Glowing:1b}" to the nbt of last spawned dropped dirt if event-entity is charged
+		push last spawned dropped dirt in random direction with speed 0.1

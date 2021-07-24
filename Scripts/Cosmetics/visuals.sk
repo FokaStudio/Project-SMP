@@ -1,0 +1,29 @@
+on damage of player:
+    event is not canceled
+    victim is not blocking
+    damage cause is contact, attack, sweep attack, projectile, fall, fire, block explosion, entity explosion, suicide, potion, thorns, hitting wall while flying or cramming
+    {origin::%uuid of victim%} != "Glass Golem"
+    if {origin::%uuid of victim%} = "Enderian":
+        play 20 of block particle using purple concrete at location 1 meter above victim
+    else if {origin::%uuid of victim%} = "Snow Golem":
+        play 20 of block particle using snow block at location 1 meter above victim
+    else:
+        play 20 of block particle using redstone block at location 1 meter above victim
+
+on death of player:
+    if {origin::%uuid of victim%} = "Glass Golem":
+        play 80 of block particle using glass at location 1 meter above victim
+
+on shoot:
+    event is not canceled
+    event-projectile is ender pearl
+    spawn armor stand at event-projectile with nbt "{Invisible:1b}"
+    set {_a} to last spawned armor stand
+    make {_a} ride event-projectile
+    while {_a} is not on ground:
+        loop 5 times:
+            play witch spell at event-projectile
+        wait 2 ticks
+    wait 1 second
+    kill {_a}
+
