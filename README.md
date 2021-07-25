@@ -1,12 +1,12 @@
 <img src="https://media.discordapp.net/attachments/727033287826210870/868149830747312149/72f31ad4c646249c5e26191884d8afb3.png" alt="Project: SMP Logo" width="200px" />
 
 # Project-SMP
-<p>
-    <a href="https://github.com/FokaStudio/Project-SMP/issues"><img alt="GitHub issues" src="https://img.shields.io/github/issues/FokaStudio/Project-SMP"></a>
-    <a href="https://github.com/FokaStudio/Project-SMP/network"><img alt="GitHub forks" src="https://img.shields.io/github/forks/FokaStudio/Project-SMP"></a>
-    <a href="https://github.com/FokaStudio/Project-SMP/stargazers"><img alt="GitHub stars" src="https://img.shields.io/github/stars/FokaStudio/Project-SMP"></a>
-    <a href="https://discord.com/tHzyD84Ak6"><img alt="Discord server" src=https://img.shields.io/discord/727033287343734885.svg?label=&logo=discord&logoColor=ffffff&color=7389D8&labelColor=6A7EC2"></a>
-</p>
+[![MIT License](https://img.shields.io/github/license/Project-SMP/Project-SMP?style=for-the-badge&logo=github)](License)
+[![Problems](https://img.shields.io/github/issues/Project-SMP/Project-SMP?style=for-the-badge&logo=github)](https://github.com/Project-SMP/Project-SMP/issues)
+[![Spoons](https://img.shields.io/github/forks/Project-SMP/Project-SMP?style=for-the-badge&logo=github)](https://github.com/Project-SMP/Project-SMP/network/members)
+[![Stars](https://img.shields.io/github/stars/Project-SMP/Project-SMP?style=for-the-badge&logo=github)](https://github.com/Project-SMP/Project-SMP/stargazers)
+[![Discord](https://img.shields.io/discord/727033287343734885.svg?style=for-the-badge&label=&logo=discord&logoColor=ffffff&color=7389D8&labelColor=6A7EC2)](https://discord.gg/mtAAnkk)
+
 The Official repository for Project: SMP server
 Yeah, that one
 
