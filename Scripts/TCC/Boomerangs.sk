@@ -182,7 +182,7 @@ on right click with carrot on stick:
 				make player damage loop-entity by 3
 			if distance between event-player and location 1 meter below {_a} < 1:
 				exit loop
-			if block at {_a} is not air or cave air or snow layer || block at {_a} is not passable
+			if block at {_a} is not air or cave air or snow layer || block at {_a} is not passable:
 				exit loop
 			wait 1 ticks
 			play sound "tcc:item.boomerang.swish" with volume 1 and pitch 1 for all players at {_a}
