@@ -3,6 +3,8 @@
 # By DinPro
 #====================
 
+# Modified by FokaStudio <3
+
 options:
 	prefix: &eSword Effects &7»
 	permission: swordeffects.use
@@ -13,7 +15,7 @@ options:
 	set: Set your current Sword Particle to
 	
 on damage:
-	held item of attacker is a wooden sword, stone sword, iron sword, gold sword, diamond sword or netherite sword
+	attacker is player
 	if {particle.%attacker%} is 1:
 		show ender signal at the victim
 	else if {particle.%attacker%} is 2:
