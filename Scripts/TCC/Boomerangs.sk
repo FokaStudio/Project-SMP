@@ -1,54 +1,105 @@
+# Coded by: FokaStudio
+# Original by: TCC's Devs
+# Addons: SkBee, SkJade
+
+# Registering recipes for Boomerangs
 on load:
+	# Regular Booerang
 	register new shaped recipe for carrot on a stick with custom model data 330004 named "&fBoomerang" using leather, oak planks, oak planks, air, air, oak planks, air, air and leather with id "boomerang"
+	# Spectral Boomerang
 	register new shaped recipe for carrot on a stick with custom model data 330005 named "&eSpectral Boomerang" using glowstone, oak planks, oak planks, air, air, oak planks, air, air and glowstone with id "spectral_boomerang"
+	# Ender Boomerang
 	register new shaped recipe for carrot on a stick with custom model data 3 named "&dEnder Boomerang" using stone, obsidian, obsidian, air, ender pearl , obsidian, air, air and stone with id "ender_boomerang"
 
+# Actual code
+# Kinda unoptimised, but idk anything about making it better...
+
+# Calling out the event
 on right click with carrot on stick:
-	if custom model data of held item = 330004:
+	set {_unb} to level of unbreaking of player's tool # Will be used later on
+	if custom model data of held item = 330004: # Regular Boomerang
 		set {_player.loc} to location of player
+		 
+		 # This is modified formula for the unbreaking enchant, it varies depending on the Boomerang
 		chance of (50 - (6*{_unb}))%:
 			damage player's tool by 1
+		
+		# Spawning the Armor Stand (for the Boomerang)
 		spawn armor stand at player
-		set {_a} to last spawned armor stand
-		add "{Marker:1b,Invisible:1b}" to the nbt of {_a}
-		set {_helm} to carrot on a stick with custom model data 1 named (name of player's tool)
+		set {_a} to last spawned armor stand 
+		add "{Marker:1b,Invisible:1b}" to the nbt of {_a} # NBT editing
+		
+		# The custom model data values for flying Boomerangs and Tools are different, so we have to make a workaround
+		set {_helm} to carrot on a stick with custom model data 1 named (name of player's tool) # Setting helmet to the Boomerang
+		
+		# Modifying the parameters of the 'helmet'
 		damage {_helm} by (durability of player's tool)
 		set {_ench::*} to enchantments of player's tool
 		enchant {_helm} with {_ench::*}
 		set helmet of {_a} to {_helm}
+		# Taking away the Boomerang from player
 		set player's tool to air
+
+		# Making the Boomerang fly
 		teleport {_a} to location 1 meter above {_a}
 		set {_loop} to 0
 		set {_rot} to 0
+		
+		# Checking if the block, we can't just use 'is passable'
+		# because Snow Layer is considered solid, and Void Air is passable, meaning
+		# that it would get lost in the Void, and not throw on Snow
 		while block at {_a} is air or cave air or snow layer || block at {_a} is passable:
 			teleport {_a} to location 0.5 meter in front of {_a}
 			add 1 to {_loop}
+			
+			# Damaging entities around the Boomerang
 			loop all entities in radius 1.5 around {_a} where [input is not event-player]:
 				make player damage loop-entity by 2
+			
+			# Delaying next frame of the Boomerang
 			wait 1 ticks
+			
+			# Sound imported from the Datapack
 			play sound "tcc:item.boomerang.swish" with volume 1 and pitch 1 for all players at {_a}
+			
+			# Exiting loop if block at the boomerang is water or void air
+			# or if the sequence has executed 80 times already
 			if {_loop} > 80:
 				exit loop
 			if block at {_a} is water or void air:
 				exit loop
+		
+		# Making it return
 		loop ({_loop}+30) times:
 			teleport {_a} to location 0.5 meter behind {_a}
+			
+			# Damage...
 			loop all entities in radius 1.5 around {_a} where [input is not event-player]:
 				make player damage loop-entity by 2
+			
+			# Checking if player is nearby, so they can pick it up in mid-air
+			# Only the player that threw it can pick it up
 			if distance between event-player and location 1 meter below {_a} < 1:
 				exit loop
-			if block at {_a} is not passable:
+			
+			# Exiting loop if block is not passable
+			if block at {_a} is not air or cave air or snow layer || block at {_a} is not passable:
 				exit loop
+			
+			# Delay and sounds
 			wait 1 ticks
 			play sound "tcc:item.boomerang.swish" with volume 1 and pitch 1 for all players at {_a}
+		
+		# End the sequence - drop the Boomerang and kill the Armor Stand
 		set {_boom} to carrot on a stick named (name of helmet of {_a}) with custom model data 330004
 		damage {_boom} by (durability of helmet of {_a})
 		enchant {_boom} with {_ench::*}
 		drop {_boom} at {_a}
 		kill {_a}
-	else if custom model data of held item = 330005:
+		
+	else if custom model data of held item = 330005: # Spectral Boomerang
 		set {_player.loc} to location of player
-		chance of (60 - (7*{_unb}))%:
+		chance of (60 - (7*{_unb}))%: # This one has a higher chance for damage
 			damage player's tool by 1
 		spawn armor stand at player
 		set {_a} to last spawned armor stand
@@ -65,15 +116,24 @@ on right click with carrot on stick:
 		while true:
 			teleport {_a} to location 0.5 meter in front of {_a}
 			add 1 to {_loop}
+			
+			# This one doesn't damage entities, but makes them glow instead
 			loop all entities in radius 4 around {_a} where [input is not event-player]:
 				apply potion of glowing to loop-entity for 15 seconds replacing existing effect
+			
+			
 			wait 1 ticks
 			play sound "tcc:item.boomerang.swish" with volume 1 and pitch 1 for all players at {_a}
 			if {_loop} > 60:
 				exit loop
+			
+			# It also phases through walls, so the only check I need is for void air
 			if block at {_a} is void air:
 				exit loop
+			
+			# And it also glows :D
 			apply potion of glowing to {_a} for 1 second
+			
 		loop ({_loop}+30) times:
 			teleport {_a} to location 0.5 meter behind {_a}
 			loop all entities in radius 4 around {_a} where [input is not event-player]:
@@ -87,11 +147,11 @@ on right click with carrot on stick:
 		enchant {_boom} with {_ench::*}
 		drop {_boom} at {_a}
 		kill {_a}
-	else if custom model data of held item = 3:
+		
+	else if custom model data of held item = 3: # Ender Boomerang
 		set {_player.loc} to location of player
 		set {_unb} to 0
-		set {_unb} to level of unbreaking of player's tool
-		chance of (35 - (5*{_unb}))%:
+		chance of (35 - (5*{_unb}))%: # The lowest chance for damage
 			damage player's tool by 1
 		spawn armor stand at player
 		set {_a} to last spawned armor stand
@@ -122,13 +182,17 @@ on right click with carrot on stick:
 				make player damage loop-entity by 3
 			if distance between event-player and location 1 meter below {_a} < 1:
 				exit loop
-			if block at {_a} is not passable:
+			if block at {_a} is not air or cave air or snow layer || block at {_a} is not passable:
 				exit loop
 			wait 1 ticks
 			play sound "tcc:item.boomerang.swish" with volume 1 and pitch 1 for all players at {_a}
 		set {_boom} to carrot on a stick named (name of helmet of {_a}) with custom model data 3
 		damage {_boom} by (durability of helmet of {_a})
+		
+		# It returns to the sender, so you can never lose it
 		teleport {_a} to event-player
+		
+		# Playing some neat effects at the location of the boomerang
 		play ender signal at player
 		play sound "entity.enderman.teleport" with volume 1 and pitch 1.5 for all players at {_a}
 		enchant {_boom} with {_ench::*}

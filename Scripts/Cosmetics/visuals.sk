@@ -1,3 +1,5 @@
+# Blood effect on damage
+# Supports my Origin script <3
 on damage of player:
     event is not canceled
     victim is not blocking
@@ -10,10 +12,12 @@ on damage of player:
     else:
         play 20 of block particle using redstone block at location 1 meter above victim
 
+# Death effects for Glass Golem origin
 on death of player:
     if {origin::%uuid of victim%} = "Glass Golem":
         play 80 of block particle using glass at location 1 meter above victim
 
+# Ender Pearl trail
 on shoot:
     event is not canceled
     event-projectile is ender pearl
