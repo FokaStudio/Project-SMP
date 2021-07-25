@@ -1,3 +1,4 @@
+# Adding ability to quickly switch armor with an armor stand by right-clicking it
 on right click on armor stand:
 	if player can build at event-entity:
 		player is sneaking
@@ -10,20 +11,16 @@ on right click on armor stand:
 		set {_player::tool} to tool of player
 		set {_player::offhand} to offhand tool of player
 
-		if {_player::helmet} is not set:
-			set {_player::helmet} to air
-		if {_player::chestplate} is not set:
-			set {_player::chestplate} to air
-		if {_player::leggings} is not set:
-			set {_player::leggings} to air
-		if {_player::boots} is not set:
-			set {_player::boots} to air
-		if {_player::tool} is not set:
-			set {_player::tool} to air
-		if {_player::offhand} is not set:
-			set {_player::offhand} to air
+		# If those variables aren't set, they would just cause the equipment to dupe, 
+		# so we need to set them to air
+		set {_player::helmet} to air if {_player::helmet} is not set
+		set {_player::chestplate} to air if {_player::chestplate} is not set
+		set {_player::leggings} to air if {_player::leggings} is not set
+		set {_player::boots} to air if {_player::boots} is not set
+		set {_player::tool} to air if {_player::tool} is not set
+		set {_player::offhand} to air if {_player::offhand} is not set
 
-
+		# Setting armor of player
 		set helmet of player to helmet of event-entity
 		set chestplate of player to chestplate of event-entity
 		set leggings of player to leggings of event-entity
@@ -31,6 +28,7 @@ on right click on armor stand:
 		set tool of player to tool of event-entity
 		set offhand tool of player to offhand tool of event-entity
 
+		# Setting armor of event-entity
 		set helmet of event-entity to {_player::helmet}
 		set chestplate of event-entity to {_player::chestplate}
 		set leggings of event-entity to {_player::leggings}
@@ -38,6 +36,8 @@ on right click on armor stand:
 		set offhand tool of event-entity to {_player::offhand}
 		set tool of event-entity to {_player::tool}
 
+# Double door opening
+#! Code is heavily unoptimised, and it requires a recode
 on right click on any wooden door:
 	cancel event
 	if "%blockdata tag ""open"" of event-block%" = "false": 
