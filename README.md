@@ -1,7 +1,7 @@
 <img src="https://media.discordapp.net/attachments/727033287826210870/868149830747312149/72f31ad4c646249c5e26191884d8afb3.png" alt="Project: SMP Logo" width="200px" />
 
 # Project-SMP
-[![License](https://img.shields.io/github/license/Project-SMP/Project-SMP?style=for-the-badge&logo=github)](License)
+[![License](https://img.shields.io/github/license/Project-SMP/Project-SMP?style=for-the-badge&logo=github)](LICENSE)
 [![Problems](https://img.shields.io/github/issues/Project-SMP/Project-SMP?style=for-the-badge&logo=github)](https://github.com/Project-SMP/Project-SMP/issues)
 [![Spoons](https://img.shields.io/github/forks/Project-SMP/Project-SMP?style=for-the-badge&logo=github)](https://github.com/Project-SMP/Project-SMP/network/members)
 [![Stars](https://img.shields.io/github/stars/Project-SMP/Project-SMP?style=for-the-badge&logo=github)](https://github.com/Project-SMP/Project-SMP/stargazers)
