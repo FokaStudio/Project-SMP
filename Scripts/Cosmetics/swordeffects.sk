@@ -7,7 +7,7 @@
 
 options:
 	prefix: &eSword Effects &7»
-	permission: swordeffects.use
+	permission: donator
 	version: 3.0
 	color: &e
 	color2: &f
@@ -67,7 +67,7 @@ on damage:
 			show happy villager at the victim	
 		
 command /swordeffects:
-	aliases: /se, /swords, /swordeffect, /sword
+	aliases: /se, /swords, /swordeffect, /sword, /attackparticles, /ap, /attackeffects, /ae
 	permission: {@permission}
 	trigger:
 		create a gui with virtual chest inventory with 2 rows named "&fSelect your Sword Effect":

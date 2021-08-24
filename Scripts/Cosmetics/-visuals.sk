@@ -1,0 +1,112 @@
+# Coded by: FokaStudio
+# Addons: skript-reflect, SkBee, 
+
+# Imports
+import:
+	org.bukkit.event.inventory.BrewEvent
+	com.destroystokyo.paper.event.block.AnvilDamagedEvent
+	com.destroystokyo.paper.event.block.TNTPrimeEvent
+	com.destroystokyo.paper.event.entity.EntityZapEvent
+	io.papermc.paper.event.block.TargetHitEvent
+
+# Sandstorm effect when in sandy biomes and when it is raining
+on join:
+	set {_v} to vector 3, 0, 3
+	while player is online:
+		if weather = rain or thunder:
+			wait 5 ticks
+			if biome at player is desert, desert hills or desert lakes:
+				play 40 falling_dust using sand 5 meters above player offset by {_v} with extra 0.001
+				apply blindness without any particles to player for 5 seconds replacing existing effect
+			else if biome at player is desert or desert hills or desert lakes:
+				play 40 falling_dust using red sand 5 meters above player offset by {_v} with extra 0.001
+				apply blindness without any particles to player for 5 seconds replacing existing effect
+		else:
+			wait 5 seconds
+
+# Greenish particles on craft
+on craft:
+	event is not canceled
+	show 50 happy villager with offset of 3, 3, 3 speed 1.5 at event-player's target block
+
+# Flames on brew
+on BrewEvent:
+	play mob spawner flames at event.getBlock().getLocation()
+
+# Fire on combust
+on combust:
+	event is not canceled
+	play mob spawner flames at event-entity
+
+# Fire on burn
+on burn:
+	event is not canceled
+	play mob spawner flames at event-location
+
+# Enchant particles on enchant
+on enchant:
+	event is not canceled
+	play 200 of enchant particle at location 1 meter above player
+
+# Fire on TNT prime
+on TNTPrimeEvent:
+	play mob spawner flames at event.getBlock().getLocation()
+
+# Fire on entity zap
+on entity zap:
+	play mob spawner flames at event-entity
+
+# Fire on smelting
+on smelt:
+	play mob spawner flames at event-location
+
+# Fire on lightning strikes
+on lightning:
+	play mob spawner flames at event-location
+
+# Heart effect when player heals
+on heal:
+	event is not canceled
+	if event-entity is player:
+		show 1 heart with offset of 0, 1.5, 0 speed 1 at event-location
+
+# Sounds when hitting 
+on TargetHitEvent:
+	set {_pitch} to event.getSignalStrength()
+	set {_pitch} to ({_pitch}/7.5)
+	play sound "block.note_block.pling" with volume 2 and pitch {_pitch} at event.getHitBlock().getLocation()
+
+# Blood effect and damage indicators on damage
+# Supports my Origin script <3
+on damage of player:
+	event is not canceled
+	victim is not blocking
+	show (rounded final damage) damage indicator with offset of 0, 1.5, 0 speed 1 at victim
+	damage cause is contact, attack, sweep attack, projectile, fall, fire, block explosion, entity explosion, suicide, potion, thorns, hitting wall while flying or cramming
+	{origin::%uuid of victim%} != "Glass Golem"
+	if {origin::%uuid of victim%} = "Enderian":
+		play 20 of block particle using purple concrete at location 1 meter above victim
+	else if {origin::%uuid of victim%} = "Snow Golem":
+		play 20 of block particle using snow block at location 1 meter above victim
+	else:
+		play 20 of block particle using redstone block at location 1 meter above victim
+
+# Death effects for Glass Golem origin
+on death of player:
+	if {origin::%uuid of victim%} = "Glass Golem":
+		play 80 of block particle using glass at location 1 meter above victim
+
+# Ender Pearl trail
+on shoot:
+	event is not canceled
+	event-projectile is ender pearl
+	spawn armor stand at event-projectile with nbt "{Invisible:1b}"
+	set {_a} to last spawned armor stand
+	make {_a} ride event-projectile
+	while {_a} is not on ground:
+		loop 5 times:
+			play witch spell at event-projectile
+		wait 2 ticks
+	wait 1 second
+	kill {_a}
+

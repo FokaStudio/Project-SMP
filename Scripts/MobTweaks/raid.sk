@@ -4,13 +4,10 @@ options:
 on death of {@Illager}:
 	if victim.isPatrolLeader() = true:
 		wait 5 ticks
-		if attacker has bad omen:
-			remove bad omen from attacker
-			wait 5 ticks
-			apply potion of bad omen of tier {badomen::%uuid of attacker%} without any particles to the attacker for 9999 days
-		else:
-			wait 5 ticks
-			remove bad omen from attacker
+		remove bad omen from attacker
+		wait 5 ticks
+		if {badomen::%uuid of attacker%} != 0:
+			apply potion of bad omen of tier {badomen::%uuid of attacker%} to the player for 9999 days
 
 import:
 	org.bukkit.event.raid.RaidFinishEvent
@@ -48,65 +45,77 @@ on right click on white standing banner or white wall banner:
 				if {badomen::%uuid of player%} > 8:
 					set {badomen::%uuid of player%} to 8
 				remove bad omen from player
-				apply potion of bad omen of tier {badomen::%uuid of player%} without any particles to the player for 9999 days
+				apply potion of bad omen of tier {badomen::%uuid of player%} to the player for 9999 days
 				remove location of block from {badomen.bannerlocation::*}
 
 on RaidFinishEvent:
 	set {_winners::*} to ...event.getWinners()
 	loop {_winners::*}:
-		apply potion of hero of the village of tier {badomen::%uuid of loop-value%} to loop-value for 20 minutes replacing the existing effect
+		apply ambient potion of hero of the village of tier {badomen::%uuid of loop-value%} to loop-value for 40 minutes replacing the existing effect
 		wait 5 ticks
 		set {badomen::%uuid of loop-value%} to 0
 
 on RaidSpawnWaveEvent:
 	set {_leader} to event.getPatrolLeader()
 	set {_raiders::*} to ...event.getRaiders()
-	add "{Attributes:[{Name:""generic.armor"",Base:10f},{Name:""generic.max_health"",Base:80f},{Name:""generic.attack_damage"",Base:15f},{Name:""generic.attack_knockback"",Base:0.2f},{Name:""generic.armor_toughness"",Base:6f}]}" to the nbt of {_leader}
+	add "{Attributes:[{Name:""generic.armor"",Base:5f},{Name:""generic.max_health"",Base:50f},{Name:""generic.attack_damage"",Base:6f},{Name:""generic.attack_knockback"",Base:0.25f},{Name:""generic.armor_toughness"",Base:3f}]}" to the nbt of {_leader}
 	heal {_leader}
-	apply potion of strength of tier 1 without any particles to {_leader} for 999 days
-	apply potion of speed of tier 1 without any particles to {_leader} for 999 days
-	apply potion of resistance of tier 1 without any particles to {_leader} for 999 days
+	apply ambient potion of strength of tier 2 to {_leader} for 999 days
+	apply ambient potion of resistance of tier 2 to {_leader} for 999 days
 	loop {_raiders::*}:
-		set {_l} to {_l}
+		set {_l} to loop-value
+		apply ambient potion of strength of tier 1 to {_l} for 999 days
+		apply ambient potion of speed of tier 1 to {_l} for 999 days
+		apply ambient potion of resistance of tier 1 to {_l} for 999 days
+		chance of 75%:
+			wait 2 ticks
+			set {_loop} to random integer between 1 and 4
+			loop {_loop} times:
+				spawn pillager or vindicator at {_l}
+		else:
+			chance of 15%:
+				wait 2 ticks
+				set {_loop} to random integer between 1 and 2
+				loop {_loop} times:
+					spawn illusioner or evoker at {_l}
 		if {_l} = pillager:
-			apply potion of strength of tier 1 without any particles to {_l} for 999 days
-			apply potion of speed of tier 1 without any particles to {_l} for 999 days
-			apply potion of resistance of tier 1 without any particles to {_l} for 999 days
-			set offhand tool of {_l} to 64 of strong poison tipped arrow or long poison tipped arrow or long weakness tipped arrow or strong harming tipped arrow or strong slowness tipped arrow
+			set offhand tool of {_l} to 64 of strong poison tipped arrow, long poison tipped arrow, long weakness tipped arrow, strong harming tipped arrow, spectral arrow or strong slowness tipped arrow
+			enchant tool of {_l} with piercing 4
+			chance of 45%:
+				enchant tool of {_l} with multishot
 		else if {_l} = vindicator:
-			apply potion of strength of tier 1 without any particles to {_l} for 999 days
-			apply potion of speed of tier 1 without any particles to {_l} for 999 days
-			apply potion of resistance of tier 1 without any particles to {_l} for 999 days
 			chance of 40%:
-				set {_l}'s tool to diamond axe named "&rDiamond Vindicator Axe" with nbt "{CustomModelData:1}"
+				set {_l}'s tool to diamond axe named "&rDiamond Vindicator Axe"
 			else:
 				chance of 10%:
-					set {_l}'s tool to netherite axe named "&rNetherite Vindicator Axe" with nbt "{CustomModelData:1}"
+					set {_l}'s tool to netherite axe named "&rNetherite Vindicator Axe"
+			chance of 65%:
+				enchant tool of {_l} with sharpness
+			chance of 45%:
+				enchant tool of {_l} with knockback
 		else if {_l} = evoker:
 			set held item of {_l} to totem of undying
-			apply potion of strength of tier 1 without any particles to {_l} for 999 days
-			apply potion of speed of tier 1 without any particles to {_l} for 999 days
-			apply potion of resistance of tier 1 without any particles to {_l} for 999 days
+			chance of 25%:
+				{_l}.setPatrolLeader(true)
 		else if {_l} = ravager:
-			apply potion of strength of tier 1 without any particles to {_l} for 999 days
-			apply potion of speed of tier 1 without any particles to {_l} for 999 days
-			apply potion of resistance of tier 1 without any particles to {_l} for 999 days
 			chance of 50%:
-				set passengers of {_l} to illusioner or evoker or witch
+				set passengers of {_l} to illusioner, evoker or witch
+			chance of 25%:
+				wait 2 ticks
+				spawn 6 pillagers at {_l}
 		else if {_l} = witch:
-			apply potion of strength of tier 1 without any particles to {_l} for 999 days
-			apply potion of speed of tier 1 without any particles to {_l} for 999 days
-			apply potion of resistance of tier 1 without any particles to {_l} for 999 days
-			apply potion of speed of tier 2 to {_l} for 999 days
-			apply potion of regeneration of tier 3 to {_l} for 999 days
-			apply potion of absorption of tier 4 to {_l} for 999 days
+			apply ambient potion of speed of tier 2 to {_l} for 999 days
+			apply ambient potion of regeneration of tier 3 to {_l} for 999 days
+			apply ambient potion of absorption of tier 4 to {_l} for 999 days
 
 on spawn of vex:
 	set {_e} to event.getEntity()
-	if {_e}.getSummoner().isPatrolLeader() = true:
+	set {_s} to {_e}.getSummoner()
+	if {_s}.isPatrolLeader() = true:
 		apply potion of strength of tier 2 to {_e} for 999 days
 		apply potion of resistance of tier 2 to {_e} for 999 days
 		set max health of {_e} to 30
+		set tool of {_e} to diamond sword, netherite sword, iron sword or gold sword
 		heal {_e}
 
 on spawn of evoker:

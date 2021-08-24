@@ -1,0 +1,14 @@
+command guide:
+    trigger:
+        send "<##35b6e6>Our Guide: <##e8e8e8>https://github.com/FokaStudio/Project-SMP/wiki"
+
+command discord:
+    trigger:
+        send "<##35b6e6>Our Discord: <##e8e8e8>http://links.projectsmp.tk/6659201"
+
+command /afk:
+    trigger:
+        if player.isAfk() = false:
+            player.setAfk(true)
+        else:
+            player.setAfk(false)

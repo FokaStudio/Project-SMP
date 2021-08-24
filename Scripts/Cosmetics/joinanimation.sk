@@ -1,0 +1,18 @@
+on first join:
+	set {_g} to gamemode of player
+	set player's gamemode to spectator
+	teleport player to {flyspawn}
+	while player doesn't have a resource pack loaded:
+		wait 1 second
+		if player is offline:
+			stop
+	send player title "<##5B5B5B>» <##F6A922>&lPROJECT: SMP <##5B5B5B>«" with subtitle "<##5B5B5B>× <##EAB04B>&lWelcome back %player% <##5B5B5B>×" for 5 seconds
+	play sound "ENTITY_BAT_TAKEOFF" to player
+	wait 3 ticks
+	while distance between player and {spawn} > 0.5:
+		push player (direction from player to {spawn}) at speed 0.1
+		wait 1 tick
+	teleport player to {spawn}
+	spawn 120 firework at location 1 meter above player for player
+	play sound "ENTITY_PLAYER_LEVELUP" to player
+	set player's gamemode to {_g}

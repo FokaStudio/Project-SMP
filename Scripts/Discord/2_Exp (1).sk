@@ -4,13 +4,16 @@ init:
 	# > The max EXP the member have to get for each level
 	set {EXPCONFIG::MAXEXPLEVEL::1} to 200
 	set {EXPCONFIG::MAXEXPLEVEL::2} to 300
-	set {EXPCONFIG::MAXEXPLEVEL::3} to 500
-	set {EXPCONFIG::MAXEXPLEVEL::4} to 800
-	set {EXPCONFIG::MAXEXPLEVEL::5} to 1000
-	set {EXPCONFIG::MAXEXPLEVEL::6} to 1300
-	set {EXPCONFIG::MAXEXPLEVEL::7} to 1500
-	set {EXPCONFIG::MAXEXPLEVEL::8} to 1800
-	set {EXPCONFIG::MAXEXPLEVEL::9} to 2100
+	set {EXPCONFIG::MAXEXPLEVEL::3} to 400
+	set {EXPCONFIG::MAXEXPLEVEL::4} to 500
+	set {EXPCONFIG::MAXEXPLEVEL::5} to 600
+	set {EXPCONFIG::MAXEXPLEVEL::6} to 700
+	set {EXPCONFIG::MAXEXPLEVEL::7} to 800
+	set {EXPCONFIG::MAXEXPLEVEL::8} to 900
+	set {EXPCONFIG::MAXEXPLEVEL::9} to 1000
+	set {EXPCONFIG::MAXEXPLEVEL::10} to 1100
+	set {EXPCONFIG::MAXEXPLEVEL::11} to 1200
+	set {EXPCONFIG::MAXEXPLEVEL::12} to 1300
 	# > If it's not set, it will make a x1.2 multiplier from the last max EXP
 
 	# > The min and max amount of EXP an user can have per message
@@ -19,6 +22,18 @@ init:
 	
 	# > The change (in percent) for the EXP system to start on a message receive.
 	set {EXPCONFIG::EXPCHANCE} to 80
+
+	set {EXPCONFIG::REWARD::3} to 872816416468897863
+	set {EXPCONFIG::REWARD::5} to 872820573129027615
+	set {EXPCONFIG::REWARD::8} to 872823372839542794
+	set {EXPCONFIG::REWARD::12} to 872823372243931176
+	set {EXPCONFIG::REWARD::18} to 872823371665129472
+	set {EXPCONFIG::REWARD::24} to 872823280527089694
+	set {EXPCONFIG::REWARD::28} to 872823274504085524
+	set {EXPCONFIG::REWARD::35} to 872823278006329384
+	set {EXPCONFIG::REWARD::40} to 872823371161825310
+	set {EXPCONFIG::REWARD::50} to 872823269223440424
+	set {EXPCONFIG::REWARD::75} to 872840384659726367
 
 	# > Role multiplier. Use the Role ID, then the amount of XP multiplier.
 	# > For example:
@@ -139,7 +154,9 @@ on message receive:
 				set {_newmax} to {EXPCONFIG::MAXEXPLEVEL::%xp level of event-member%}
 			set max xp of event-member to {_newmax}
 			set xp of event-member to {_reste}
-
+			set {_role} to {EXPCONFIG::REWARD::%xp level of event-member%}
+			if {_role} is set:
+				add role with id "%{_role}%" to roles of event-member
 			make embed:
 				set author of embed to "%discord name of event-user% has reached next level!"
 				set author icon of embed to avatar of event-user
@@ -147,7 +164,10 @@ on message receive:
 				set image of embed to "attachment://image.png"
 				set footer of embed to "Well Played %discord name of event-user%!"
 				set timestamp of embed to now
-			upload genLevelUp(event-member) with last embed to event-channel
+			set {_card} to genLevelUp(event-member)
+			upload {_card} with last embed to event-channel
+			upload {_card} with last embed to channel with id "727033287826210871"
+			set {_role} to {EXPCONFIG::REWARD::%xp level of event-member%}
 		else:
 			add {_xp} to exp of event-member
 

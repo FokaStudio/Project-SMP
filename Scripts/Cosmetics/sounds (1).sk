@@ -1,0 +1,5 @@
+on inventory click:
+    play sound "ui.button.click" to event-player
+
+on inventory close:
+    play sound "psmp:ui.menu.close" to event-player

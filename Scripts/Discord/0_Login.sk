@@ -1,7 +1,7 @@
 init:
-	register webhook "WebookButler" using url "URL"
+	register webhook "WebookButler" using url "https://discord.com/api/webhooks/833672640371359775/E5pRLVv-zaHRmXrP3nhYnKn4K9qcIieOTW1P0HVlT-uKUGREEFNp9Qv1uOcb6xA9lctm"
 	make new discord bot:
 		enable all default intent
-		login to "TOKEN" with name "Butler"
+		login to "NzIyMDY1ODEwMDMzNDc1NjE2.XudqMA.wthI4_1Z6xnnlxsP3VaZ0hnC3UQ" with name "Butler"
 	set online status of bot named "Butler" to do not disturb
 	send ":white_check_mark: **Server has started!**" to channel with id "833657829415190578"

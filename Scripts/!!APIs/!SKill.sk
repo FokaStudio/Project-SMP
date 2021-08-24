@@ -1,0 +1,149 @@
+import:
+	java.lang.Character
+	java.lang.Integer
+
+# Checks if entity is wet (￣y▽,￣)╭ 
+# But seriously, it means that it checks if an entity:
+# 1) Is in Water (respects Boats)
+# 2) On rain
+condition [SKill] %entity% is wet:
+	check:
+		if weather in world of exprs-1 = rain or thunder:
+			set {_b::*} to (y-coord of location of highest solid block at location of exprs-1)
+			set {_a::*} to (y-coord of location of exprs-1)
+			{_a::*} > {_b::*}
+			continue
+		if block at exprs-1 = water or flowing water:
+			expr-1.getVehicle() != oak boat or acacia boat or birch boat or dark oak boat or spruce boat or jungle boat # Any boat wasn't working for some unkown reason :(
+			continue
+
+# Checks if an attack in a damage event is a critical one. 
+# May rarely false flag :(
+condition [SKill] %player%'s attack is critical:
+	check:
+		expr-1.getFallDistance() > 0.0F
+		expr-1.isOnGround() != true
+		expr-1.isInsideVehicle() != true
+		expr-1.hasPotionEffect(BLINDNESS) != true
+		continue
+
+# Checks if an entity has a specified potion effect
+# Original from SkQuery, but just like Skellet (which I will mention later on)
+# this addon is just a messy tossed salad of features, from which only some of 
+# them are actually useful...
+condition [SKill] %entity% (0¦has|1¦doesn't have)[ potion [(of|effect)]] %potion effect type%:
+	check:
+		if parse mark = 0:
+			if expr-1.hasPotionEffect(exprs-2) = true:
+				continue
+		else:
+			if expr-1.hasPotionEffect(exprs-2) != true:
+				continue
+
+# Returns a character from Unicode
+# Like 'unicode "U+202"' would return 'Ȃ'
+# Original by Anarchick#4128
+# Found on #code-snippets in Skript Chat's Discord
+# Made into expression from a function <3
+expression [SKill] unicode [from] %string%:
+	return type: text
+	get:
+		set {_unicode} to join (regex split exprs-1 by "[^\dA-F]+")
+		set {_n} to Integer.valueOf({_unicode} and 16)
+		set {_char::*} to ...Character.toChars({_n})
+		return "%{_char::1}%"
+
+# Original by fenish#1703
+# Found on #code-snippets in Skript Chat's Discord
+# Made into expression from a function
+expression [SKill] progress [bar] (all|full value) %number% (now|current value) %number%:
+	return type: text
+	get:
+		set {_percent} to floor((exprs-2 * 100) / exprs-1)
+		loop floor({_percent}/10) times:
+			add "&a▇" to {_list::*}
+		loop 10 - floor({_percent}/10) times:
+			add "&7▇" to {_list::*}
+		return "%join {_list::*} with """"% &8(&c%%%{_percent}%&8)"
+
+# Making entities disappear and reappear (visually)
+# Original by ShaneBee 🌴#0007, found on Skript Chat's Discord
+effect [SKill] make %entities% (0¦visible|1¦invisible):
+	trigger:
+		set {_t} to true if (parse mark = 1) otherwise false
+		loop exprs-1:
+			loop-value.getHandle().setInvisible({_t})
+
+# Grabs fall distance of any entity. Useful for making Anti-Cheats
+# Original from Skellet, but tbh - this addon is GARBAGE
+# Most features are in other Addons, other APIs or in Vanilla Skript...
+# Those that aren't are really wonky and barely working
+expression [SKill] fall distance of %entity%:
+	return type: number
+	get:
+		return expr-1.getFallDistance()
+	set:
+		expr-1.setFallDistance(change value)
+
+# Grabs the tier of the potion effect of an entity
+expression [SKill] tier of [potion of] %potion effect type% of %entity%:
+	return type: number
+	get:
+		return expr-2.getPotionEffect(expr-1).getAmplifier()+1
+
+# Wand API <3
+effect [SKill] shoot wand from %entity% using [particle] %particle% [using %-itemtype/blockdata/dustoption/dusttransition/vibration%] [with] speed %number% [with] (mode|pattern) %string% (loop[ing]|repeat) %int% [times] and [(retrieve|store)] result[s] in %objects%:
+	trigger:
+		delay the effect
+		set {_pitch} to pitch of expr-1
+		set {_yaw} to yaw of expr-1
+		set {_vector} to vector from yaw {_yaw} and pitch {_pitch}
+		set vector length of {_rv} to 0.25
+		set {_loc} to location 1.6 meters above location of expr-1
+		loop expr-6 times:
+			if expr-5 = "chaotic":
+				set {_rp} to random number between -90 and 90
+				set {_ry} to random number between 0.01 and 359.7
+				set {_rv} to vector from yaw {_ry} and pitch {_rp}
+				set vector length of {_rv} to 0.01
+			else if expr-5 = "follow":
+				set {_pitch} to pitch of expr-1
+				set {_yaw} to yaw of expr-1
+				set {_rv} to vector from yaw {_yaw} and pitch {_pitch}
+				set vector length of {_rv} to 0.025
+			set {_vector} to {_vector} ++ {_rv}
+			set vector length of {_vector} to 0.25
+			set {_lastloc} to {_loc}
+			set {_loc} to {_loc} ~ {_vector}
+
+			loop all players in radius 2 of {_loc}:
+				loop-player is not expr-1
+				set {_ploc} to location 1 meter above loop-player
+				set {_return.list::entity} to loop-player
+				set {_return.list::loc} to location 1 meter above loop-player
+				exit 2 loops
+				continue
+				stop
+			loop all mobs in radius 2 of {_loc}:
+				set {_ploc} to location .5 meter above loop-entity
+				set {_return.list::entity} to loop-entity
+				set {_return.list::loc} to location 0.5 meter above loop-entity
+				exit 2 loops
+				continue
+				stop
+			if block at {_loc} is not passable:
+				set {_return.list::block} to block at {_loc}
+				set {_return.list::loc} to {_loc}
+				exit 1 loop
+				continue
+				stop
+			if expr-3 is set:
+				play 3 of expr-2 particle using expr-3 at {_loc} offset by vector(0, 0, 0) with extra 0 for all players
+			else:
+				play 3 of expr-2 particle at {_loc} offset by vector(0, 0, 0) with extra 0 for all players
+			add 1 to {_loop}
+			if {_loop} > expr-4:
+				wait 1 tick
+				set {_loop} to 0
+		set raw expr-7 to {_return.list::*}
+		continue

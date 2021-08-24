@@ -1,4 +1,4 @@
-discord command tagcreator <text> [<text>] [<text>]:
+discord command tagcreator [<text>] [<text>] [<text>]:
 	aliases: tcreator, tc, tagmanager, tm, tmanager, tagc, tagm
 	permissions: administrator
 	prefixes: !
@@ -15,7 +15,7 @@ discord command tagcreator <text> [<text>] [<text>]:
 				stop
 			set {_util::*} to arg-3 split at "|"
 			set {discord.tag::%arg-2%::title} to {_util::1}
-			set {discord.tag::%arg-2%::text} to formatted {_util::2}
+			set {discord.tag::%arg-2%::text} to {_util::2}
 			add arg-2 to {discord.tags::*} 
 			reply to event-message with "**Succesfully created tag ""%arg-2%""!**"
 		else if arg-1 is "delete" or "remove":
@@ -31,7 +31,7 @@ discord command tagcreator <text> [<text>] [<text>]:
 				stop
 			set {_util::*} to arg-3 split at "|"
 			set {discord.tag::%arg-2%::title} to {_util::1}
-			set {discord.tag::%arg-2%::text} to formatted {_util::2}
+			set {discord.tag::%arg-2%::text} to {_util::2}
 			reply to event-message with "**Succesfully edited tag ""%arg-2%""!**"
 		else if arg-1 is "image":
 			if {discord.tags::*} doesn't contain arg-2:
@@ -52,7 +52,6 @@ discord command tagcreator <text> [<text>] [<text>]:
 			set {discord.tag::%arg-2%::extra} to arg-3
 			reply to event-message with "**Succesfully added extra to tag ""%arg-2%""!**"
 
-# Main Command
 discord command tag <text>:
 	prefixes: !
 	aliases: t

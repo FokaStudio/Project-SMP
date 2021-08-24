@@ -1,0 +1,31 @@
+import:
+	dev.lone.itemsadder.api.FontImages.PlayerHudWrapper
+	dev.lone.itemsadder.api.FontImages.PlayerQuantityHudWrapper
+
+every 3 seconds:
+	loop all players:
+		send "%PlayerHUDsHolderWrapper().getPlayer(loop-player)%" to console
+		set {_manaHud} to new PlayerQuantityHudWapper({_hudWrapper}, "magiccraft:mana_bar");
+		{_manaHud}.setFloatValue((({_manaHud}.getFloatValue)+1.0)f)
+
+command wand_of_fire:
+	trigger:
+		tool of player is stone sword
+		SKill shoot wand from player using flame with speed 5 with mode "follow" repeat 350 and store result in {misc::*}
+		if {misc::1} is a block:
+			play 50 of block particle using {misc::1} at {misc::2}
+			show 15 smoke at {misc::2}
+			play sound "entity.generic.extinguish_fire" at {misc::2}
+			show 5 lava pop at {misc::1}
+		else if {misc::1} is a player:
+			set {misc::1} on fire
+			damage {misc::1} by 4
+			play sound "entity.generic.extinguish_fire" with volume 1 and pitch 0.5 at {misc::1}
+			show 50 lava pop at {misc::1}
+		else if {misc::1} is an entity:
+			set {misc::1} on fire
+			damage {misc::1} by 3
+			play sound "entity.generic.extinguish_fire" with volume 1 and pitch 0.5 at {misc::1}
+			show 50 lava pop at {misc::1}
+		clear {misc::*}
+

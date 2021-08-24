@@ -105,6 +105,7 @@ on right click on end portal frame:
 			end_first_click(location of event-block, "Frozen Eye", last spawned armor stand, event-player, "328F9A")
 		else if {_r} = 11:
 			end_first_click(location of event-block, "Ender Eye", last spawned armor stand, event-player, "65329A")
+		kill last spawned armor stand
 	else:
 		blockdata tag "eye" of event-block is false
 		cancel event
@@ -176,8 +177,6 @@ on right click on end portal frame:
 			end_notify_msg(player, location of event-block)
 
 on break of end portal frame:
-	loop all armor stands in radius 0.75 around event-block:
-		kill loop-entity
 	play sound "block.respawn_anchor.deplete" with volume 1 and pitch 0.75 at event-block for all players
 	play flash at event-block
 	play large explosion at event-block

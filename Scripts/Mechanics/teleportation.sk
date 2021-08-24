@@ -41,10 +41,20 @@ on consume of potion:
 			cancel event
 			send action bar "<##A54E59>You don't have a valid death location to return to" to player
 
-every 5 ticks:
+function WaystoneLoop():
 	loop {waystonelocation::*}:
-		play 4 of dust_color_transition using dustTransition((light gray or light blue), (magenta or purple), 1.5) at location 0.7 meter above loop-value
+		if {waystone::%{waystoneid::%loop-value%}%::linked} is not set:
+			play 4 of dust_color_transition using dustTransition((light gray, blue, gray, white or light blue), (light gray, blue, gray, white or light blue), 1.5) at location 0.7 meter above loop-value
+		else:
+			play 4 of dust_color_transition using dustTransition((red, orange, yellow, pink, magenta, purple or light red), (red, orange, yellow, pink, magenta, purple or light red), 1.5) at location 0.7 meter above loop-value
 		play 5 of enchant at loop-value
+	loop all players where [target block of input is lodestone]:
+		set {_id2} to {waystoneid::%location of loop-player's target block%}
+		{waystone::%{_id2}%::linked} is set
+		send action bar "&cThis Waystone is connected to %{waystone::%{waystone::%{_id2}%::linked}%::name}% &7(Owned by &4%{waystone::%{waystone::%{_id2}%::linked}%::owner}%&7)" to loop-player
+
+every 5 ticks:
+	WaystoneLoop()
 
 on death of player:
 	set {last_death_location::%uuid of victim%} to event-location
@@ -76,14 +86,13 @@ on right click on lodestone:
 		set slot 0 of player's current inventory to writable book named "&fChange Waystone's name"
 		set slot 0 of player's current inventory to painting named "&fChange Waystone's Icon"
 		remove "lodestone.waystone_icon" from scoreboard tags of player
-	if player's tool is compass:
+	else if player's tool is compass:
 		if player doesn't have ender pearl, blaze rod and emerald:
 			cancel event
 			send action bar "<##A54E59>You need Ender Pearl, Blaze Rod and Emerald in order to do this" to player
 		else:
 			remove ender pearl, blaze rod and emerald from player
-		stop
-	if {waystonelocation::*} doesn't contain location of event-block:
+	else if {waystonelocation::*} doesn't contain location of event-block:
 		add 1 to {waystone.count}
 		set {_id} to {waystone.count}
 		set {waystoneid::%location of event-block%} to {_id}
@@ -92,12 +101,44 @@ on right click on lodestone:
 		set {waystone::%{_id}%::icon} to lodestone
 		set {waystonelocation::%{_id}%} to location of event-block
 		add location of event-block to {waystone.learned::%uuid of player%::*}
-		send action bar "&fNew Waystone discovered! %{waystone::%{_id}%::name}%" to player
+		send "&fNew Waystone discovered! %{waystone::%{_id}%::name}%" to player
+	else if player's tool is crying obsidian:
+		{waystonelocation::*} contains location of event-block
+		cancel event
+		set {_id.temp} to {waystoneid::%location of event-block%}
+		if {waystone::%{_id.temp}%::linked} is set:
+			send "&4This Waystone is already connected to other Waystone!"
+		else if player doesn't have scoreboard tag "lodestone.waystone_link":
+			add "lodestone.waystone_link" to the scoreboard tags of player
+			send "&5Right-click another Waystone to link them together"
+			set metadata value "lodestone.linking" of player to location of event-block
+		else:
+			location of event-block != metadata value "lodestone.linking" of player
+			set {_id} to {waystoneid::%metadata value ""lodestone.linking"" of player%}
+			set {_id2} to {waystoneid::%location of event-block%}
+			remove location of event-block from {waystone.learned::%uuid of player%::*}
+			remove metadata value "lodestone.linking" of player from {waystone.learned::%uuid of player%::*}
+			set {waystone::%{_id}%::linked} to {_id2}
+			set {waystone::%{_id2}%::linked} to {_id}
+			clear metadata value "lodestone.linking" of player
+			remove "lodestone.waystone_link" from scoreboard tags of player
+			send "&dThose 2 Waystones will now be a shortcut to each other"
 	else:
-		if {waystone.learned::%uuid of player%::*} doesn't contain location of event-block:
-			add location of event-block to {waystone.learned::%uuid of player%::*}
 		set {_id} to {waystoneid::%location of event-block%}
-		if {waystone::%{_id}%::owner} = player:
+		if {waystone::%{_id}%::linked} is set:
+			apply nausea without any particles to player for 7 seconds
+			play sound "block.portal.trigger" with volume 0.5 and pitch 1.15 at player for player
+			wait 3 seconds
+			teleport player to location 1 meter above {waystonelocation::%{waystone::%{_id}%::linked}%}
+			play flash at player
+			play sound "block.portal.travel" with volume 0.5 and pitch 1.15 at player for player
+			play ender signal at player
+			stop
+		else if {waystone.learned::%uuid of player%::*} doesn't contain location of event-block:
+			add location of event-block to {waystone.learned::%uuid of player%::*}
+			send "&fNew Waystone discovered! %{waystone::%{_id}%::name}%" to player
+			stop
+		else if {waystone::%{_id}%::owner} = player:
 			if player is sneaking:
 				open chest with 1 row named "&7Editing Waystone (%{waystoneid::%location of event-block%}%)" to the player
 				set slot 0 of player's current inventory to writable book named "&fChange Waystone's name"
@@ -118,6 +159,8 @@ on break of lodestone:
 			delete {waystone::%loop-index%::name}
 			delete {waystone::%loop-index%}
 			delete {waystonelocation::%loop-index%}
+			delete {waystone::%{waystone::%loop-index%::linked}%::linked}
+			delete {waystone::%loop-index%::linked}
 			loop all offline players:
 				remove location of event-block from {waystone.learned::%uuid of loop-value-2%::*}
 			exit loop

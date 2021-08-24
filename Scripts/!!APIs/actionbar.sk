@@ -1,0 +1,17 @@
+import:
+	org.bukkit.Bukkit
+	
+option nms:
+	get: 
+		set {_nms.version} to Bukkit.getServer().getClass().getPackage().getName().split("\.")[3]
+		return "%{_nms.version}%"
+
+import:
+	net.minecraft.network.chat.ChatMessageType
+
+
+function packetActionBar(text: text, receivers: players):
+	set {_packet} to new play_server_chat packet
+	set field 2 of {_packet} to basecomponent from json {_text}
+	set field 3 of {_packet} to ChatMessageType.c
+	send packet {_packet} to {_receivers::*} without calling event

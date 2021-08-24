@@ -1,7 +1,0 @@
-
-function packetActionBar(text: text, receivers: players):
-  set {_packet} to new play_server_chat packet
-  set "chatcomponent" pjson 0 of {_packet} to {_text} parsed as jsonobject
-  set "ChatType" penum 0 of {_packet} to "GAME_INFO"
-  loop {_receivers::*}:
-    send loop-value packet {_packet}

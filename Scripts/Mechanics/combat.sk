@@ -22,7 +22,7 @@ on damage:
 
 on damage:
 	attacker is player
-	held item of attacker is any tool or any sword
+	held item of attacker is any tool, any sword or trident
 	set {_misc} to held item of attacker
 	set {_misc} to {_misc}.getType()
 	attacker.hasCooldown({_misc}) = true
@@ -49,19 +49,21 @@ function calculate_util(n: number) :: number:
 	set {_n} to {_n}/20
 	return {_n}
 
-on damage:
+on damage of living entity:
 	event is not canceled
 	damage cause is not unknown
-	victim is not armor stand or dropped item
 	if attacker's attack is critical:
 		bind hologram "&cCritical!" or "&4Critical!" or "<##CB5B5B>Critical!" or "<##8C1212>Critical!" or "<##601818>Critical!" to victim for 2 seconds offset by (random number between -0.5 and 0.5), (random number between 2.75 and 3.25), (random number between -0.5 and 0.5)
 	set {_util} to calculate_util(final damage*2) + 2.25
 	
 	bind hologram "&c-%(final damage*2)%" to victim for 1 second offset by 0, {_util}, 0
-
+    
+    
+    
 on heal:
 	event is not canceled
-	event-entity is not armor stand or dropped item
+	event-entity is living entity
+	event-entity doesn't have scoreboard tag "global.ignore"
 	health of event-entity != max health of event-entity
 	heal amount is not 0
 	set {_util} to calculate_util(heal amount*2) + 2.25

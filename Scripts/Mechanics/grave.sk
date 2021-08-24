@@ -1,0 +1,53 @@
+on death of player:
+	if {origin::%uuid of victim%} != "Shulk":
+		set {_misc::*} to items of victim
+		clear inventory of victim
+	else:
+		set {_misc::*} to slot 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34 and 35 of player
+		set slot 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34 and 35 of player to air
+	loop blocks upwards:
+		if loop-block is air or cave air:
+			set {_l} to location of loop-block
+			exit loop
+	wait 3 seconds
+	play flash at {_l}
+	play sound "entity.shulker_bullet.hit" with volume 1 and pitch 2 for all players at {_l}
+	play sound "itemsadder:ambient.angelic" with volume 2 and pitch 1 for all players at {_l}
+	set block at {_l} to barrel
+	loop 54 times:
+		if slot (loop-value)-1 of inventory of block at {_l} is enchanted with curse of vanishing:
+			broadcast "vanishing"
+			set slot (loop-value)-1 of inventory of block to air
+	set inventory of block at {_l} to {_misc::*}
+	add location of block at {_l} to {graves::*}
+	wait 180 seconds
+	if {graves::*} contains location of block at {_l}:
+		loop 54 times:
+			set {_slot} to (loop-value - 1)
+			set {_item} to slot {_slot} of block at {_l}
+			drop {_item} at location 1 meter above block at {_l}
+			set slot {_slot} of block at {_l} to air
+		set block at {_l} to air
+		play flash at block at {_l}
+		play sound "block.respawn_anchor.deplete" with volume 1 and pitch 2 for all players at block at {_l}
+		remove location of block at {_l} from {graves::*}
+		
+on right click on barrel:
+	if {graves::*} contains location of event-block:
+		cancel event
+		metadata value "grave" of event-block is not set
+		set metadata value "grave" of event-block to true
+		loop 54 times:
+			set {_slot} to (loop-value - 1)
+			set {_item} to slot {_slot} of event-block
+			drop {_item} at location 1 meter above event-block
+			set slot {_slot} of event-block to air
+		set event-block to air
+		play flash at event-block
+		play sound "block.respawn_anchor.deplete" with volume 1 and pitch 2 for all players at event-block
+		remove location of event-block from {graves::*}
+		clear metadata value "grave" of event-block
+
+on break of barrel:
+	if {graves::*} contains location of event-block:
+		cancel event

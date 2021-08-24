@@ -1,0 +1,18 @@
+on explosion:
+    event-entity is not tnt
+    if event-entity is not wither or fireball:
+        set explosion block yield to 0%
+        set {_b::*} to type of (exploded blocks)
+        wait 10 seconds
+        loop exploded blocks:
+            wait 1 tick
+            add 1 to {_s}
+            set loop-block to {_b::%{_s}%}
+    else:
+        set explosion block yield to 0%
+        set {_b::*} to type of (exploded blocks)
+        wait 120 seconds
+        loop exploded blocks:
+            wait 4 ticks
+            add 1 to {_s}
+            set loop-block to {_b::%{_s}%}
