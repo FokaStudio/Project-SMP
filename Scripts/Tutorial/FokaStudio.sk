@@ -36,9 +36,7 @@ command /tutorial-fokastudio-talk:
 			play sound "entity.villager.ambient" with volume 1 and pitch 1 for player
 			wait 6 seconds
 			console command "/recipe give %player% *"
-			give player lodestone
-			wait 5 ticks
-			give player glowing chorus fruit named "&dEnchanted Golden Chorus Fruit" with lore "&7Teleports you to", "&7a random location" with custom model data 330001
+			give player 2 lodestones
 			wait 5 ticks
 			give player potion named "<##37E1D7>Recall Potion" with lore "&7Teleports you to", "&7your spawn point" with nbt "{CustomPotionColor:3725013,HideFlags:32,PSMPPotion:""Recall""}"
 			wait 5 ticks

@@ -141,29 +141,27 @@ on right click on lodestone:
 			send "&dThose 2 Waystones will now be a shortcut to each other"
 	else:
 		set {_id} to {waystoneid::%location of event-block%}
-		if {waystone::%{_id}%::linked} is set:
-			apply nausea without any particles to player for 7 seconds
-			play sound "block.portal.trigger" with volume 0.5 and pitch 1.15 at player for player
-			wait 3 seconds
-			teleport player to location 1 meter above {waystonelocation::%{waystone::%{_id}%::linked}%}
-			play flash at player
-			play sound "block.portal.travel" with volume 0.5 and pitch 1.15 at player for player
-			play ender signal at player
-			stop
-		else if {waystone.learned::%uuid of player%::*} doesn't contain location of event-block:
-			add location of event-block to {waystone.learned::%uuid of player%::*}
-			send "&fNew Waystone discovered! %{waystone::%{_id}%::name}%" to player
-			stop
-		else if {waystone::%{_id}%::owner} = player:
+		if {waystone::%{_id}%::owner} = player:
 			if player is sneaking:
 				open chest with 1 row named "&7Editing Waystone (%{waystoneid::%location of event-block%}%)" to the player
 				set slot 0 of player's current inventory to writable book named "&fChange Waystone's name"
 				set slot 1 of player's current inventory to painting named "&fChange Waystone's icon"
 				stop
 			else:
+				if {waystone::%{_id}%::linked} is set:
+					apply nausea without any particles to player for 7 seconds
+					play sound "block.portal.trigger" with volume 0.5 and pitch 1.15 at player for player
+					wait 3 seconds
+					teleport player to location 1 meter above {waystonelocation::%{waystone::%{_id}%::linked}%}
+					play flash at player
+					play sound "block.portal.travel" with volume 0.5 and pitch 1.15 at player for player
+					play ender signal at player
+					stop
+				if {waystone.learned::%uuid of player%::*} doesn't contain location of event-block:
+					add location of event-block to {waystone.learned::%uuid of player%::*}
+					send "&fNew Waystone discovered! %{waystone::%{_id}%::name}%" to player
+					stop
 				player command "/pagtest 1"
-				stop
-		player command "/pagtest 1"
 
 on break of lodestone:
 	{waystonelocation::*} contains location of event-block
