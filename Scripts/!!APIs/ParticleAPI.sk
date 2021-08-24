@@ -14,10 +14,11 @@
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 
-init:
-	register webhook "WebookButler" using url "REDACTED"
-	make new discord bot:
-		enable all default intent
-		login to "REDACTED" with name "Butler"
-	set online status of bot named "Butler" to do not disturb
-	send ":white_check_mark: **Server has started!**" to channel with id "833657829415190578"
+# SkBee's particle system makes Skript parse the code 90x slower, so this is a workaround 
+#(delays only for 2 lines, not every line where you use the effect)
+effect [ParticleAPI] %number% %particle% [using %-itemtype/blockdata/dustoption/dusttransition/vibration%] [at] %location% offset %vector% extra %number% for %players%:
+	trigger:
+		if expr-3 is set:
+			play expr-1 of expr-2 particle using expr-3 at expr-4 offset by expr-5 with extra expr-6 for exprs-7 # SkBee
+		else:
+			play expr-1 of expr-2 particle at expr-4 offset by expr-5 with extra expr-6 for exprs-7 # Skbee

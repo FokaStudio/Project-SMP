@@ -2,10 +2,10 @@ function end_notify_msg(p: player, l: location):
 	blockdata tag "eye" of block at {_l} is false
 	send action bar "<##D1D1D1>&oThis Frame requires a(n) %{ender_eye::%{_l}%}%" to {_p}
 
-function end_drop_eye(l: location, t: string, c: string, e: visual effect, n: number, s: text, p: number, cmd: integer):
+function end_drop_eye(l: location, t: string, c: string, e: visual effect, n: number, s: text, p: number, cmd: integer, player: entity):
 	drop 1 ender eye named "%{_c}%%{_t}%" with custom model data {_cmd} at {_l}
 	show {_n} {_e} at {_l}
-	play sound "%{_s}%" with volume 0.5 and pitch {_p} at {_l} for all players
+	play sound "%{_s}%" with volume 0.5 and pitch {_p} at {_l} for {player}
 
 function end_first_click(l: location, t: text, a: entity, p: player, c: string):
 	set {_tl::*} to lowercase {_t} split at " "
@@ -29,51 +29,51 @@ function end_insert_eye(l: location, t: text, p: player, i: number) :: boolean:
 
 on death of husk:
 	chance of 5%:
-		end_drop_eye(location of victim, "Sandy Eye", "<##F4E636>", critical hit, 10, "entity.husk.converted_to_zombie", 0.75, 1)
+		end_drop_eye(location of victim, "Sandy Eye", "<##F4E636>", critical hit, 10, "entity.husk.converted_to_zombie", 0.75, 2, attacker)
 	
 on death of pillager:
 	chance of 5%:
-		end_drop_eye(location of victim, "Emerald Eye", "<##6CD736>", falling obsidian tear, 6, "event.raid.horn", 0.75, 2)
+		end_drop_eye(location of victim, "Emerald Eye", "<##6CD736>", falling obsidian tear, 6, "event.raid.horn", 0.75, 3, attacker)
 
 on death of drowned:
 	chance of 5%:
-		end_drop_eye(location of victim, "Black Pearl", "<##585858>", water bubble, 16, "entity.zombie.converted_to_drowned", 0.8, 3)
+		end_drop_eye(location of victim, "Black Pearl", "<##585858>", water bubble, 16, "entity.zombie.converted_to_drowned", 0.8, 4, attacker)
 	
 on death of blaze:
 	chance of 5%:
-		end_drop_eye(location of victim, "Fiery Eye", "<##CA4646>", mob spawner flames, 1, "entity.blaze.burn", 0.75, 4)
+		end_drop_eye(location of victim, "Fiery Eye", "<##CA4646>", mob spawner flames, 1, "entity.blaze.burn", 0.75, 5, attacker)
 
 on death of guardian:
 	chance of 5%:
-		end_drop_eye(location of victim, "Prismarine Eye", "<##32D3D3>", water bubble, 26, "entity.elder_guardian.curse", 0.75, 5)
+		end_drop_eye(location of victim, "Prismarine Eye", "<##32D3D3>", water bubble, 26, "entity.elder_guardian.curse", 0.75, 6, attacker)
 
 on death of creeper:
 	chance of 5%:
-		end_drop_eye(location of victim, "Lush Eye", "<##1A9C1A>", crimson spore, 15, "entity.parrot.imitate.ender_dragon", 0.75, 6)
+		end_drop_eye(location of victim, "Lush Eye", "<##1A9C1A>", crimson spore, 15, "entity.parrot.imitate.ender_dragon", 0.75, 7, attacker)
 
 on death of evoker:
 	chance of 5%:
-		end_drop_eye(location of victim, "Runic Eye", "<##BF6671>", enchantment table, 8, "entity.evoker.prepare_attack", 0.75, 9)
+		end_drop_eye(location of victim, "Runic Eye", "<##BF6671>", enchantment table, 8, "entity.evoker.prepare_attack", 0.75, 10, attacker)
 
 import:
 	org.bukkit.event.entity.PiglinBarterEvent
 
 on PiglinBarterEvent:
 	chance of 5%:
-		end_drop_eye(location of event.getEntity(), "Gilded Eye", "<##A0A65E>", white ash, 15, "pentity.piglin.admiring_item", 0.75, 10)
+		end_drop_eye(location of event.getEntity(), "Gilded Eye", "<##A0A65E>", white ash, 15, "pentity.piglin.admiring_item", 0.75, 11, event.getPlayer())
 
 on death of wither skeleton:
 	chance of 5%:
-		end_drop_eye(location of victim, "Withered Eye", "<##272727>", falling lava, 8, "entity.wither.spawn", 0.75, 7)
+		end_drop_eye(location of victim, "Withered Eye", "<##272727>", falling lava, 8, "entity.wither.spawn", 0.75, 8, attacker)
 
 on death of stray:
 	chance of 5%:
-		end_drop_eye(location of victim, "Frozen Eye", "<##328F9A>", falling water, 8, "entity.skeleton.converted_to_stray", 0.75, 11)
+		end_drop_eye(location of victim, "Frozen Eye", "<##328F9A>", falling water, 8, "entity.skeleton.converted_to_stray", 0.75, 12, attacker)
 
 on damage of end crystal:
 	wait 10 ticks
 	chance of 25%:
-		end_drop_eye(location of victim, "Crystal Core", "<##E473D8>", magical critical hit, 10, "entity.ender_dragon.flap", 0.75, 8)
+		end_drop_eye(location of victim, "Crystal Core", "<##E473D8>", magical critical hit, 10, "entity.ender_dragon.flap", 0.75, 9, attacker)
 
 on right click on end portal frame:
 	if {ender_eye::%location of event-block%} is not set:
@@ -113,57 +113,57 @@ on right click on end portal frame:
 		if tool of player is not an ender eye:
 			end_notify_msg(player, location of event-block)
 			stop
-		if end_insert_eye(location of event-block, "Sandy Eye", player, 1) = true:
+		if end_insert_eye(location of event-block, "Sandy Eye", player, 2) = true:
 			uncancel event
 			play flash at event-block
 			play sound "entity.husk.converted_to_zombie" with volume 0.15 and pitch 0.75 at event-block
 			play sound "entity.ender_dragon.growl" with volume 0.01 and pitch 0.75 at event-block
-		else if end_insert_eye(location of event-block, "Emerald Eye", player, 2) = true:
+		else if end_insert_eye(location of event-block, "Emerald Eye", player, 3) = true:
 			uncancel event
 			play flash at event-block
 			play sound "event.raid.horn" with volume 5 and pitch 0.75 at event-block
 			play sound "entity.ender_dragon.growl" with volume 0.01 and pitch 0.75 at event-block
-		else if end_insert_eye(location of event-block, "Black Pearl", player, 3) = true:
+		else if end_insert_eye(location of event-block, "Black Pearl", player, 4) = true:
 			uncancel event
 			play flash at event-block
 			play sound "entity.zombie.converted_to_drowned" with volume 0.15 and pitch 0.75 at event-block
 			play sound "entity.ender_dragon.growl" with volume 0.01 and pitch 0.75 at event-block
-		else if end_insert_eye(location of event-block, "Fiery Eye", player, 4) = true:
+		else if end_insert_eye(location of event-block, "Fiery Eye", player, 5) = true:
 			uncancel event
 			play flash at event-block
 			play sound "entity.blaze.burn" with volume 0.15 and pitch 0.75 at event-block
 			play sound "entity.ender_dragon.growl" with volume 0.01 and pitch 0.75 at event-block
-		else if end_insert_eye(location of event-block, "Prismarine Eye", player, 5) = true:
+		else if end_insert_eye(location of event-block, "Prismarine Eye", player, 6) = true:
 			uncancel event
 			play flash at event-block
 			play sound "entity.elder_guardian.curse" with volume 0.15 and pitch 0.75 at event-block
 			play sound "entity.ender_dragon.growl" with volume 0.01 and pitch 0.75 at event-block
-		else if end_insert_eye(location of event-block, "Lush Eye", player, 6) = true:
+		else if end_insert_eye(location of event-block, "Lush Eye", player, 7) = true:
 			uncancel event
 			play flash at event-block
 			play sound "entity.parrot.imitate.ender_dragon" with volume 0.15 and pitch 0.75 at event-block
 			play sound "entity.ender_dragon.growl" with volume 0.01 and pitch 0.75 at event-block
-		else if end_insert_eye(location of event-block, "Withered Eye", player, 7) = true:
+		else if end_insert_eye(location of event-block, "Withered Eye", player, 8) = true:
 			uncancel event
 			play flash at event-block
 			play sound "entity.wither.spawn" with volume 0.15 and pitch 0.75 at event-block
 			play sound "entity.ender_dragon.growl" with volume 0.01 and pitch 0.75 at event-block
-		else if end_insert_eye(location of event-block, "Crystal Core", player, 8) = true:
+		else if end_insert_eye(location of event-block, "Crystal Core", player, 9) = true:
 			uncancel event
 			play flash at event-block
 			play sound "entity.ender_dragon.flap" with volume 0.15 and pitch 0.75 at event-block
 			play sound "entity.ender_dragon.growl" with volume 0.01 and pitch 0.75 at event-block
-		else if end_insert_eye(location of event-block, "Runic Eye", player, 9) = true:
+		else if end_insert_eye(location of event-block, "Runic Eye", player, 10) = true:
 			uncancel event
 			play flash at event-block
 			play sound "entity.evoker.prepare_attack" with volume 0.15 and pitch 0.75 at event-block
 			play sound "entity.ender_dragon.growl" with volume 0.01 and pitch 0.75 at event-block
-		else if end_insert_eye(location of event-block, "Gilded Eye", player, 10) = true:
+		else if end_insert_eye(location of event-block, "Gilded Eye", player, 11) = true:
 			uncancel event
 			play flash at event-block
 			play sound "entity.piglin.admiring_item" with volume 0.15 and pitch 0.75 at event-block
 			play sound "entity.ender_dragon.growl" with volume 0.01 and pitch 0.75 at event-block
-		else if end_insert_eye(location of event-block, "Frozen Eye", player, 11) = true:
+		else if end_insert_eye(location of event-block, "Frozen Eye", player, 12) = true:
 			uncancel event
 			play flash at event-block
 			play sound "entity.skeleton.converted_to_stray" with volume 0.15 and pitch 0.75 at event-block

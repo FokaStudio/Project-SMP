@@ -1,31 +1,163 @@
-import:
-	dev.lone.itemsadder.api.FontImages.PlayerHudWrapper
-	dev.lone.itemsadder.api.FontImages.PlayerQuantityHudWrapper
+# Copyright 2021  FokaStudio
 
-every 3 seconds:
-	loop all players:
-		send "%PlayerHUDsHolderWrapper().getPlayer(loop-player)%" to console
-		set {_manaHud} to new PlayerQuantityHudWapper({_hudWrapper}, "magiccraft:mana_bar");
-		{_manaHud}.setFloatValue((({_manaHud}.getFloatValue)+1.0)f)
+# This program is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+
+# You should have received a copy of the GNU General Public License
+# along with this program.  If not, see <https://www.gnu.org/licenses/>.
+
+
+import:
+	com.archyx.aureliumskills.api.AureliumAPI
+
+player property mana:
+	return type: number
+	get:
+		return AureliumAPI.getMana(expr-1)
+	set:
+		AureliumAPI.setMana(expr-1, change value)
+	add:
+		AureliumAPI.setMana(expr-1, (AureliumAPI.getMana(expr-1) + change value))
+	remove:
+		AureliumAPI.setMana(expr-1, (AureliumAPI.getMana(expr-1) - change value))
+
+condition:
+	patterns:
+		%player%'s wand has no durability
+		wand of %player% is broken
+		%player%'s wand is broken
+	check:
+		if durability of tool of expr-1 = max durability of tool of expr-1:
+			continue
+
+function wandCheck(p: player, m: int) :: boolean:
+	if tool of {_p} != stone sword:
+		return false 
+	else if {_p}'s wand is broken:
+		play sound "block.note_block.bass" with volume 1 and pitch .5 to {_p}
+		send "%fontimage ""twitteremojis:cancel""% &cYour wand is broken! Repair it in an anvil first!" to {_p}
+		return false
+	else if (mana of {_p} - {_m}) <= 0:
+		play sound "block.note_block.bass" with volume 1 and pitch .5 to {_p}
+		send "%fontimage ""twitteremojis:cancel""% &cNot enough Mana! %{_m}%&c is needed to cast this spell!" to {_p}
+		return false
+	else:
+		return true
 
 command wand_of_fire:
 	trigger:
-		tool of player is stone sword
-		SKill shoot wand from player using flame with speed 5 with mode "follow" repeat 350 and store result in {misc::*}
-		if {misc::1} is a block:
-			play 50 of block particle using {misc::1} at {misc::2}
-			show 15 smoke at {misc::2}
-			play sound "entity.generic.extinguish_fire" at {misc::2}
-			show 5 lava pop at {misc::1}
-		else if {misc::1} is a player:
-			set {misc::1} on fire
-			damage {misc::1} by 4
-			play sound "entity.generic.extinguish_fire" with volume 1 and pitch 0.5 at {misc::1}
-			show 50 lava pop at {misc::1}
-		else if {misc::1} is an entity:
-			set {misc::1} on fire
-			damage {misc::1} by 3
-			play sound "entity.generic.extinguish_fire" with volume 1 and pitch 0.5 at {misc::1}
-			show 50 lava pop at {misc::1}
-		clear {misc::*}
+		stop if wandCheck(player, 12) = false
+		remove 12 from mana of player
+		play sound "entity.blaze.shoot" with volume 1 and pitch 0.8 at player for all players
+		ParticleAPI 80 enchant at location 1.15 meters above player offset vector(0, 0, 0) extra 1 for all players
+		SKill shoot wand from player using flame with speed 5 with mode "follow" repeat 350 and store result in {wand.result::*}
+		if {wand.result::1} is a block:
+			ParticleAPI 50 block using {wand.result::1} at {wand.result::2} offset vector(0, 0, 0) extra 1 for all players
+			ParticleAPI 80 campfire_cosy_smoke at {wand.result::1} offset vector(.5, .5, .5) extra 0 for all players
+			play sound "entity.generic.extinguish_fire" at {wand.result::2}
+			show 5 lava pop at {wand.result::1}
+		else if {wand.result::1} is a player:
+			set {wand.result::1} on fire
+			make player damage {wand.result::1} by 6
+			play sound "entity.generic.extinguish_fire" with volume 1 and pitch 0.5 at {wand.result::1}
+			show 50 lava pop at {wand.result::1}
+		else if {wand.result::1} is an entity:
+			set {wand.result::1} on fire
+			make player damage {wand.result::1} by 5
+			play sound "entity.generic.extinguish_fire" with volume 1 and pitch 0.5 at {wand.result::1}
+			show 50 lava pop at {wand.result::1}
+		clear {wand.result::*}
 
+command wand_of_air:
+	trigger:
+		stop if wandCheck(player, 10) = false
+		remove 10 from mana of player
+		ParticleAPI 80 enchant at location 1.15 meters above player offset vector(0, 0, 0) extra 1 for all players
+		play sound "block.respawn_anchor.charge" with volume 1 and pitch 2 at player for all players
+		play sound "entity.bat.takeoff" with volume 1 and pitch 1.25 at player for all players
+		SKill shoot wand from player using dust using dustOption(white, 1.5) with speed 35 with mode "chaotic" repeat 350 and store result in {wand.result::*}
+		if {wand.result::1} is a block:
+			ParticleAPI 20 block using {wand.result::1} at {wand.result::2} offset vector(0, 0, 0) extra 1 for all players
+			play sound "entity.bat.takeoff" at {wand.result::2}
+			ParticleAPI 20 poof {wand.result::1} offset vector(0, 0, 0) extra 0.1 for all players
+		else if {wand.result::1} is a player:
+			make player damage {wand.result::1} by 1
+			push {wand.result::1} up at speed 1
+			push {wand.result::1} (direction from player to {wand.result::1}) at speed 2
+			play sound "entity.bat.takeoff" with volume 1 and pitch 0.95 at {wand.result::1}
+			ParticleAPI 80 poof at {wand.result::1} offset vector(1, 1, 1) extra 0.3 for all players
+		else if {wand.result::1} is an entity:
+			make player damage {wand.result::1} by 1
+			push {wand.result::1} up at speed 1
+			push {wand.result::1} (direction from player to {wand.result::1}) at speed 2
+			play sound "entity.bat.takeoff" with volume 1 and pitch 0.95 at {wand.result::1}
+			ParticleAPI 80 poof at {wand.result::1} offset vector(1, 1, 1) extra 0.3 for all players
+		clear {wand.result::*}
+
+command wand_of_soul_fire:
+	trigger:
+		stop if wandCheck(player, 14) = false
+		remove 14 from mana of player
+		play sound "entity.blaze.shoot" with volume 1 and pitch 0.6 at player for all players
+		ParticleAPI 80 enchant at location 1.15 meters above player offset vector(0, 0, 0) extra 1 for all players
+		SKill shoot wand from player using soul_fire_flame with speed 7 with mode "follow" repeat 550 and store result in {wand.result::*}
+		if {wand.result::1} is a block:
+			ParticleAPI 50 block using {wand.result::1} at {wand.result::2} offset vector(0, 0, 0) extra 1 for all players
+			ParticleAPI 80 campfire_cosy_smoke at {wand.result::1} offset vector(.5, .5, .5) extra 0 for all players
+			play sound "entity.generic.extinguish_fire" at {wand.result::2}
+			show 5 lava pop at {wand.result::1}
+			ParticleAPI 5 soul at {wand.result::1} offset vector(0.5, 0.5, 0.5) extra 0 for all players
+		else if {wand.result::1} is a player:
+			set {wand.result::1} on fire
+			make player damage {wand.result::1} by 9
+			play sound "entity.generic.extinguish_fire" with volume 1 and pitch 0.5 at {wand.result::1}
+			show 50 lava pop at {wand.result::1}
+			ParticleAPI 15 soul at {wand.result::1} offset vector(1, 1, 1) extra 0.2 for all players
+		else if {wand.result::1} is an entity:
+			set {wand.result::1} on fire
+			make player damage {wand.result::1} by 8
+			play sound "entity.generic.extinguish_fire" with volume 1 and pitch 0.5 at {wand.result::1}
+			show 50 lava pop at {wand.result::1}
+			ParticleAPI 15 soul at {wand.result::1} offset vector(1, 1, 1) extra 0.1 for all players
+		clear {wand.result::*}
+
+command wand_of_slime:
+	trigger:
+		stop if wandCheck(player, 11) = false
+		remove 11 from mana of player
+		play sound "entity.slime.attack" with volume 1 and pitch 0.9 at player for all players
+		ParticleAPI 80 enchant at location 1.15 meters above player offset vector(0, 0, 0) extra 1 for all players
+		if player is sneaking:
+			play sound "entity.slime.squish" with volume 1 and pitch 0.8 at player
+			push player upwards with speed 2
+			stop
+		SKill shoot wand from player using dust using dustOption(lime, 2.5) with speed 5 with mode "follow" repeat 350 and store result in {wand.result::*}
+		if {wand.result::1} is a block:
+			ParticleAPI 50 block using {wand.result::1} at {wand.result::2} offset vector(0, 0, 0) extra 1 for all players
+			ParticleAPI 50 block using minecraft:slime_block at {wand.result::2} offset vector(0, 0, 0) extra 1 for all players
+			play sound "entity.slime.squish_small" at {wand.result::2}
+			play sound "block.gravel.break" with volume 1 and pitch .6 at {wand.result::2}
+			play sound "block.slime_block.break" with volume 1 and pitch .8 at {wand.result::2}
+			ParticleAPI 5 soul at {wand.result::1} offset vector(0.5, 0.5, 0.5) extra 0 for all players
+		else if {wand.result::1} is a player:
+			make player damage {wand.result::1} by 1
+			push {wand.result::1} upwards with speed 1
+			play sound "entity.slime.squish" with volume 1 and pitch 0.8 at {wand.result::1}
+			play sound "block.gravel.break" with volume 1 and pitch .6 at {wand.result::2}
+			play sound "block.slime_block.break" with volume 1 and pitch .8 at {wand.result::2}
+			ParticleAPI 25 block using minecraft:slime_block at {wand.result::2} offset vector(0, 0, 0) extra 1 for all players
+		else if {wand.result::1} is an entity:
+			make player damage {wand.result::1} by 1
+			push {wand.result::1} upwards with speed 1
+			play sound "entity.slime.squish" with volume 1 and pitch 0.8 at {wand.result::1}
+			play sound "block.gravel.break" with volume 1 and pitch .6 at {wand.result::2}
+			play sound "block.slime_block.break" with volume 1 and pitch .8 at {wand.result::2}
+			ParticleAPI 25 block using minecraft:slime_block at {wand.result::2} offset vector(0, 0, 0) extra 1 for all players
+		clear {wand.result::*}

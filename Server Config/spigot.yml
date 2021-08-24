@@ -12,6 +12,7 @@
 
 config-version: 12
 settings:
+  log-named-deaths: true
   debug: false
   bungeecord: false
   sample-count: 12
@@ -33,12 +34,13 @@ settings:
     attackDamage:
       max: 2048.0
 messages:
-  whitelist: You are not whitelisted on this server!
-  unknown-command: Unknown command. Type "/help" for help.
-  server-full: The server is full!
-  outdated-client: Outdated client! Please use {0}
-  outdated-server: Outdated server! I'm still on {0}
-  restart: Server is restarting
+  whitelist: Server is undergoing maintenance!\nPlease come back later!
+  unknown-command: This command doesn't exist!\nOr does it...?
+  server-full: The server is full!\nPlease check again later!
+  outdated-client: Outdated client!\nPlease update to {0}!\n(no, we will not allow
+    older clients to join,\njust update from this 1.8 or 1.12, whatever...)
+  outdated-server: Server is outdated!\nI am still on {0}!
+  restart: Server is restarting!\nPlease be back in few minutes!
 advancements:
   disable-saving: false
   disabled:
@@ -51,10 +53,10 @@ commands:
   - tellraw
   spam-exclusions:
   - /skill
-  silent-commandblock-console: true
-  log: true
+  silent-commandblock-console: false
+  log: false
   tab-complete: 0
-  send-namespaced: false
+  send-namespaced: true
 players:
   disable-saving: false
 stats:
@@ -63,7 +65,7 @@ stats:
 world-settings:
   default:
     verbose: false
-    hopper-amount: 4
+    hopper-amount: 1
     dragon-death-sound-radius: 512
     seed-village: 10387312
     seed-desert: 14357617
@@ -81,22 +83,22 @@ world-settings:
     seed-mansion: 10387319
     seed-fossil: 14357921
     seed-portal: 34222645
-    max-tnt-per-tick: 20
-    enable-zombie-pigmen-portal-spawns: true
-    item-despawn-rate: 6000
-    view-distance: 1
-    wither-spawn-sound-radius: 512
+    max-tnt-per-tick: 1
     arrow-despawn-rate: 300
     trident-despawn-rate: 1200
-    hanging-tick-frequency: 100
-    zombie-aggressive-towards-villager: true
+    enable-zombie-pigmen-portal-spawns: true
+    item-despawn-rate: 6000
+    view-distance: default
+    wither-spawn-sound-radius: 0
     nerf-spawner-mobs: false
-    mob-spawn-range: 1
+    zombie-aggressive-towards-villager: true
+    hanging-tick-frequency: 0
+    mob-spawn-range: 5
     end-portal-sound-radius: 0
     max-entity-collisions: 1
     merge-radius:
-      exp: 12.0
-      item: 8.0
+      exp: 16.0
+      item: 7.0
     growth:
       cactus-modifier: 100
       cane-modifier: 100
@@ -115,33 +117,33 @@ world-settings:
       sweetberry-modifier: 100
       kelp-modifier: 100
     entity-activation-range:
-      animals: 16
-      monsters: 24
-      raiders: 48
+      animals: 8
+      monsters: 18
+      raiders: 36
       misc: 8
       water: 8
-      villagers: 16
-      flying-monsters: 48
+      villagers: 6
+      flying-monsters: 36
       villagers-work-immunity-after: 100
       villagers-work-immunity-for: 20
       villagers-active-for-panic: true
       tick-inactive-villagers: false
       wake-up-inactive:
-        animals-max-per-tick: 2
-        animals-every: 1200
-        animals-for: 40
-        monsters-max-per-tick: 4
-        monsters-every: 400
-        monsters-for: 60
+        animals-max-per-tick: 1
+        animals-every: 1400
+        animals-for: 10
+        monsters-max-per-tick: 1
+        monsters-every: 800
+        monsters-for: 30
         villagers-max-per-tick: 1
-        villagers-every: 600
-        villagers-for: 20
+        villagers-every: 1000
+        villagers-for: 10
         flying-monsters-max-per-tick: 1
-        flying-monsters-every: 200
-        flying-monsters-for: 60
+        flying-monsters-every: 400
+        flying-monsters-for: 40
     ticks-per:
       hopper-transfer: 8
-      hopper-check: 1
+      hopper-check: 4
     hunger:
       jump-walk-exhaustion: 0.025
       jump-sprint-exhaustion: 0.1
@@ -151,8 +153,8 @@ world-settings:
       sprint-multiplier: 0.05
       other-multiplier: 0.0
     max-tick-time:
-      tile: 50
-      entity: 50
+      tile: 3
+      entity: 6
     squid-spawn-range:
       min: 45.0
     entity-tracking-range:

@@ -1,3 +1,19 @@
+# Copyright 2021  FokaStudio
+
+# This program is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+
+# You should have received a copy of the GNU General Public License
+# along with this program.  If not, see <https://www.gnu.org/licenses/>.
+
+
 options:
 	Illager: Illusioner or Evoker or Vindicator or Pillager
 
@@ -67,17 +83,10 @@ on RaidSpawnWaveEvent:
 		apply ambient potion of strength of tier 1 to {_l} for 999 days
 		apply ambient potion of speed of tier 1 to {_l} for 999 days
 		apply ambient potion of resistance of tier 1 to {_l} for 999 days
-		chance of 75%:
-			wait 2 ticks
-			set {_loop} to random integer between 1 and 4
-			loop {_loop} times:
-				spawn pillager or vindicator at {_l}
-		else:
-			chance of 15%:
-				wait 2 ticks
-				set {_loop} to random integer between 1 and 2
-				loop {_loop} times:
-					spawn illusioner or evoker at {_l}
+		wait 1 second
+		spawn pillager or vindicator at {_l}
+		chance of 25%:
+			spawn evoker at {_l}
 		if {_l} = pillager:
 			set offhand tool of {_l} to 64 of strong poison tipped arrow, long poison tipped arrow, long weakness tipped arrow, strong harming tipped arrow, spectral arrow or strong slowness tipped arrow
 			enchant tool of {_l} with piercing 4
@@ -98,11 +107,12 @@ on RaidSpawnWaveEvent:
 			chance of 25%:
 				{_l}.setPatrolLeader(true)
 		else if {_l} = ravager:
-			chance of 50%:
+			chance of 75%:
 				set passengers of {_l} to illusioner, evoker or witch
 			chance of 25%:
 				wait 2 ticks
 				spawn 6 pillagers at {_l}
+				set offhand tool of last spawned pillager to shield
 		else if {_l} = witch:
 			apply ambient potion of speed of tier 2 to {_l} for 999 days
 			apply ambient potion of regeneration of tier 3 to {_l} for 999 days
@@ -119,5 +129,6 @@ on spawn of vex:
 		heal {_e}
 
 on spawn of evoker:
-	chance of 40%:
+	"%spawn reason%" != "spawner"
+	chance of 60%:
 		spawn illusioner at event-entity
