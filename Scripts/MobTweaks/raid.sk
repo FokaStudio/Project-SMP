@@ -102,6 +102,8 @@ on RaidSpawnWaveEvent:
 				enchant tool of {_l} with sharpness
 			chance of 45%:
 				enchant tool of {_l} with knockback
+			chance of 50%:
+				spawn witch at {_l}
 		else if {_l} = evoker:
 			set held item of {_l} to totem of undying
 			chance of 25%:
@@ -109,14 +111,13 @@ on RaidSpawnWaveEvent:
 		else if {_l} = ravager:
 			chance of 75%:
 				set passengers of {_l} to illusioner, evoker or witch
-			chance of 25%:
-				wait 2 ticks
-				spawn 6 pillagers at {_l}
-				set offhand tool of last spawned pillager to shield
+			spawn 6 pillagers at {_l}
+			set offhand tool of last spawned pillager to shield
 		else if {_l} = witch:
 			apply ambient potion of speed of tier 2 to {_l} for 999 days
 			apply ambient potion of regeneration of tier 3 to {_l} for 999 days
 			apply ambient potion of absorption of tier 4 to {_l} for 999 days
+			wait 2 ticks
 
 on spawn of vex:
 	set {_e} to event.getEntity()
