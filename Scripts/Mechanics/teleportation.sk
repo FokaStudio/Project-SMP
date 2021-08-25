@@ -157,12 +157,15 @@ on right click on lodestone:
 					play sound "block.portal.travel" with volume 0.5 and pitch 1.15 at player for player
 					play ender signal at player
 					stop
-				if {waystone.learned::%uuid of player%::*} doesn't contain location of event-block:
+				else if {waystone.learned::%uuid of player%::*} doesn't contain location of event-block:
 					add location of event-block to {waystone.learned::%uuid of player%::*}
 					send "&fNew Waystone discovered! %{waystone::%{_id}%::name}%" to player
 				player command "/pagtest 1"
 				stop
 			player command "/pagtest 1"
+			stop
+		player command "/pagtest 1"
+			
 
 on break of lodestone:
 	{waystonelocation::*} contains location of event-block
