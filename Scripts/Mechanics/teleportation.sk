@@ -160,8 +160,9 @@ on right click on lodestone:
 				if {waystone.learned::%uuid of player%::*} doesn't contain location of event-block:
 					add location of event-block to {waystone.learned::%uuid of player%::*}
 					send "&fNew Waystone discovered! %{waystone::%{_id}%::name}%" to player
-					stop
 				player command "/pagtest 1"
+				stop
+			player command "/pagtest 1"
 
 on break of lodestone:
 	{waystonelocation::*} contains location of event-block
