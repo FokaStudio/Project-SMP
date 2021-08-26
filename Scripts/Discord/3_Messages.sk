@@ -20,27 +20,30 @@ import:
 on PlayerAdvancementDoneEvent:
 	set {_a} to event.getAdvancement().getDisplay()
 	{_a}.shouldAnnounceChat() = true
+	set {_d} to uncolored {_a}.getDescription()
+	set {_t} to {_a}.getTitle()
 	if "%{_a}.getFrameType()%" contains "TASK":
-		send ":trophy: **%event.getPlayer()% has made the advancement**%nl%*%{_a}.getTitle()%*%nl%```%{_a}.getDescription()%```" to channel with id "833657829415190578"
+		send ":trophy: **%event.getPlayer()% has made the advancement**%nl%*%{_t}%*%nl%```%{_d}%```" to channel with id "833657829415190578"
 	else if "%{_a}.getFrameType()%" contains "GOAL":
-		send ":trophy: **%event.getPlayer()% has made the goal **%nl%*%{_a}.getTitle()%*%nl%```%{_a}.getDescription()%```" to channel with id "833657829415190578"
+		send ":trophy: **%event.getPlayer()% has made the goal **%nl%*%{_t}%*%nl%```%{_d}%```" to channel with id "833657829415190578"
 	else if "%{_a}.getFrameType()%" contains "CHALLENGE":
-		send ":trophy: **%event.getPlayer()% has made the challenge **%nl%*%{_a}.getTitle()%*%nl%```%{_a}.getDescription()%```" to channel with id "833657829415190578"
+		send ":trophy: **%event.getPlayer()% has made the challenge **%nl%*%{_t}%*%nl%```%{_d}%```" to channel with id "833657829415190578"
 
 on server stop:
 	send ":x: **Server has stopped**" to channel with id "833657829415190578"
-	shutdown bot named "Butler"
 
 import:
 	net.pl3x.purpur.event.PlayerAFKEvent
 
 on PlayerAFKEvent:
+	set {_p} to event.getPlayer()
 	if event.isGoingAfk() = true:
-		send ":keyboard: **%event.getPlayer()% is now AFK**" to channel with id "833657829415190578"
+		send ":keyboard: **%{_p}% is now AFK**" to channel with id "833657829415190578"
 	else:
-		send ":keyboard: **%event.getPlayer()% is no longer AFK**" to channel with id "833657829415190578"
+		send ":keyboard: **%{_p}% is no longer AFK**" to channel with id "833657829415190578"
 
 on chat:
+	wait 5 ticks
 	event is not cancelled
 	replace all "@" in message with "@ "
 	make new webhook message:
@@ -69,6 +72,7 @@ on chat:
 	make webhook "WebookButler" send message last webhook message builder
 	
 on message receive:
+	wait 5 ticks
 	id of event-channel is "833657829415190578"
 	if event-message is a webhook:
 		stop
@@ -78,13 +82,17 @@ on message receive:
 	play sound "entity.experience_orb.pickup" to all players where [input doesn't have scoreboard tag "sounds.off"]
 
 on join:
+	wait 5 ticks
 	if player has not played before:
 		send ":tada: **%event-player% has joined the server for the first time!**" to channel with id "833657829415190578"
 	else:
 		send ":heavy_plus_sign: %event-player% has joined the game" to channel with id "833657829415190578"
 
 on disconnect:
+	wait 5 ticks
 	send ":heavy_minus_sign: %event-player% has left the game" to channel with id "833657829415190578"
 
 on death of player:
+	wait 5 ticks
+	event is not cancelled
 	send ":skull: **%uncolored death message%**" to channel with id "833657829415190578"
