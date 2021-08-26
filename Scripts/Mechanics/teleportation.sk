@@ -67,7 +67,9 @@ function WaystoneLoop():
 	loop all players where [target block of input is lodestone]:
 		set {_id2} to {waystoneid::%location of loop-player's target block%}
 		{waystone::%{_id2}%::linked} is set
-		send action bar "&cThis Waystone is connected to %{waystone::%{waystone::%{_id2}%::linked}%::name}% &7(Owned by &4%{waystone::%{waystone::%{_id2}%::linked}%::owner}%&7)" to loop-player
+		loop 10 times:
+			send action bar "&cThis Waystone is connected to %{waystone::%{waystone::%{_id2}%::linked}%::name}% &7(Owned by &4%{waystone::%{waystone::%{_id2}%::linked}%::owner}%&7)" to loop-player
+			wait 1 ticks
 
 every 5 ticks:
 	WaystoneLoop()
@@ -132,7 +134,8 @@ on right click on lodestone:
 			location of event-block != metadata value "lodestone.linking" of player
 			set {_id} to {waystoneid::%metadata value ""lodestone.linking"" of player%}
 			set {_id2} to {waystoneid::%location of event-block%}
-			remove location of event-block from {waystone.learned::%uuid of player%::*}
+			loop all offline players:
+				remove location of event-block from {waystone.learned::%uuid of loop-value%::*}
 			remove metadata value "lodestone.linking" of player from {waystone.learned::%uuid of player%::*}
 			set {waystone::%{_id}%::linked} to {_id2}
 			set {waystone::%{_id2}%::linked} to {_id}
@@ -147,26 +150,22 @@ on right click on lodestone:
 				set slot 0 of player's current inventory to writable book named "&fChange Waystone's name"
 				set slot 1 of player's current inventory to painting named "&fChange Waystone's icon"
 				stop
-			else:
-				if {waystone::%{_id}%::linked} is set:
-					apply nausea without any particles to player for 7 seconds
-					play sound "block.portal.trigger" with volume 0.5 and pitch 1.15 at player for player
-					wait 3 seconds
-					teleport player to location 1 meter above {waystonelocation::%{waystone::%{_id}%::linked}%}
-					play flash at player
-					play sound "block.portal.travel" with volume 0.5 and pitch 1.15 at player for player
-					play ender signal at player
-					stop
-				else if {waystone.learned::%uuid of player%::*} doesn't contain location of event-block:
-					add location of event-block to {waystone.learned::%uuid of player%::*}
-					send "&fNew Waystone discovered! %{waystone::%{_id}%::name}%" to player
-				player command "/pagtest 1"
-				stop
-			player command "/pagtest 1"
+		if {waystone::%{_id}%::linked} is set:
+			apply nausea without any particles to player for 7 seconds
+			play sound "block.portal.trigger" with volume 0.5 and pitch 1.15 at player for player
+			wait 3 seconds
+			teleport player to location 1 meter above {waystonelocation::%{waystone::%{_id}%::linked}%}
+			play flash at player
+			play sound "block.portal.travel" with volume 0.5 and pitch 1.15 at player for player
+			play ender signal at player
+			stop
+		if {waystone.learned::%uuid of player%::*} doesn't contain location of event-block:
+			add location of event-block to {waystone.learned::%uuid of player%::*}
+			send "&fNew Waystone discovered! %{waystone::%{_id}%::name}%" to player
 			stop
 		player command "/pagtest 1"
+		stop
 			
-
 on break of lodestone:
 	{waystonelocation::*} contains location of event-block
 	loop {waystonelocation::*}:
@@ -261,7 +260,8 @@ command /pagtest [<integer=1>]:
 on inventory click:
 	name of player's current inventory contains "&7Available Waystones &8(&9Page "
 	cancel event
-	if name of clicked item is "&a&lNEXT PAGE ->&r" or "&c&l<- PREVIOUS PAGE&r":
+	stop if clicked item is air
+	if clicked item is feather:
 		# Gets the page you are on
 		set {_getCurrentPage} to name of player's current inventory
 		# Removes all text other than page number from name of the GUI / This is one method
