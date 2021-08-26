@@ -81,7 +81,7 @@ function healthDisplay(e: living entity) :: string:
 
 function sendBroadcast(p: players, m: string, t: integer=1):
 	send "" to {_p::*}
-	send "%fontimage ""mcemojis:mc_book""% <##9AFEEF>%{_m}%" to {_p::*}
+	send "%fontimage ""minecraft:mc_book""% <##9AFEEF>%{_m}%" to {_p::*}
 	send "" to {_p::*}
 
 function savedBroadcastExists(i: integer) :: boolean:
