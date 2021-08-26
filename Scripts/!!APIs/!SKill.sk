@@ -23,12 +23,12 @@ import:
 # 2) On rain
 condition [SKill] %entity% is wet:
 	check:
-		if weather in world of exprs-1 = rain or thunder:
-			set {_b::*} to (y-coord of location of highest solid block at location of exprs-1)
-			set {_a::*} to (y-coord of location of exprs-1)
+		if weather in world of expr-1 = rain or thunder:
+			set {_b::*} to (y-coord of location of highest solid block at location of expr-1)
+			set {_a::*} to (y-coord of location of expr-1)
 			{_a::*} > {_b::*}
 			continue
-		if block at exprs-1 = water or flowing water:
+		if block at expr-1 = water or flowing water:
 			expr-1.getVehicle() != oak boat or acacia boat or birch boat or dark oak boat or spruce boat or jungle boat # Any boat wasn't working for some unkown reason :(
 			continue
 
@@ -46,7 +46,7 @@ condition [SKill] %player%'s attack is critical:
 # Original from SkQuery, but just like Skellet (which I will mention later on)
 # this addon is just a messy tossed salad of features, from which only some of 
 # them are actually useful...
-condition [SKill] %entity% (0¦has|1¦doesn't have)[ potion [(of|effect)]] %potion effect type%:
+condition [SKill] %entity% (0¦has|1¦doesn't have) [potion [(of|effect)]] %potion effect types%:
 	check:
 		if parse mark = 0:
 			if expr-1.hasPotionEffect(exprs-2) = true:
@@ -165,6 +165,6 @@ effect [SKill] shoot wand from %entity% using [particle] %particle% [using %-ite
 
 # It does what it says...
 # It is 'nothing'
-effect [do] nothing:
+effect [SKill] [do] nothing:
 	trigger:
 		stop
