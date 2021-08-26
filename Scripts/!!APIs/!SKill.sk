@@ -162,3 +162,9 @@ effect [SKill] shoot wand from %entity% using [particle] %particle% [using %-ite
 				set {_loop} to 0
 		set raw expr-7 to {_return.list::*}
 		continue
+
+# It does what it says...
+# It is 'nothing'
+effect [do] nothing:
+	trigger:
+		stop
