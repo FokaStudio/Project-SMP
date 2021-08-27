@@ -17,6 +17,7 @@
 discord command tagcreator [<text>] [<text>] [<text>]:
 	aliases: tcreator, tc, tagmanager, tm, tmanager, tagc, tagm
 	permissions: administrator
+	category: Tags
 	prefixes: !
 	trigger:
 		if arg-1 is "help":
@@ -71,6 +72,7 @@ discord command tagcreator [<text>] [<text>] [<text>]:
 discord command tag <text>:
 	prefixes: !
 	aliases: t
+	category: Tags
 	trigger:
 		if {discord.tags::*} doesn't contain arg-1:
 			reply to event-message with ":x: **Tag with that ID doesn't exist! (%arg-1%)**"

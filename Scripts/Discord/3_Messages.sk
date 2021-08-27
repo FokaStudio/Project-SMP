@@ -45,7 +45,9 @@ on PlayerAFKEvent:
 on chat:
 	wait 5 ticks
 	event is not cancelled
-	replace all "@" in message with "@ "
+	set {_m} to chat-message
+	replace all "@" in {_m} with "@ "
+	replace all "\" in {_m} with " "
 	make new webhook message:
 		set avatar of webhook to "https://mc-heads.net/avatar/%player%/512"
 		if player has permission "owner":
@@ -68,7 +70,7 @@ on chat:
 			set discord name of webhook to "[VIP] %player%"
 		else:
 			set discord name of webhook to "[Member] %player%"
-		set message content of webhook to uncolored chat-message
+		set message content of webhook to uncolored {_m}
 	make webhook "WebookButler" send message last webhook message builder
 	
 on message receive:
@@ -78,7 +80,23 @@ on message receive:
 		stop
 	if event-user is a discord bot:
 		stop
-	broadcast "<##7289DA>Discord&r &7%event-member% » %event-message%"
+	set {_mess} to event-message
+	set {_a::*} to attachments of event-message
+	set {_att.mess} to ""
+	set {_e::*} to disky emotes of event-message
+	loop {_a::*}:
+		if att loop-value is img:
+			set {_att.mess} to "%{_att.mess}% &o[image]&r " 
+		else if att loop-value is vdo:
+			set {_att.mess} to "%{_att.mess}% &o[video]&r "
+		else if att loop-value is spoil:
+			set {_att.mess} to "%{_att.mess}% &o[SPOILER]&r "
+	set {_mess} to "%{_mess}%%{_att.mess}%"
+	loop {_e::*}:
+		replace {_e::*} in {_mess} with discord name of loop-value
+	replace all " " in {_mess} with "&7 "
+	replace all "\" in {_mess} with " " 
+	broadcast "<##7289DA>Discord&r &7%event-member% » %{_mess}%"
 	play sound "entity.experience_orb.pickup" to all players where [input doesn't have scoreboard tag "sounds.off"]
 
 on join:
