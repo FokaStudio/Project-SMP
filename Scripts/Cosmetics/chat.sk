@@ -1,0 +1,95 @@
+# Copyright 2021  FokaStudio
+
+# This program is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+
+# You should have received a copy of the GNU General Public License
+# along with this program.  If not, see <https://www.gnu.org/licenses/>.
+
+
+# Coded by: FokaStudio
+# Original by: <none>
+# Addons required: <none>
+# Other plugins: <none>
+
+#!! ACTUAL CODE VVV
+
+#! Initialization
+init:
+
+	# Chat colors based on permission
+	set {chat.color::owner} to "<##FFFF7C>"
+	set {chat.color::admin} to "<##FF7C7C>"
+	set {chat.color::mod} to "<##FFD17C>"
+	set {chat.color::dev} to "&a"
+	set {chat.color::builder} to "<##7C98FF>"
+	set {chat.color::helper} to "<##1B8D2A>"
+	set {chat.color::mvipplus} to "&f"
+	set {chat.color::mvip} to "&f"
+	set {chat.color::svip} to "&f"
+	set {chat.color::vip} to "&f"
+	set {chat.color::player} to "<##E3E3E3>"
+
+	# List of permissions that have formatted chat
+	set {chat.formatted_perms::*} to "owner", "admin", "mod", "dev", "builder", "helper", "mvipplus", "mvip"
+
+# Ridiculously long function to simplify later code
+function chatPermCheck(p: player) :: text:
+	if {_p} has permission "owner":
+		return "owner"
+	else if {_p} has permission "admin":
+		return "admin"
+	else if {_p} has permission "mod":
+		return "mod"
+	else if {_p} has permission "dev":
+		return "dev"
+	else if {_p} has permission "builder":
+		return "builder"
+	else if {_p} has permission "helper":
+		return "helper"
+	else if {_p} has permission "mvipplus":
+		return "mvipplus"
+	else if {_p} has permission "mvip":
+		return "mvip"
+	else if {_p} has permission "svip":
+		return "svip"
+	else if {_p} has permission "vip":
+		return "vip"
+	else:
+		return "player"
+
+# Event
+on chat:
+
+	# Check if player is a donator (gets a special name plate then)
+	set {_d} to "" # Basically 'null'
+	if player has permission "donator":
+		set {_d} to " %fontimage ""betterranks:donator""%" # And now it is set!
+
+	# Setting temp variables
+	set {_perm} to chatPermCheck(player) # Permission check, returns permission name, e.g. "owner" if player has it
+	set {_image} to fontimage "betterranks:%{_perm}%" # Rank plate, returns it based on previous perm
+	set {_color} to {chat.color::%{_perm}%} # Color, return is based on perm
+	set {_mess} to message # Misc
+	set {_mess} to colored {_mess} if {chat.formatted_perms::*} contains {_perm} # Formatting if player has the right permission
+	
+	# Donators use different perm system than above, so I have to give them another line of code
+	set {_mess} to colored {_mess} if player has permission "donator"
+
+	# Message editing
+	replace all " " in {_mess} with "%{_color}% " # Color applies everywhere, even after '&r' or '<reset>'
+	replace all "\" in {_mess} with " " # You can then replace space bars with '\' and enjoy full color coded messages!
+
+	# Chat format at final
+	set chat format to "%{_image}% %{_color}%%player%%{_d}% &7» %{_color}%%{_mess}%"
+	#! {_image} - rank plate
+	#! {_color} - chat and name color
+	#! {_mess} - chat message 
+	#! {_d} - donator suffix
