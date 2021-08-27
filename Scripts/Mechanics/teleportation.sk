@@ -104,12 +104,6 @@ on right click on lodestone:
 		set slot 0 of player's current inventory to writable book named "&fChange Waystone's name"
 		set slot 0 of player's current inventory to painting named "&fChange Waystone's Icon"
 		remove "lodestone.waystone_icon" from scoreboard tags of player
-	else if player's tool is compass:
-		if player doesn't have ender pearl, blaze rod and emerald:
-			cancel event
-			send action bar "<##A54E59>You need Ender Pearl, Blaze Rod and Emerald in order to do this" to player
-		else:
-			remove ender pearl, blaze rod and emerald from player
 	else if {waystonelocation::*} doesn't contain location of event-block:
 		add 1 to {waystone.count}
 		set {_id} to {waystone.count}
@@ -295,18 +289,3 @@ on inventory click:
 		play sound "block.portal.travel" with volume 0.5 and pitch 1.15 at player for player
 		play ender signal at player
 		teleport player to location 1 meter above {waystonelocation::%{_id::1}%}
-
-on player drop of compass:
-	if tag "LodestonePos" of nbt of event-item is set:
-		player is sneaking
-		kill the closest dropped compass to player
-		set {_x} to tag "LodestonePos;X" of nbt of event-item
-		increase {_y} by 0.5
-		set {_y} to tag "LodestonePos;Y" of nbt of event-item
-		increase {_y} by 1.5
-		set {_z} to tag "LodestonePos;Z" of nbt of event-item
-		increase {_z} by 0.5
-		set {_world} to tag "LodestoneDimension" of nbt of event-item
-		set {_world} to lodestone_dimension({_world})
-		teleport player to location({_x}, {_y}, {_z}, world({_world}))
-		give player compass
