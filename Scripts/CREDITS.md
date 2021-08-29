@@ -7,6 +7,7 @@
 
 # Mechanics
 #### [Secrets (L-Secret)](https://www.spigotmc.org/resources/l-secret-create-your-own-secrets.80490/)
+#### [Lunar Events (Blood Moon)](https://www.spigotmc.org/resources/skript-blood-moon.91247/)
 
 # Cosmetics
 #### [Sword Effects](https://www.spigotmc.org/resources/sword-effects.39384/updates) (unmodified)

@@ -1,0 +1,208 @@
+# Copyright 2021  FokaStudio
+
+# This program is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+
+# You should have received a copy of the GNU General Public License
+# along with this program.  If not, see <https://www.gnu.org/licenses/>.
+
+
+# Coded by: FokaStudio
+# Original by: Lylac47_
+# Addons required:
+# Other plugins:
+
+#!! ACTUAL CODE VVV
+
+#! Initialization
+init:
+	set {lunar.event::event} to null if {lunar.event::event} is not set
+
+# Starting night events
+at 6pm in "world":
+	set {_w} to world("world")
+	broadcast "&dNight is falling upon the world" in {_w}
+	broadcast "&dMay the gods be on your side", "&dMay the luck be on your side, because the gods won't" or "&dGods won't be merciful to you this night" in {_w}
+	wait 40 ticks
+	set {_moonphase} to {_w}.getMoonPhase()
+
+	# Blood moons occur every full moon, so it has to have its own node
+	if "%{_moonphase}%" = "FULL_MOON":
+		broadcast "&4Blood Moon is rising..." in {_w}
+		set {lunar.event::event} to "bloodmoon"
+	else:
+		# Hunt for Blood
+		chance of 10%:
+			broadcast "&cThe Hunt for Blood has begun!" in {_w}
+			set {lunar.event::event} to "bloodhunt"
+			stop
+		
+		# Soulscurrying
+		chance of 15%:
+			broadcast "&bSouls are scurrying out tonight" in {_w}
+			set {lunar.event::event} to "soulscurry"
+			stop
+		
+		# Strange World
+		chance of 15%:
+			broadcast "&eThe world just got stranger..." in {_w}
+			set {lunar.event::event} to "strangeworld"
+			stop
+		
+		# Harvest Moon
+		chance of 5%:
+			broadcast "&6Harvest Moon is rising" in {_w}
+			set the gamerule randomTickSpeed of world "world" to 20
+			set {lunar.event::event} to "harvest"
+			stop
+
+# Ending night events
+at 5am in "world":
+	set {_w} to world("world")
+	if {lunar.event::event} = null:
+		broadcast "&dThe ancient unrest is over for now" in {_w}
+	else:
+		
+		# Bloodmoon
+		if {lunar.event::event} = "bloodmoon":
+			broadcast "&4Blood Moon is ending..." in {_w}
+		
+		# Hunt for Blood
+		else if {lunar.event::event} = "bloodhunt":
+			broadcast "&cThe blood hunters retreat, satisfied." in {_w}
+		
+		# Soulscurrying
+		else if {lunar.event::event} = "soulscurry":
+			broadcast "&bThe lost souls fade as the sun comes up" in {_w}
+		
+		# Strange World
+		else if {lunar.event::event} = "strangeworld":
+			broadcast "&eThe strange creatures begin to vanish." in {_w}
+		
+		# Harvest Moon
+		else if {lunar.event::event} = "harvest":
+			broadcast "&6Harvest Moon is ending..." in {_w}
+			set the gamerule randomTickSpeed of world "world" to 3
+		
+		#!! Generic
+		set {lunar.event::event} to null
+
+# Starting day events
+at 6 am in "world":
+	chance of 10%:
+		broadcast "&aThe hissing sounds begin"
+		set {lunar.event::dayevent} to "creepers"
+		stop
+	chance of 15%:
+		broadcast "&4Today is a good day to die."
+		set {lunar.event::dayevent} to "deathday"
+		stop
+	chance of 5%:
+		broadcast "&6Today is a big day."
+		set {lunar.event::dayevent} to "bigday"
+		stop
+
+# Ending day events
+at 5:30pm in "world":
+	if {lunar.event::event} = "creepers":
+		broadcast "&aThe hissing fades away" in {_w}
+	else if {lunar.event::event} = "deathday":
+		broadcast "&4You survived until night, but it doesn't end here" in {_w}
+	else if {lunar.event::event} = "bigday":
+		broadcast "&6The ground settles as the sun sets" in {_w}
+	set {lunar.event::dayevent} to null
+
+# Editing mob data (night events)
+on spawn:
+	
+	# Checks VVV
+	"%event-entity%" is "creeper", "zombie", "husk", "spider", "skeleton" or "stray" # Checks the entity
+	spawn reason is natural or spawn egg # Checks the spawn reason, becasue Spawner Mobs aren't supposed to count
+	set {_w} to world("world") # Util
+	world of event-entity is {_w} # Checks the world
+	
+	# Blood Moon
+	if {lunar.event::event} = "bloodmoon":
+		apply potion of strength of tier 2 without any particles to event-entity for 999 days
+		apply potion of resistance of tier 2 without any particles to event-entity for 999 days
+		apply potion of speed of tier 1 without any particles to event-entity for 999 days
+		apply potion of absorption of tier 2 without any particles to event-entity for 999 days
+		set {_t} to type of event-entity
+		spawn {_t} at event-entity
+		if "%event-entity%" is "creeper":
+			charge event-entity
+	
+	# Hunt for Blood
+	else if {lunar.event::event} = "bloodhunt":
+		if "%event-entity%" is "zombie" or "husk":
+			spawn wither skeleton at event-entity
+		else if "%event-entity%" is "skeleton" or "stray":
+			spawn wither skeleton at event-entity
+			set tool of last spawned wither skeleton to bow
+		apply potion of strength of tier 1 without any particles to last spawned wither skeleton for 999 days
+		apply potion of resistance of tier 1 without any particles to last spawned wither skeleton for 999 days
+	
+	# Soulscurrying
+	else if {lunar.event::event} = "soulscurry":
+		spawn 1 vex at event-entity
+	
+	# Creeper invasion
+	else if {lunar.event::event} = "strangeworld":
+		chance of 50%:
+			spawn 1 creeper at event-entity
+			chance of 25%:
+				charge last spawned creeper
+
+# Editing mob data (day events)
+on spawn:
+	# Checks VVV
+	"%event-entity%" is "cow", "cat", "pig", "horse", "donkey" or "sheep" # Checks the entity
+	spawn reason is natural or spawn egg # Checks the spawn reason, becasue Spawner Mobs aren't supposed to count
+	set {_w} to world("world") # Util
+	world of event-entity is {_w} # Checks the world
+	
+	# Creep Day
+	if {lunar.event::dayevent} = "creepers":
+		chance of 50%:
+			spawn 1 creeper at event-entity
+	
+	# Death Day
+	else if {lunar.event::dayevent} = "deathday":
+		chance of 50%:
+			spawn 1 vindicator, pillager, witch, illusioner or evoker at event-entity
+	
+	# Big Day
+	else if {lunar.event::dayevent} = "bigday":
+		chance of 25%:
+			spawn 1 iron golem at event-entity
+			add "aggresive_golem" to the scoreboard tags of last spawned iron golem
+			set {_t} to biome at last spawned iron golem
+			set name of last spawned iron golem to "&f%{_t}% golem" in proper case
+			add "{PlayerCreated:0b,AngerTime:10000}" to the nbt of last spawned iron golem
+
+# Cancelling mob targetting for a Golem
+#! Iron Golem X Mobs
+on entity target:
+	if event-entity is iron golem:
+		event-entity has scoreboard tag "aggresive_golem"
+		if target is not a player:
+			cancel event
+
+#! Mobs X Iron Golem
+on entity target:
+	target has scoreboard tag "aggresive_golem"
+	cancel event
+
+# Cancels sleeping on a Lunar event
+on bed enter:
+	if {lunar.event::event} != null or "harvest":
+		loop 100 times:
+			send action bar "&cYou don't feel tired this night" to player
+			wait 1 tick
