@@ -24,6 +24,7 @@
 #! Initialization
 init:
 	set {lunar.event::event} to null if {lunar.event::event} is not set
+	set {lunar.event::dayevent} to null if {lunar.event::dayevent} is not set
 
 # Starting night events
 at 6pm in "world":
