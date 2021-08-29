@@ -42,8 +42,8 @@ Options:
 
 	# periodical broadcasts
 
-	broadcastInterval: 600 # Interval between periodic broadasts, in seconds
-	intervalBroadcastsPerPage: 5 # How many interval broadcast records should be displayed per page in /ab list
+	broadcastInterval: 300 # Interval between periodic broadasts, in seconds
+	intervalBroadcastsPerPage: 10 # How many interval broadcast records should be displayed per page in /ab list
 
 	# action bar health
 
@@ -81,7 +81,7 @@ function healthDisplay(e: living entity) :: string:
 
 function sendBroadcast(p: players, m: string, t: integer=1):
 	send "" to {_p::*}
-	send "%fontimage ""minecraft:mc_book""% <##9AFEEF>%{_m}%" to {_p::*}
+	send "%fontimage ""twitteremojis:question""% <##9AFEEF>%{_m}%" to {_p::*}
 	send "" to {_p::*}
 
 function savedBroadcastExists(i: integer) :: boolean:
@@ -115,7 +115,7 @@ function printBroadcastList(p: player, i: integer=1):
 				set {_cut::*} to split uncolored loop-value-1 at ""
 				loop {_cut::*}:
 
-					loop-index-2 parsed as integer < 21
+					loop-index-2 parsed as integer < 42
 					add "{@secondary}%uncolored loop-value-2%" to {_string::*}
 
 				set {_msg} to join {_string::*}
