@@ -152,7 +152,8 @@ on spawn:
 	
 	# Soulscurrying
 	else if {lunar.event::event} = "soulscurry":
-		spawn 1 vex at event-entity
+		chance of 25%:
+			spawn 1 vex at event-entity
 	
 	# Creeper invasion
 	else if {lunar.event::event} = "strangeworld":
@@ -204,6 +205,7 @@ on entity target:
 # Cancels sleeping on a Lunar event
 on bed enter:
 	if {lunar.event::event} != null or "harvest":
+		cancel event
 		loop 100 times:
 			send action bar "&cYou don't feel tired this night" to player
 			wait 1 tick
