@@ -1,0 +1,61 @@
+init:
+	set {kirumi.talkmode} to false if {kirumi.talkmode} is not set
+	set {kirumi.talkmode.global} to false if {kirumi.talkmode.global} is not set
+	set {kirumi.whitelist_guilds::*} to "727033287343734885"
+	
+discord command toggleexperimental:
+	description: Admin command that disables my experimental options
+	aliases: te, togglex, tx
+	category: moderation
+	permissions: administrator
+	prefixes: !
+	trigger:
+		if discord id of event-user != "619922683408154634":
+			reply to event-message with ":x: **Only my master and developer FokaStudio can execute this command!**"
+		else if {kirumi.talkmode.global} = false:
+			set {kirumi.talkmode.global} to true
+			reply to event-message with "**You have enabled my advanced AI functions that allow me to talk freely, I hope we will have a great time together!**"
+
+
+discord command talk:
+	description: Enable my advanced AI functions, allowing me to talk with you freely
+	aliases: AI
+	category: general
+	prefixes: !
+	trigger:
+		if {kirumi.whitelist_guilds::*} doesn't contain id of event-guild:
+			if discord id of event-user != "619922683408154634":
+				reply to event-message with ":x: **This guild isn't whitelisted for this!**%nl%Only my master and developer, **FokaStudio** can execute this command!*"
+				stop
+		if {kirumi.talkmode.global} = false:
+			reply to event-message with ":x: **My master and developer has disabled this command globally for now, try and use it another time**"
+			stop
+		if {kirumi.talkmode::%discord id of event-guild%} = false:
+			set {kirumi.talkmode::%discord id of event-guild%} to true
+			reply to event-message with "**You have enabled my advanced AI functions that allow me to talk freely, I hope we will have a great time together!**"
+		else:
+			set {kirumi.talkmode::%discord id of event-guild%} to false
+			reply to event-message with "**You have disabled my advanced AI functions, I hope you will happen to enable them once again soon!**%nl%*I will be waiting forward to this moment!* ❤"
+
+on message receive:
+	{kirumi.whitelist_guilds::*} contains id of event-guild
+	{kirumi.talkmode.global} = true
+	{kirumi.talkmode::%discord id of event-guild%} = true
+	if event-message is a webhook:
+		stop
+	if event-user is a discord bot:
+		stop
+	set {_message} to "%event-message%"
+	if first index of "!" in {_message} = 1:
+		stop
+	replace all " " in {_message} with "%%20"
+	set {_url} to "https://api.affiliateplus.xyz/api/chatbot?message=%{_message}%|botname=Kirumi%%20Tojo|ownername=FokaStudio|user=%event-user%"
+	replace all "|" in {_url} with "&"
+	reply with personal {_url} and store it in {msg}
+	wait 5 ticks
+	edit {msg} to show ":speech_balloon: **Sending...**"
+	send a request to {_url}
+	set {_body} to body of the last http response
+	map json {_body} to {_response::*}
+	reply with "%{_response::message}%"
+	delete discord entity {msg}

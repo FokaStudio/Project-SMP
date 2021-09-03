@@ -23,3 +23,27 @@ init:
 	set presence of bot "name" to playing "Project: SMP | play.projectsmp.tk"
 	wait 5 seconds
 	send ":white_check_mark: **Server has started!**" to channel with id "833657829415190578"
+
+function kirumiColor(s: string) :: color:
+	if {_s} = "error":
+		return dark red
+	else if {_s} = "warn":
+		return yellow
+	else if {_s} = "info":
+		return light blue
+	else if {_s} = "moderation":
+		return light red
+	else if {_s} = "other":
+		return lime
+
+effect [Kirumi] log %string% as %string%:
+	trigger:
+		make embed:
+			set author of the embed to "Project: SMP | %expr-2 in proper case%"
+			set author icon of the embed to avatar of user with id "722065810033475616"
+			set title of the embed to "%expr-2%"
+			set description of the embed to "%expr-1%"
+			set timestamp of the embed to now
+			set footer of the embed to "Kirumi Tojo by FokaStudio"
+			set color of the embed to kirumiColor(expr-2)
+		send last embed to channel with id "730314895358165092"

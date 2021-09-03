@@ -41,7 +41,7 @@ function helpMessage(c: string, u: user) :: embed:
 			append "**Project: SMP**%nl%%nl%List of all commands:%nl%%nl%" to builder {_m}
 			loop all discord command:
 				if discord command category of loop-value = {_c}:
-					add "**`!%loop-value%`** - *%description of loop-value%*%nl%**Aliases**: %aliases of loop-value% %nl%%nl%" to {_embed::*}
+					add "**`!%loop-value%`** - *%description of loop-value%*%nl%**Aliases**: %aliases of loop-value% %nl%" to {_embed::*}
 			if size of {_embed::*} != 0:
 				set color of the embed to lime
 				set description of embed to join {_embed::*} with nl
@@ -64,8 +64,9 @@ function helpButtons(m: message):
 	add new button with url "button.general" with style success with content "General" with emoji "📜" to buttons of {_row}
 	add new disabled button with url "button.fun" with style danger with content "Fun" with emoji "🎉" to buttons of {_row}
 	add new button with url "button.tags" with style primary with content "Tags" with emoji "📝" to buttons of {_row}
-	add new disabled button with url "button.moderation" with style primary with content "Moderation" with emoji "🔨" to buttons of {_row}
+	add new button with url "button.moderation" with style primary with content "Moderation" with emoji "🔨" to buttons of {_row}
 	add new disabled button with url "button.image" with style secondary with content "Image" with emoji "💄" to buttons of {_row}
+	add new button with url "button.back" with style primary with content "Back" with emoji "◀" to buttons of {_row}
 	add row {_row} to message {_m}
 
 discord command help [<string>]:
@@ -93,5 +94,7 @@ on button click:
 		edit event-message to show helpMessage("image", event-user)
 	else if discord id of event-button = "button.tags":
 		edit event-message to show helpMessage("tags", event-user)
+	else:
+		edit event-message to show helpMessage("none", event-user)
 	wait 3 ticks
 	helpButtons(event-message)
