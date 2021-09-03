@@ -15,10 +15,10 @@
 
 
 init:
-	register webhook "WebookButler" using url "https://canary.discord.com/api/webhooks/879669598436327434/6EhQyHcjawMS_rYLgfZLXVwTpYlo_vpuEpEgOJxQQMZSkk7km4HD-8pmR6eMISr-tS04"
+	register webhook "WebookButler" using url "REDACTED"
 	make new discord bot:
 		enable all default intent
-		login to "NzIyMDY1ODEwMDMzNDc1NjE2.XudqMA.hDjlxrGT4s1gOGhjkelWmrgz3wo" with name "Butler"
+		login to "REDACTED" with name "Butler"
 	set online status of bot named "Butler" to do not disturb
 	set presence of bot "name" to playing "Project: SMP | play.projectsmp.tk"
 	wait 5 seconds
