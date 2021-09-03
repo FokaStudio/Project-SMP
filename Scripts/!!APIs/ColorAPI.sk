@@ -22,8 +22,8 @@
 # @param number the number to be converted to hexadecimal
 # @return the hexadecimal representation of the number
 function decimalToHexadecimal(number: number) :: string:
-	return ("00" if {_number} <= 0, else ("FF")) if {_number} is not between 0 and 255
-	return join (character at (mod((floor({_number} / 16)), 16) + 1) in "0123456789ABCDEF") and (character at ((mod({_number}, 16)) + 1) in "0123456789ABCDEF")
+    return ("00" if {_number} <= 0, else ("FF")) if {_number} is not between 0 and 255
+    return join (character at (mod((floor({_number} / 16)), 16) + 1) in "0123456789ABCDEF") and (character at ((mod({_number}, 16)) + 1) in "0123456789ABCDEF")
  
 # rainbow(input: string, wrap: boolean = false, wrapAmount: number = 10, lightness: number = 0)
 # @description Function that 'rainbowifies' a given string (id est colors the string in a rainbow pattern - ROYGBIV)
@@ -32,18 +32,18 @@ function decimalToHexadecimal(number: number) :: string:
 # @param lightness a number from 0 to 1 representing how light the color should be; a value of 0.5 means no change, value 0 is black and value 1 is white
 # @return the rainbowified string
 function rainbow(input: string, wrapAmount: number = -1, lightness: number = 0.5) :: string:
-	set {_delta} to 360 / ({_wrapAmount} if {_wrapAmount} > 0, else length of {_input})
-	set {_lightnessModifier} to (({_lightness}*2)-1) * 255
-	set {_angle} to 90
-	loop length of {_input} times:
-		set {_character} to character at loop-value in {_input}
-		if {_character} or (character at (loop-value - 1) in {_input}) is "§":
-			if "abcdefklmnor0123456789" contains {_character}:
-				set {_format} to (join {_format} and "&%{_character}%") if {_character} is not "r", else ("")
-			continue
-		set {_output} to join {_output}, "<##%decimalToHexadecimal((0.5 * (sin({_angle}) + 1)) * 255 + {_lightnessModifier})%%decimalToHexadecimal((0.5 * (sin({_angle} + 120) + 1)) * 255 + {_lightnessModifier})%%decimalToHexadecimal((0.5 * (sin({_angle} + 240) + 1)) * 255 + {_lightnessModifier})%>", {_format} and {_character}
-		remove {_delta} from {_angle}
-	return colored {_output}
+    set {_delta} to 360 / ({_wrapAmount} if {_wrapAmount} > 0, else length of {_input})
+    set {_lightnessModifier} to (({_lightness}*2)-1) * 255
+    set {_angle} to 90
+    loop length of {_input} times:
+        set {_character} to character at loop-value in {_input}
+        if {_character} or (character at (loop-value - 1) in {_input}) is "§":
+            if "abcdefklmnor0123456789" contains {_character}:
+                set {_format} to (join {_format} and "&%{_character}%") if {_character} is not "r", else ("")
+            continue
+        set {_output} to join {_output}, "<##%decimalToHexadecimal((0.5 * (sin({_angle}) + 1)) * 255 + {_lightnessModifier})%%decimalToHexadecimal((0.5 * (sin({_angle} + 120) + 1)) * 255 + {_lightnessModifier})%%decimalToHexadecimal((0.5 * (sin({_angle} + 240) + 1)) * 255 + {_lightnessModifier})%>", {_format} and {_character}
+        remove {_delta} from {_angle}
+    return colored {_output}
  
 # gradient(input: string, startColor: numbers, endColor: numbers)
 # @description Function that applies a gradient pattern over a given string
@@ -53,16 +53,16 @@ function rainbow(input: string, wrapAmount: number = -1, lightness: number = 0.5
 # @param wrapAmount if this value is positive, the gradient pattern will start repeating approximately every wrapAmount characters
 # @return the colored string in a gradient pattern
 function gradient(input: string, startColor: numbers, endColor: numbers, wrapAmount: number = -1) :: string:
-	set {_delta} to 180 / ({_wrapAmount} if {_wrapAmount} > 0, else (length of uncolored {_input}) - 1)
-	set {_angle} to 90
-	loop length of {_input} times:
-		set {_character} to character at loop-value in {_input}
-		if {_character} or (character at (loop-value - 1) in {_input}) is "§":
-			if "abcdefklmnor0123456789" contains {_character}:
-				set {_format} to (join {_format} and "&%{_character}%") if {_character} is not "r", else ("")
-			continue
-		set {_startColorProportion} to (0.5 * (sin({_angle}) + 1))
-		set {_endColorProportion} to (0.5 * (sin({_angle} + 180) + 1))
-		set {_output} to join {_output}, "<##%decimalToHexadecimal(({_startColor::1} * {_startColorProportion}) + ({_endColor::1} * {_endColorProportion}))%%decimalToHexadecimal(({_startColor::2} * {_startColorProportion}) + ({_endColor::2} * {_endColorProportion}))%%decimalToHexadecimal(({_startColor::3} * {_startColorProportion}) + ({_endColor::3} * {_endColorProportion}))%>", {_format} and {_character}
-		add {_delta} to {_angle}
-	return colored {_output}
+    set {_delta} to 180 / ({_wrapAmount} if {_wrapAmount} > 0, else (length of uncolored {_input}) - 1)
+    set {_angle} to 90
+    loop length of {_input} times:
+        set {_character} to character at loop-value in {_input}
+        if {_character} or (character at (loop-value - 1) in {_input}) is "§":
+            if "abcdefklmnor0123456789" contains {_character}:
+                set {_format} to (join {_format} and "&%{_character}%") if {_character} is not "r", else ("")
+            continue
+        set {_startColorProportion} to (0.5 * (sin({_angle}) + 1))
+        set {_endColorProportion} to (0.5 * (sin({_angle} + 180) + 1))
+        set {_output} to join {_output}, "<##%decimalToHexadecimal(({_startColor::1} * {_startColorProportion}) + ({_endColor::1} * {_endColorProportion}))%%decimalToHexadecimal(({_startColor::2} * {_startColorProportion}) + ({_endColor::2} * {_endColorProportion}))%%decimalToHexadecimal(({_startColor::3} * {_startColorProportion}) + ({_endColor::3} * {_endColorProportion}))%>", {_format} and {_character}
+        add {_delta} to {_angle}
+    return colored {_output}

@@ -1,24 +1,8 @@
-# Copyright 2021  FokaStudio
-
-# This program is free software: you can redistribute it and/or modify
-# it under the terms of the GNU General Public License as published by
-# the Free Software Foundation, either version 3 of the License, or
-# (at your option) any later version.
-
-# This program is distributed in the hope that it will be useful,
-# but WITHOUT ANY WARRANTY; without even the implied warranty of
-# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-# GNU General Public License for more details.
-
-# You should have received a copy of the GNU General Public License
-# along with this program.  If not, see <https://www.gnu.org/licenses/>.
-
-
-# SkBee's particle system makes Skript parse the code 90x slower, so this is a workaround 
-#(delays only for 2 lines, not every line where you use the effect)
+# SkBee's particle system makes Skript parse the code 90x slower, so this is a workaround (delays only for 1 line, not every line
+# where you use the effect)
 effect [ParticleAPI] %number% %particle% [using %-itemtype/blockdata/dustoption/dusttransition/vibration%] [at] %location% offset %vector% extra %number% for %players%:
 	trigger:
 		if expr-3 is set:
-			play expr-1 of expr-2 particle using expr-3 at expr-4 offset by expr-5 with extra expr-6 for exprs-7 # SkBee
+			play expr-1 of expr-2 particle using expr-3 at expr-4 offset by expr-5 with extra expr-6 for exprs-7
 		else:
-			play expr-1 of expr-2 particle at expr-4 offset by expr-5 with extra expr-6 for exprs-7 # Skbee
+			play expr-1 of expr-2 particle at expr-4 offset by expr-5 with extra expr-6 for exprs-7

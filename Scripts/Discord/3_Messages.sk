@@ -93,7 +93,7 @@ on message receive:
 			set {_att.mess} to "%{_att.mess}% &o[SPOILER]&r "
 	set {_mess} to "%{_mess}%%{_att.mess}%"
 	loop {_e::*}:
-		replace {_e::*} in {_mess} with discord name of loop-value
+		replace disky emotes of event-message in {_mess} with discord names of disky emotes of event-message
 	replace all " " in {_mess} with "&7 "
 	replace all "\" in {_mess} with " " 
 	broadcast "<##7289DA>Discord&r &7%event-member% » %{_mess}%"
