@@ -1,0 +1,97 @@
+# Copyright 2021  FokaStudio
+
+# This program is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+
+# You should have received a copy of the GNU General Public License
+# along with this program.  If not, see <https://www.gnu.org/licenses/>.
+
+
+# Coded by: FokaStudio
+# Original by: <none>
+# Addons required: DiSky
+# Other plugins: <none>
+
+
+function helpMessage(c: string, u: user) :: embed:
+	if {_c} = "none":
+		make embed:
+			set title of embed to "Help"
+			set description of embed to "**I am Kirumi Tojo, the *Ultimate Maid*. Please let me know if you require my service.**%nl%Do `!help <category>` to learn about other commands"
+			set author of the embed to "Project: SMP Server"
+			set colour of the embed to orange
+			add inline field named "General" with value "General command category" to fields of embed
+			add inline field named "Fun" with value "The land of endless joy" to fields of embed
+			add inline field named "Moderation" with value "Moderation capabilities of mine" to fields of embed
+			add inline field named "Image" with value "Let me become your personal make-up artist" to fields of embed
+			add inline field named "Tags" with value "My quick responses if you would wish to ask me anything" to fields of embed
+			set footer of embed to "Requested by %discord name of {_u}%##%tag of {_u}%"
+			set footer icon of embed to avatar of {_u}
+			set timestamp of embed to now
+		return last embed
+	else:
+		make embed:
+			append "**Project: SMP**%nl%%nl%List of all commands:%nl%%nl%" to builder {_m}
+			loop all discord command:
+				if discord command category of loop-value = {_c}:
+					add "**`!%loop-value%`** - *%description of loop-value%*%nl%**Aliases**: %aliases of loop-value% %nl%%nl%" to {_embed::*}
+			if size of {_embed::*} != 0:
+				set color of the embed to lime
+				set description of embed to join {_embed::*} with nl
+				set title of embed to "Help for %{_c}%"
+				set footer of embed to "Requested by %discord name of {_u}%##%tag of {_u}%"
+				set footer icon of embed to avatar of {_u}
+				set timestamp of embed to now
+			else:
+				set color of the embed to light red
+				set description of embed to "I have sadly failed to find anything related to the category **""%{_c}%""**"
+				set title of embed to "I have failed to complete my task"
+				set footer of embed to "Requested by %discord name of {_u}%##%tag of {_u}%"
+				set footer icon of embed to avatar of {_u}
+				set timestamp of embed to now
+			set author of the embed to "Project: SMP Server"
+		return last embed
+
+function helpButtons(m: message):
+	set {_row} to new buttons row
+	add new button with url "button.general" with style success with content "General" with emoji "📜" to buttons of {_row}
+	add new disabled button with url "button.fun" with style danger with content "Fun" with emoji "🎉" to buttons of {_row}
+	add new button with url "button.tags" with style primary with content "Tags" with emoji "📝" to buttons of {_row}
+	add new disabled button with url "button.moderation" with style primary with content "Moderation" with emoji "🔨" to buttons of {_row}
+	add new disabled button with url "button.image" with style secondary with content "Image" with emoji "💄" to buttons of {_row}
+	add row {_row} to message {_m}
+
+discord command help [<string>]:
+	aliases: helpmepls, mayigethelp, heeyadmin
+	category: general
+	description: Basic help command. Use it anytime you want
+	prefixes: !
+	trigger:
+		if arg-1 is not set:
+			reply to event-message with helpMessage("none", event-user) and store it in {_msg}
+		else:
+			reply to event-message with helpMessage(arg-1, event-user) and store it in {_msg}
+		wait 3 ticks
+		helpButtons({_msg})
+
+on button click:
+	defer the interaction
+	if discord id of event-button = "button.general":
+		edit event-message to show helpMessage("general", event-user)
+	else if discord id of event-button = "button.fun":
+		edit event-message to show helpMessage("fun", event-user)
+	else if discord id of event-button = "button.moderation":
+		edit event-message to show helpMessage("moderation", event-user)
+	else if discord id of event-button = "button.image":
+		edit event-message to show helpMessage("image", event-user)
+	else if discord id of event-button = "button.tags":
+		edit event-message to show helpMessage("tags", event-user)
+	wait 3 ticks
+	helpButtons(event-message)
