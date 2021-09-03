@@ -47,3 +47,6 @@ effect [Kirumi] log %string% as %string%:
 			set footer of the embed to "Kirumi Tojo by FokaStudio"
 			set color of the embed to kirumiColor(expr-2)
 		send last embed to channel with id "730314895358165092"
+
+on disky error:
+	Kirumi log "%last disky error%" as "error"

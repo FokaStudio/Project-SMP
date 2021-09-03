@@ -18,7 +18,7 @@ discord command tagcreator [<text>] [<text>] [<text>]:
 	aliases: tcreator, tc, tagmanager, tm, tmanager, tagc, tagm
 	permissions: administrator
 	description: Basic command for registering new quick responses
-	category: Tags
+	category: tags
 	prefixes: !
 	trigger:
 		if arg-1 is "help":
@@ -73,7 +73,7 @@ discord command tagcreator [<text>] [<text>] [<text>]:
 discord command tag <text>:
 	prefixes: !
 	aliases: t
-	category: Tags
+	category: tags
 	description: Asking me questions so I can use my quick responses
 	trigger:
 		if {discord.tags::*} doesn't contain arg-1:

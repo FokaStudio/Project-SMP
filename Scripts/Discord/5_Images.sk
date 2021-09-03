@@ -1,0 +1,79 @@
+# Copyright 2021  FokaStudio
+
+# This program is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+
+# You should have received a copy of the GNU General Public License
+# along with this program.  If not, see <https://www.gnu.org/licenses/>.
+
+
+# Coded by: FokaStudio
+# Original by: <none>
+# Addons required: DiSky
+# Other plugins: <none>
+
+
+discord command tableflip <user=%event-user%>:
+	prefixes: !
+	description: Throw a binary table out of anger or make someone do so
+	category: image
+	trigger:
+		reply to event-message with "https://vacefron.nl/api/tableflip?user=%avatar of arg-1%?size=2048"
+
+discord command wasted <user=%event-user%>:
+	prefixes: !
+	description: This one is basically a virtual sui- or homicide
+	category: image
+	trigger:
+		reply to event-message with "https://some-random-api.ml/canvas/wasted?avatar=%avatar of arg-1%?size=2048"
+
+discord command trigger <user=%event-user%>:
+	aliases: triggered
+	prefixes: !
+	description: Drive someone (or yourself) to wild fury
+	category: image
+	trigger:
+		reply to event-message with "https://api.devs-hub.xyz/trigger?image=%avatar of arg-1%?size=2048"
+
+discord command rainbow <user=%event-user%>:
+	prefixes: !
+	description: Pride month doesn't have to end with July
+	category: image
+	trigger:
+		reply to event-message with "https://api.devs-hub.xyz/rainbow?image=%avatar of arg-1%?size=2048"
+
+discord command magik <user=%event-user%> <int=50>:
+	aliases: magic
+	prefixes: !
+	description: Become a true magical creature with this wacky filter
+	category: image
+	trigger:
+		reply to event-message with "https://api.devs-hub.xyz/magik?image=%avatar of arg-1%?size=2048&%""""%level=%arg-2%"
+
+discord command glitch <user=%event-user%>:
+	prefixes: !
+	description: g̸̡̬̠̞̐̓̾̎̃͐̓͝l̸̹̥͇͎͎̰̣͖͍̝̠͈̺͋̊́̽̚ͅͅị̷̱͍̬͉͕̖̥̩̝̖̪͚̀̎̏̅̃́̂̌̐͌̓̕͘t̷̨̡̝̫̠̪̟̱̩̃͆̊͋͊͆̀̎̄́̄͊̎͒̐c̴̭̭͗̅̕h̴̭̯̜̺̗́͌̒̓̑̒͂͋͛̏͌̿̇͘͝ ̶̯̲͔̼̱̯̰̣̙̮͐̉̒̽̀̒͌͑̐̃̐̓͑̀ǫ̸̮͚̦͕͓͕̳̖̳͎̲̤͑̾̎̂̌̓̑̍̓̈́̐̎͂͘͘ų̶̢̢͉̱̦̻̬̙̤̗̪̦͕̊͂̿̊̃t̸̨̢̢͇̠͉̤͔̣͎̱̻̺̟̳̏͊̀̀̏́͠ ̶̱̬̙̜̇̀̅͛̃̑̀́̓͗o̶̪̐́͂́̔̔͂͗͆̅͗̔̐f̴̧̖̼̪̳̞̞̹͓͚̙̽̊̎̄̉̀̌́̀̚ ̸̞͙̗̯̼͇̻͙̳̻̞͉͛͌̈́̈̊̋̈́̂̑͘t̵̨̨͇̗͚̩̫̲̤̯̙̥̿̇͜ͅh̸͈͚̽͊̒̍̑̌́͌̆̊͑̕̚ȩ̷̢͙̺͖͚͖̪̙̥̩̞͌̄͋̾͋͗̿̔͑̑͘͜͠ ̷̻̲̠͚̪̖̇͆͑͌̒͋̉̔̊̀̚͝͝͝e̸̢͎̲͐͋̓́̊͆̃͆͐̈̐͘͠à̷̧̡̰̯̩͓̩̺̥̮̺̫̟̊̍̑̆͛̕̕r̸̢͙̞̗͂̅̆͒͊̀̈́̂̀͋͛͠t̸̺͖͖̲̥̘͚̅̌̃̃̋̊͜͠h̴̝̞͇͙̺̣̲̞͉̀͐͌̃͆͑̔̌̋̉̅̽̒̍͝
+	category: image
+	trigger:
+		reply to event-message with "https://api.devs-hub.xyz/glitch?image=%avatar of arg-1%?size=2048"
+
+discord command communist <user=%event-user%>:
+	prefixes: !
+	description: The sun in the sky is red, in our hearts is the sun Mao Zedong
+	category: image
+	trigger:
+		reply to event-message with "https://api.devs-hub.xyz/communist?image=%avatar of arg-1%?size=2048"
+
+discord command stonks <user=%event-user%>:
+	prefixes: !
+	description: Stuuuhnks
+	category: image
+	trigger:
+		reply to event-message with "https://vacefron.nl/api/stonks?user=%avatar of arg-1%?size=2048"

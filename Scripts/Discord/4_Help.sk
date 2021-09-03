@@ -62,12 +62,15 @@ function helpMessage(c: string, u: user) :: embed:
 function helpButtons(m: message):
 	set {_row} to new buttons row
 	add new button with url "button.general" with style success with content "General" with emoji "📜" to buttons of {_row}
-	add new disabled button with url "button.fun" with style danger with content "Fun" with emoji "🎉" to buttons of {_row}
+	add new button with url "button.fun" with style danger with content "Fun" with emoji "🎉" to buttons of {_row}
 	add new button with url "button.tags" with style primary with content "Tags" with emoji "📝" to buttons of {_row}
 	add new button with url "button.moderation" with style primary with content "Moderation" with emoji "🔨" to buttons of {_row}
-	add new disabled button with url "button.image" with style secondary with content "Image" with emoji "💄" to buttons of {_row}
-	add new button with url "button.back" with style primary with content "Back" with emoji "◀" to buttons of {_row}
+	add new button with url "button.image" with style secondary with content "Image" with emoji "💄" to buttons of {_row}
 	add row {_row} to message {_m}
+	wait 10 ticks
+	set {_row2} to new buttons row
+	add new button with url "button.back" with style primary with content "Back" with emoji "◀" to buttons of {_row2}
+	add row {_row2} to message {_m}
 
 discord command help [<string>]:
 	aliases: helpmepls, mayigethelp, heeyadmin
