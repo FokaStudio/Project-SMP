@@ -50,3 +50,20 @@ effect [Kirumi] log %string% as %string%:
 
 on disky error:
 	Kirumi log "%last disky error%" as "error"
+
+discord command log <text> <text>:
+	permissions: administrator
+	prefixes: !
+	category: moderation
+	description: Log a message into <#730314895358165092>
+	trigger:
+		Kirumi log "%arg-2%" as "%arg-1%"
+
+discord command announce <text>:
+	permissions: administrator
+	prefixes: !
+	category: moderation
+	description: Make me help you with making announcements
+	trigger:
+		delete discord entity event-message
+		reply with arg-2
