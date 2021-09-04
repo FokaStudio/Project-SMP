@@ -17,11 +17,11 @@ init:
 	# > If it's not set, it will make a x1.2 multiplier from the last max EXP
 
 	# > The min and max amount of EXP an user can have per message
-	set {EXPCONFIG::MINEXP} to 2
-	set {EXPCONFIG::MAXEXP} to 7
+	set {EXPCONFIG::MINEXP} to 7
+	set {EXPCONFIG::MAXEXP} to 20
 	
 	# > The change (in percent) for the EXP system to start on a message receive.
-	set {EXPCONFIG::EXPCHANCE} to 80
+	set {EXPCONFIG::EXPCHANCE} to 75
 
 	set {EXPCONFIG::REWARD::3} to 872816416468897863
 	set {EXPCONFIG::REWARD::5} to 872820573129027615
@@ -154,9 +154,10 @@ on message receive:
 				set {_newmax} to {EXPCONFIG::MAXEXPLEVEL::%xp level of event-member%}
 			set max xp of event-member to {_newmax}
 			set xp of event-member to {_reste}
-			set {_role} to {EXPCONFIG::REWARD::%xp level of event-member%}
-			if {_role} is set:
-				add role with id "%{_role}%" to roles of event-member
+			if discord id of event-guild = "727033287343734885":
+				set {_role} to {EXPCONFIG::REWARD::%xp level of event-member%}
+				if {_role} is set:
+					add role with id "%{_role}%" to roles of event-member
 			make embed:
 				set author of embed to "%discord name of event-user% has reached next level!"
 				set author icon of embed to avatar of event-user
