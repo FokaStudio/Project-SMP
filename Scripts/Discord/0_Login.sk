@@ -20,7 +20,7 @@ init:
 		enable all default intent
 		login to "REDACTED" with name "Butler"
 	set online status of bot named "Butler" to do not disturb
-	set presence of bot "name" to playing "Project: SMP | play.projectsmp.tk"
+	set presence of bot "Butler" to playing "Project: SMP | play.projectsmp.tk"
 	wait 5 seconds
 	send ":white_check_mark: **Server has started!**" to channel with id "833657829415190578"
 
@@ -52,7 +52,7 @@ on disky error:
 	Kirumi log "%last disky error%" as "error"
 
 discord command log <text> <text>:
-	permissions: administrator
+	permissions: manage server
 	prefixes: !
 	category: moderation
 	description: Log a message into <#730314895358165092>
@@ -60,10 +60,10 @@ discord command log <text> <text>:
 		Kirumi log "%arg-2%" as "%arg-1%"
 
 discord command announce <text>:
-	permissions: administrator
+	permissions: manage server
 	prefixes: !
 	category: moderation
 	description: Make me help you with making announcements
 	trigger:
 		delete discord entity event-message
-		reply with arg-2
+		reply with arg-1
