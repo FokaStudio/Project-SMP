@@ -34,10 +34,13 @@ discord command toggleexperimental:
 	trigger:
 		if discord id of event-user != "619922683408154634":
 			reply to event-message with ":x: **Only my master and developer FokaStudio can execute this command!**"
-		else if {kirumi.talkmode.global} = false:
+			stop
+		if {kirumi.talkmode.global} = false:
 			set {kirumi.talkmode.global} to true
 			reply to event-message with "**You have enabled my advanced AI functions that allow me to talk freely, I hope we will have a great time together!**"
-
+		else:
+			set {kirumi.talkmode.global} to false
+			reply to event-message with "**You have disabled my AI functions that allow me to talk, I hope you will turn them back on someday!"
 
 discord command talk:
 	description: Enable my advanced AI functions, allowing me to talk with you freely

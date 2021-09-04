@@ -22,13 +22,20 @@
 
 discord command joke:
 	aliases: jokes, randomjoke
+	category: fun
+	description: If you want me to entertain you, I know some jokes
 	prefixes: !
 	trigger:
-		send a request to "https://v2.jokeapi.dev/joke/Miscellaneous,Dark,Spooky,Christmas?lang=de&type=single" with headers "User-agent: sky_high"
+		send a request to "https://v2.jokeapi.dev/joke/Miscellaneous,Dark,Spooky,Christmas?lang=en&type=single" with headers "User-agent: Kirumi Tojo"
 		map json body of last http response to {_joke::*}
-		make embed:
-			set author of embed to "%event-member%"
-			set author icon of embed to avatar of event-member
-			add field named "Witz:" with value "%{_joke::joke}%" to embed
-			set color of embed to light blue
+		reply to event-message with "**%{_joke::joke}%**"
+
+discord command joke:
+	aliases: jokes, randomjoke
+	category: fun
+	description: If you want me to entertain you, I know some jokes
+	prefixes: !
+	trigger:
+		send a request to "https://v2.jokeapi.dev/joke/Miscellaneous,Dark,Spooky,Christmas?lang=en&type=single" with headers "User-agent: Kirumi Tojo"
+		map json body of last http response to {_joke::*}
 		reply to event-message with "**%{_joke::joke}%**"

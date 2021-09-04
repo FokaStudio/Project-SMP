@@ -1,0 +1,25 @@
+options:
+	channel: 876073931096862731
+
+on message receive:
+	if event-channel = channel with id "{@channel}":
+		if event-member is a discord bot:
+			react to event-message with reaction "white_check_mark"
+			react to event-message with reaction "x"
+		else:
+			set {_att::*} to attachments of event-message
+			delete discord entity event-message
+			make embed:
+				set author of embed to "%event-member%##%tag of event-member%"
+				set author icon of embed to avatar of event-member
+				set title of embed to "Suggestion"
+				add field named "Suggestion:" with value "➽ %event-message%" to embed
+				set image of embed to attachment url of {_att::1} if {_att::1} is set
+				set color of embed to yellow, orange or light red
+				set timestamp of the embed to now
+			reply with last embed and store it in {_embed}
+			add discord id of {_embed} to {suggestion::%discord id of event-member%::*}
+
+on reaction add:
+	{suggestion::%discord id of event-member%::*} contains discord id of event-message:
+		remove event-emote added by event-user from event-message
