@@ -1,0 +1,54 @@
+# Copyright 2021  FokaStudio
+
+# This program is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+
+# You should have received a copy of the GNU General Public License
+# along with this program.  If not, see <https://www.gnu.org/licenses/>.
+
+
+# Coded by: FokaStudio
+# Original by: <none>
+# Addons required: DiSky
+# Other plugins: <none>
+
+
+discord command purge [<number>]:
+	prefixes: !
+	permissions: manage server
+	permission message: **:x: You can't use that command!**
+	description: Clean a number of messages
+	category: moderation
+	trigger:
+		if arg-1 is not set:
+			reply with "**:x: You must define an amount!**"
+			stop
+		send message "**:warning: You are about to clear %arg-1% messages, are you sure ?**" to event-channel and store it in {_msg}
+		set {_id} to discord id of event-user
+		set {_emsg} to event-message
+		set {_row} to a new buttons row
+		add new button with url "%discord id of event-user%:purge:%arg-1%:%discord id of event-message%:%discord id of {_msg}%:confirm" with style success with content "Yes please!" with emoji "✅" to buttons of {_row}
+		add new button with url "%discord id of event-user%:purge:%arg-1%:%discord id of event-message%:%discord id of {_msg}%:cancel" with style danger with content "Nah, nevermind." with emoji "❌" to buttons of {_row}
+		add row {_row} to message {_msg}
+
+on button click:
+	set {_id} to discord id of event-button
+	set {_pars::*} to split {_id} at ":"
+	{_pars::2} is "purge"
+	discord id of event-user is {_pars::1}
+	if {_pars::6} is "confirm":
+		set {_amount} to {_pars::3} parsed as number
+		purge last {_amount} messages from event-channel
+		reply with "**✅ Purged %{_amount}% messages!**"
+	else:
+		set {_msg} to message with id {_pars::4} in event-channel
+		set {_amsg} to message with id {_pars::5} in event-channel
+		reply to {_msg} with "**✅ Purge command cancelled!**"
+		delete discord entity {_amsg}
