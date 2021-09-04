@@ -20,6 +20,14 @@
 # Other plugins: <none>
 
 
+member property condition staff:
+	check:
+		set {_roles::*} to roles of expr-1
+		if "%roles of expr-1%" contains "Staff":
+			continue
+		else if expr-1 has discord permission administrator:
+			continue
+
 discord command purge [<number>]:
 	prefixes: !
 	permissions: manage server
@@ -52,3 +60,298 @@ on button click:
 		set {_amsg} to message with id {_pars::5} in event-channel
 		reply to {_msg} with "**✅ Purge command cancelled!**"
 		delete discord entity {_amsg}
+
+# Command to ban users
+discord command ban <member> [<string>] [<number>]:
+	description: <STAFF>Ban a member. Input can be a direct mention, user id, or name##discrim. Must provide a reason. The last argument is the amount of days worth of messages to clear.
+	usage: ban <mention|user id|name##tag> <reason> [<days of messages to prune>]
+	prefixes: !
+	executable in: guild
+	category: moderation
+	trigger:
+		if event-member is staff:
+			if arg-2 is not set:
+				reply with "You must include a reason to use this command"
+				stop
+			send "You have been banned from the skUnity Discord for `%arg-2%`. If you wish to appeal this ban, you may talk to %event-user%##%tag of event-user% at a later date." to {_user}
+			if arg-3 is not set:
+				disky ban arg-1 because arg-2
+			else:
+				disky ban arg-1 removing arg-3 of message because arg-2
+			reply with "%{_user}%##%tag of {_user}% has been banned"
+			set {_m} to a new message builder
+			append "**-=Ban=-**%nl%" to {_m}
+			append "**User**: %{_user}%##%tag of {_user}% (%discord id of {_user}%)%nl%" to {_m}
+			append "**Reason**: %arg-2%%nl%" to {_m}
+			append "**Responsible Moderator**: %event-user%##%tag of event-user%" to {_m}
+			send {_m} to channel with id "730314895358165092"
+			
+			
+			
+# Command to get all of the punishments a user has had
+discord command punishments <member>:
+	description: <STAFF>Get all of the punishments a user has had.
+	usage: punishments <mention|user id|name##tag>
+	executable in: guild
+	category: moderation
+	prefixes: !
+	trigger:
+		if event-member is staff:
+			set {_user} to arg-1
+			set {_punished} to false
+			if {Kirumi.warnings::%discord id of arg-1%} is set:
+				set {_punished} to true
+			if {Mutes::%discord id of arg-1%} is set:
+				set {_punished} to true
+			if {punishment::Kirumi.tempmute::%discord id of arg-1%} is set:
+				set {_punished} to true
+			if {Kirumi.kicked::%discord id of arg-1%} is set:
+				set {_punished} to true
+			if {_punished} is false:
+				reply with "%discord name of arg-1%##%tag of arg-1% has never been punished."
+				stop
+			set {_m} to a new message builder
+			append "Here are all the current punishments for %discord name of arg-1%##%tag of arg-1% %mention tag of event-user%!" to {_m}
+			append "```%nl%" to {_m}
+			if {Kirumi.warnings::%discord id of arg-1%} is set:
+				loop {Kirumi.warns::%discord id of arg-1%::*}:
+					append "Warned for: %loop-value%%nl%" to {_m}
+			if {Mutes::%discord id of arg-1%} is set:
+				loop {Mutes::%discord id of arg-1%::*}:
+					append "Muted for: %loop-value%%nl%" to {_m}
+			if {punishment::Kirumi.tempmute::%discord id of arg-1%::count} is set:
+				loop {punishment::Kirumi.tempmute::%discord id of arg-1%::count} times:
+					append "Temp-muted (%{punishment::Kirumi.tempmute::%discord id of arg-1%::%loop-value%::length}%): %{punishment::Kirumi.tempmute::%discord id of arg-1%::%loop-value%::reason}%%nl%" to {_m}
+			if {Kirumi.kicked::%discord id of arg-1%} is set:
+				loop {Kirumi.kicked::%discord id of arg-1%} times:
+					append "Kicked for: %{Kirumi.kicked::%discord id of arg-1%::%loop-value%::reason}%%nl%" to {_m}
+			append "```" to {_m}
+			reply with {_m}
+			
+
+
+# Command to unban a user 
+discord command unban <string> [<string>]:
+	aliases: pardon
+	description: <STAFF>UnBan a user by their ID. Must provide a reason for why you unbanned them.
+	usage: unban <user id> <reason>
+	executable in: guild
+	prefixes: !
+	category: moderation
+	trigger:
+		if event-member is staff:
+			if arg-2 is not set:
+				reply with "You must include a reason to use this command"
+				stop			
+			if user with id arg-1 is banned from event-guild:
+				do nothing
+			else:
+				reply with "The provided user was not banned"
+				stop
+			loop banned users of event-guild:
+				if discord id of loop-value = arg-1:
+					retrieve user with id discord id of loop-value and store it in {_user}
+					unban loop-value from event-guild
+					reply with "%discord name of {_user}%##%tag of {_user}% has been unbanned"
+					set {_m} to a new message builder
+					append "**-=Pardon=-**%nl%" to {_m}
+					append "**User**: %discord name of loop-value%##%tag of loop-value%%nl%" to {_m}
+					append "**Reason**: %arg-2%%nl%" to {_m}
+					append "**Responsible Moderator**: %event-user%##%tag of event-user%" to {_m}
+					send {_m} to channel with id "730314895358165092"
+					stop
+			reply with "The provided user was not banned"
+			
+# Command to warn users, keeps track of warning count	
+discord command warn <member> [<string>]:
+	description: <STAFF>Warn a user, may provide a reason
+	usage: warn <mention|user id|name##tag> <reason>
+	executable in: guild
+	prefixes: !
+	category: moderation
+	trigger:
+		if event-member is staff:
+			if arg-2 is not set:
+				reply with "You must include a reason to use this command"
+				stop
+			if arg-1 is a bot:
+				reply with "You may not warn bots"
+				stop
+			if {Kirumi.warnings::%discord id of arg-1%} is not set:
+				set {Kirumi.warnings::%discord id of arg-1%} to 1
+			else:
+				add 1 to {Kirumi.warnings::%discord id of arg-1%}
+			send "You have received warning number `%{Kirumi.warnings::%discord id of arg-1%}%`! You must be careful, too many warnings may lead to severe consequences. You were warned for: `%arg-2%`" to arg-1
+			set {_m} to a new message builder
+			set {Kirumi.warns::%discord id of arg-1%::%{Kirumi.warnings::%discord id of arg-1%}%} to arg-2
+			append "**-=Warning=-**%nl%" to {_m}
+			append "**User**: %arg-1%##%tag of arg-1% (%discord id of arg-1%)%nl%" to {_m}
+			append "**Reason**: %arg-2%%nl%" to {_m}
+			append "**Count**: %{Kirumi.warnings::%discord id of arg-1%}%%nl%" to {_m}
+			append "**Responsible Moderator**: %event-user%##%tag of event-user%" to {_m}
+			send {_m} to channel with id "730314895358165092"
+			reply with "I have issued a warning to %discord name of arg-1%##%tag of arg-1%"
+			
+# Command to get warnings for a user 
+discord command warnings [<member>] [<number>]:
+	description: <STAFF>Get either all the warnings of a user or a specific warning number from a user
+	executable in: guild
+	aliases: warns
+	usage: warnings <mention|user id|name##tag> [<warning number>]
+	prefixes: !
+	category: moderation
+	trigger:
+		if event-member is staff:
+			if arg-1 is not set:
+				reply with "You must include a user to get the warnings of"
+				stop
+			set {_user} to arg-1
+			if {Kirumi.warnings::%discord id of arg-1%} is not set:
+				reply with "%discord name of arg-1%##%tag of arg-1% currently has no warnings"
+				stop
+			if arg-2 is set:
+				if {Kirumi.warns::%discord id of arg-1%::%arg-2%} is not set:
+					reply with "That user does not have a warning attached to that number"
+					stop
+				reply with "That user was warned for `%{Kirumi.warns::%discord id of arg-1%::%arg-2%}%`"
+				stop
+			set {_m} to a new message builder
+			append "```vbs%nl%" to {_m}
+			set {_count} to 0
+			loop {Kirumi.warns::%discord id of arg-1%::*}:
+				add 1 to {_count}
+				append "%{_count}%) %loop-value%%nl%" to {_m}
+			append "```" to {_m}
+			reply with {_m}
+		else:
+			if {Kirumi.warnings::%discord id of event-member%} is not set:
+				reply with "You currently have no warnings"
+				stop
+			set {_m} to a new message builder
+			append "Here is a list of your current warnings %mention tag of event-member%" to {_m}
+			append "```%nl%" to {_m}
+			set {_c} to 1
+			loop {Kirumi.warns::%discord id of event-member%::*}:
+				append "%{_c}%) %loop-value%%nl%" to {_m}
+				add 1 to {_c}
+			append "```" to {_m}
+			reply with {_m}
+				
+# Command to remove a warning from a user
+discord command relieve <member> <number>:
+	description: <STAFF>Remove a warning by number from a user
+	executable in: guild
+	usage: relieve <mention|user id|name##tag> <warning number>
+	prefixes: !
+	category: moderation
+	trigger:
+		if event-member is staff:
+			if {Kirumi.warnings::%discord id of arg-1%} is not set:
+				reply with "%discord name of arg-1%##%tag of arg-1% currently has no warnings"
+				stop
+			if {Kirumi.warns::%discord id of arg-1%::%arg-2%} is not set:
+				reply with "%discord name of arg-1%##%tag of arg-1% does not have a warning attached to that number"
+				stop
+			subtract 1 from {Kirumi.warnings::%discord id of arg-1%}
+			send "Your warning for `%{Kirumi.warns::%discord id of arg-1%::%arg-2%}%` has been reverted by %event-user%! Your new warning count is `%{Kirumi.warnings::%discord id of arg-1%}%`" to arg-1
+			reply with "Successfully reverted %discord name of arg-1%##%tag of arg-1%'s warning. New warning count is %{Kirumi.warnings::%discord id of arg-1%}%"
+			if {Kirumi.warnings::%discord id of arg-1%} is 0:
+				delete {Kirumi.warnings::%discord id of arg-1%}
+			delete {Kirumi.warns::%discord id of arg-1%::%arg-2%}
+
+
+# Command to mute users, may provide a reason	
+discord command mute <member> [<string>]:
+	description: <STAFF>Mute a user, must provide a reason.
+	executable in: guild
+	usage: mute <mention|user id|name##tag> <reason>
+	prefixes: !
+	category: moderation
+	trigger:
+		if event-member is staff:
+			if arg-2 is not set:
+				reply with "You must include a reason to use this command"
+				stop
+			set {_roles::*} to roles of arg-1
+			if {_roles::*} contains role with id "881155284964368435":
+				reply with "%arg-1%##%tag of arg-1% is already muted"
+				stop
+			add role with id "881155284964368435" to roles of arg-1
+			set {evaders::%discord id of arg-1%} to true
+			if {Mutes::%discord id of arg-1%} is not set:
+				set {Mutes::%discord id of arg-1%} to 1
+			else:
+				add 1 to {Mutes::%arg-1%}
+			set {Mutes::%discord id of arg-1%::%{Mutes::%discord id of arg-1%}%} to arg-2
+			send "You have been muted for `%arg-2%` and will be unmuted at the responsible staff member's discretion." to arg-1
+			reply with "%discord name of arg-1%##%tag of arg-1%"
+			set {_m} to a new message builder
+			append "**-=Mute=-**%nl%" to {_m}
+			append "**User**: %discord name of arg-1%##%tag of arg-1% (%discord id of arg-1%)%nl%" to {_m}
+			append "**Reason**: %arg-2%%nl%" to {_m}
+			append "**Responsible Moderator**: %event-user%##%tag of event-user%" to {_m}
+			send {_m} to channel with id "730314895358165092"
+	
+# Command to unmute users
+discord command unmute <member> [<string>]:
+	description: <STAFF>Un-mute a user, must provide a reason
+	executable in: guild
+	usage: unmute <mention|user id|name##tag> <reason>
+	prefixes: !
+	category: moderation
+	trigger:
+		if event-member is staff:
+			if arg-2 is not set:
+				reply with "You must include a reason to use this command"
+				stop
+			set {_roles::*} to roles of arg-1
+			if {_roles::*} does not contain role with id "881155284964368435":
+				reply with "That user is not currently muted"
+				stop
+			remove role with id "881155284964368435" from roles of arg-1
+			if {Kirumi.tempMute::%discord id of arg-1%} is true:
+				delete {Kirumi.tempMute::%discord id of arg-1%}
+				delete {Kirumi.tempMute::%discord id of arg-1%::time}
+				delete {Kirumi.tempMute::%discord id of arg-1%::length}
+				delete {Kirumi.tempMute::%discord id of arg-1%::*}
+			reply with "%arg-1%##%tag of arg-1% has been unmuted"
+			set {evaders::%arg-1%} to false
+			set {_m} to a new message builder
+			append "**-=Un-Mute=-**%nl%" to {_m}
+			append "**User**: %arg-1%##%tag of arg-1% (%discord id of arg-1%)%nl%" to {_m}
+			append "**Reason**: %arg-2%%nl%" to {_m}
+			append "**Responsible Moderator**: %event-user%##%tag of event-user%" to {_m}
+			send {_m} to channel with id "730314895358165092"			
+			
+# Command to kick users, may provide a reason 
+discord command kick <member> [<string>]:
+	description: <STAFF>kick a user, must provide a reason
+	usage: kick <mention|user id|name##tag> <reason>
+	executable in: guild
+	prefixes: !
+	category: moderation
+	trigger:
+		if event-member is staff:
+			if arg-2 is not set:
+				reply with "You must include a reason to use this command"
+				stop
+			if arg-1 is staff:
+				reply with "You must not kick Staff members!"
+				stop
+			disky kick arg-1 because of arg-2
+			if arg-1 is a bot:
+				stop
+			else:
+				send "You have been kicked from the skUnity Discord for `%arg-2%`." to arg-1
+			reply with "I have successfully kicked %discord name of arg-1%##%tag of arg-1% from the server"
+			if {Kirumi.kicked::%discord id of arg-1%} is not set:
+				set {Kirumi.kicked::%discord id of arg-1%} to 1
+			else:
+				add 1 to {Kirumi.kicked::%discord id of arg-1%}
+			set {Kirumi.kicked::%discord id of arg-1%::%{Kirumi.kicked::%discord id of arg-1%}%::reason} to arg-2
+			set {_m} to a new message builder
+			append "**-=Kick=-**%nl%" to {_m}
+			append "**User**: %discord name of arg-1%##%tag of arg-1% (%discord id of arg-1%)%nl%" to {_m}
+			append "**Reason**: %arg-2%%nl%" to {_m}
+			append "**Responsible Moderator**: %event-user%##%tag of event-user%" to {_m}
+			send {_m} to channel with id "730314895358165092"
