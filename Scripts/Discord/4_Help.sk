@@ -61,15 +61,15 @@ function helpMessage(c: string, u: user) :: embed:
 
 function helpButtons(m: message):
 	set {_row} to new buttons row
-	add new button with url "button.general" with style success with content "General" with emoji "📜" to buttons of {_row}
-	add new button with url "button.fun" with style danger with content "Fun" with emoji "🎉" to buttons of {_row}
-	add new button with url "button.tags" with style primary with content "Tags" with emoji "📝" to buttons of {_row}
-	add new button with url "button.moderation" with style primary with content "Moderation" with emoji "🔨" to buttons of {_row}
-	add new button with url "button.image" with style secondary with content "Image" with emoji "💄" to buttons of {_row}
+	add new button with url "help.general" with style success with content "General" with emoji "📜" to buttons of {_row}
+	add new button with url "help.fun" with style danger with content "Fun" with emoji "🎉" to buttons of {_row}
+	add new button with url "help.tags" with style primary with content "Tags" with emoji "📝" to buttons of {_row}
+	add new button with url "help.moderation" with style primary with content "Moderation" with emoji "🔨" to buttons of {_row}
+	add new button with url "help.image" with style secondary with content "Image" with emoji "💄" to buttons of {_row}
 	add row {_row} to message {_m}
 	wait 10 ticks
 	set {_row2} to new buttons row
-	add new button with url "button.back" with style primary with content "Back" with emoji "◀" to buttons of {_row2}
+	add new button with url "help.back" with style primary with content "Back" with emoji "◀" to buttons of {_row2}
 	add row {_row2} to message {_m}
 
 discord command help [<string>]:
@@ -87,17 +87,18 @@ discord command help [<string>]:
 
 on button click:
 	defer the interaction
-	if discord id of event-button = "button.general":
+	first index of "help" in "%discord id of event-button%" = 1
+	if discord id of event-button = "help.general":
 		edit event-message to show helpMessage("general", event-user)
-	else if discord id of event-button = "button.fun":
+	else if discord id of event-button = "help.fun":
 		edit event-message to show helpMessage("fun", event-user)
-	else if discord id of event-button = "button.moderation":
+	else if discord id of event-button = "help.moderation":
 		edit event-message to show helpMessage("moderation", event-user)
-	else if discord id of event-button = "button.image":
+	else if discord id of event-button = "help.image":
 		edit event-message to show helpMessage("image", event-user)
-	else if discord id of event-button = "button.tags":
+	else if discord id of event-button = "help.tags":
 		edit event-message to show helpMessage("tags", event-user)
-	else:
+	else if discord id of event-button = "help.back":
 		edit event-message to show helpMessage("none", event-user)
 	wait 3 ticks
 	helpButtons(event-message)
