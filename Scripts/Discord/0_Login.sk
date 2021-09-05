@@ -14,6 +14,13 @@
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 
+# Coded by: FokaStudio
+# Original by: <none>
+# Addons required: DiSky
+# Other plugins: <none>
+
+
+# Login and startup message
 init:
 	register webhook "WebookButler" using url "REDACTED"
 	make new discord bot:
@@ -24,6 +31,7 @@ init:
 	wait 5 seconds
 	send ":white_check_mark: **Server has started!**" to channel with id "833657829415190578"
 
+# Utility, returns a color for the embed based on input
 function kirumiColor(s: string) :: color:
 	if {_s} = "error":
 		return dark red
@@ -36,6 +44,7 @@ function kirumiColor(s: string) :: color:
 	else if {_s} = "other":
 		return lime
 
+# Effect to log smth to #audit-logs
 effect [Kirumi] log %string% as %string%:
 	trigger:
 		make embed:
@@ -48,9 +57,11 @@ effect [Kirumi] log %string% as %string%:
 			set color of the embed to kirumiColor(expr-2)
 		send last embed to channel with id "730314895358165092"
 
+# Letting me now of Disky errors
 on disky error:
 	Kirumi log "%last disky error%" as "error"
 
+# Force smth to log into the #audit-logs
 discord command log <text> <text>:
 	permissions: manage server
 	prefixes: !
@@ -59,6 +70,7 @@ discord command log <text> <text>:
 	trigger:
 		Kirumi log "%arg-2%" as "%arg-1%"
 
+# Basically making Kirumi say a desired line of mine
 discord command announce <text>:
 	permissions: manage server
 	prefixes: !
@@ -67,3 +79,9 @@ discord command announce <text>:
 	trigger:
 		delete discord entity event-message
 		reply with arg-1
+
+# Auto publisher for announcement channels
+#on message receive:
+#	if discord id of event-guild = "727033287343734885":
+#		if discord id of event-channel = "727033287352123499", "727033287352123500" or "859844503556718613":
+#			publish the discord message event-message
