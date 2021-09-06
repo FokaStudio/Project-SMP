@@ -11,9 +11,9 @@ projectile:
 # they're far away from the player
 dab:
   enabled: true
-  start-distance: 8
-  max-tick-freq: 400
-  activation-dist-mod: 4
+  start-distance: 4
+  max-tick-freq: 1000
+  activation-dist-mod: 5
   blacklisted-entities: []
 # Configures Flare, the built-in profiler
 flare:

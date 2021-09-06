@@ -18,7 +18,7 @@ settings:
   sample-count: 12
   player-shuffle: 0
   user-cache-size: 1000
-  save-user-cache-on-stop-only: false
+  save-user-cache-on-stop-only: true
   moved-wrongly-threshold: 0.0625
   moved-too-quickly-multiplier: 10.0
   log-villager-deaths: true
@@ -90,9 +90,9 @@ world-settings:
     item-despawn-rate: 6000
     view-distance: default
     wither-spawn-sound-radius: 0
-    nerf-spawner-mobs: false
+    nerf-spawner-mobs: true
     zombie-aggressive-towards-villager: true
-    hanging-tick-frequency: 0
+    hanging-tick-frequency: 1000
     mob-spawn-range: 5
     end-portal-sound-radius: 0
     max-entity-collisions: 1
@@ -117,12 +117,12 @@ world-settings:
       sweetberry-modifier: 100
       kelp-modifier: 100
     entity-activation-range:
-      animals: 8
+      animals: 7
       monsters: 18
       raiders: 36
-      misc: 8
+      misc: 6
       water: 8
-      villagers: 6
+      villagers: 4
       flying-monsters: 36
       villagers-work-immunity-after: 100
       villagers-work-immunity-for: 20
@@ -134,10 +134,10 @@ world-settings:
         animals-for: 10
         monsters-max-per-tick: 1
         monsters-every: 800
-        monsters-for: 30
+        monsters-for: 20
         villagers-max-per-tick: 1
         villagers-every: 1000
-        villagers-for: 10
+        villagers-for: 5
         flying-monsters-max-per-tick: 1
         flying-monsters-every: 400
         flying-monsters-for: 40
@@ -153,8 +153,8 @@ world-settings:
       sprint-multiplier: 0.05
       other-multiplier: 0.0
     max-tick-time:
-      tile: 3
-      entity: 6
+      tile: 1000
+      entity: 1000
     squid-spawn-range:
       min: 45.0
     entity-tracking-range:

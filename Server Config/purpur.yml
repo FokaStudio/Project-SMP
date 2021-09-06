@@ -9,7 +9,7 @@
 # Wiki: https://github.com/pl3xgaming/Purpur/wiki 
 
 verbose: false
-config-version: 19
+config-version: 21
 settings:
   tps-catchup: true
   server-mod-name: Krabby Patty
@@ -36,6 +36,7 @@ settings:
     sleeping-players-percent: <gold><count> players are sleeping, total of <total>
       is needed to skip the night
   logger:
+    suppress-unrecognized-recipe-errors: false
     suppress-init-legacy-material-errors: false
     suppress-ignored-advancement-warnings: false
   broadcasts:
@@ -141,7 +142,7 @@ settings:
     disable-note-block-updates: true
     disable-chorus-plant-updates: true
     barrel:
-      six-rows: true
+      rows: 6
     ender_chest:
       six-rows: true
       use-permissions-for-rows: true
@@ -174,7 +175,7 @@ world-settings:
         ridable: false
         ridable-in-water: false
         follow-emerald-blocks: true
-        can-be-leashed: false
+        can-be-leashed: true
         allow-trading: true
         attributes:
           max_health: 20.0
@@ -284,6 +285,7 @@ world-settings:
         attributes:
           max_health: 3.0
       cow:
+        naturally-aggressive-to-players-chance: 0.0
         ridable: false
         ridable-in-water: false
         feed-mushrooms-for-mooshroom: 0
@@ -301,6 +303,7 @@ world-settings:
         attributes:
           max_health: 20.0
       dolphin:
+        naturally-aggressive-to-players-chance: 0.0
         ridable: true
         disable-treasure-searching: true
         spit:
@@ -398,9 +401,9 @@ world-settings:
           max_health: 100.0
       glow_squid:
         ridable: false
-        can-fly: false
+        can-fly: true
         attributes:
-          max_health: 10.0
+          max_health: 15.0
       goat:
         ridable: false
         ridable-in-water: false
@@ -626,11 +629,11 @@ world-settings:
         ridable-in-water: false
         leave-trail-when-ridden: false
         drop-pumpkin-when-sheared: true
-        pumpkin-can-be-added-back: false
-        min-shoot-interval-ticks: 20
-        max-shoot-interval-ticks: 20
-        snow-ball-modifier: 10.0
-        attack-distance: 1.25
+        pumpkin-can-be-added-back: true
+        min-shoot-interval-ticks: 2
+        max-shoot-interval-ticks: 5
+        snow-ball-modifier: 20.0
+        attack-distance: 2.0
         bypass-mob-griefing: false
         takes-damage-from-water: true
         attributes:
@@ -696,7 +699,7 @@ world-settings:
         brain-ticks: 9
         use-brain-ticks-only-when-lagging: true
         follow-emerald-blocks: true
-        can-be-leashed: false
+        can-be-leashed: true
         can-breed: true
         breeding-delay-ticks: 6000
         clerics-farm-warts: false
@@ -818,7 +821,7 @@ world-settings:
       void-damage-dealt: 4.0
       raid-cooldown-seconds: 0
       animal-breeding-cooldown-seconds: 0
-      entity-lifespan: 3600
+      entity-lifespan: 2400
       entity-left-handed-chance: 0.05000000074505806
       armorstand:
         step-height: 0.0
@@ -899,6 +902,7 @@ world-settings:
         wandering-traders: default
         village-sieges: default
       player:
+        shift-right-click-repairs-mending-points: 0
         spawn-invulnerable-ticks: 900
         invulnerable-while-accepting-resource-pack: false
         teleport-if-outside-border: true
@@ -931,21 +935,21 @@ world-settings:
         curse-of-binding:
           remove-with-weakness: false
       projectile-damage:
-        snowball: 1.0
+        snowball: 2.0
       projectile-despawn-rates:
         dragon_fireball: 300
         egg: 300
-        ender_pearl: 300
-        experience_bottle: 300
-        firework_rocket: 300
-        fishing_bobber: 300
-        fireball: 300
-        llama_spit: 300
-        potion: 300
-        shulker_bullet: 300
-        small_fireball: 300
-        snowball: 300
-        wither_skull: 300
+        ender_pearl: 160
+        experience_bottle: 160
+        firework_rocket: 160
+        fishing_bobber: 160
+        fireball: 160
+        llama_spit: 160
+        potion: 160
+        shulker_bullet: 160
+        small_fireball: 160
+        snowball: 160
+        wither_skull: 160
       projectile-offset:
         bow: 3.0
         crossbow: 0.0
@@ -955,11 +959,11 @@ world-settings:
         trident: 1.0
         snowball: 8.0
       silk-touch:
-        enabled: true
-        spawner-name: Spawner
+        enabled: false
+        spawner-name: <reset><reset><reset>Spawner
         minimal-level: 1
         spawner-lore:
-        - a &a{mob}
+        - <reset><reset><reset>a <green><mob>
         tools:
         - minecraft:iron_pickaxe
         - minecraft:golden_pickaxe
@@ -1211,7 +1215,7 @@ world-settings:
       shulker_box:
         allow-oversized-stacks: false
       sign:
-        allow-colors: false
+        allow-colors: true
         right-click-edit: true
       slab:
         break-individual-slabs-when-sneaking: true
@@ -1261,7 +1265,7 @@ world-settings:
           rain: 0.05000000074505806
           powder-snow: 0.10000000149011612
       azalea:
-        growth-chance: 0.0
+        growth-chance: 0.25
       flowering_azalea:
         growth-chance: 0.0
     ridable-settings:

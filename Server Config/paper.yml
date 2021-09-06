@@ -11,20 +11,22 @@
 # Docs: https://paper.readthedocs.org/ 
 
 verbose: false
-config-version: 21
+config-version: 22
 settings:
+  lag-compensate-block-breaking: true
+  send-full-pos-for-hard-colliding-entities: true
   load-permissions-yml-before-plugins: true
   enable-player-collisions: true
   region-file-cache-size: 256
   use-display-name-in-quit-message: true
   save-empty-scoreboard-teams: true
   bungee-online-mode: true
-  incoming-packet-spam-threshold: 200
+  incoming-packet-spam-threshold: 160
   use-alternative-luck-formula: false
-  chunk-tasks-per-tick: 300
+  chunk-tasks-per-tick: 400
   console-has-all-permissions: true
   player-auto-save-rate: -1
-  max-player-auto-save-per-tick: -1
+  max-player-auto-save-per-tick: 1
   max-joins-per-tick: 1
   track-plugin-scoreboards: false
   fix-entity-position-desync: true
@@ -35,7 +37,7 @@ settings:
     online-mode: falset
     secret: ''
   async-chunks:
-    threads: -1
+    threads: 3
   unsupported-settings:
     allow-permanent-block-break-exploits: false
     allow-piston-duplication: false
@@ -72,6 +74,36 @@ settings:
       title: 8192
       author: 8192
       page: 16384
+  player-chunks:
+    min-load-radius: 2
+    max-concurrent-sends: 2
+    autoconfig-send-distance: true
+    target-player-chunk-send-rate: 60.0
+    max-global-chunk-send-rate: 300.0
+    enable-frustum-priority: false
+    global-max-chunk-load-rate: 80.0
+    player-max-concurrent-loads: 4.0
+    global-max-concurrent-loads: 200.0
+  packet-limiter:
+    kick-message: '&cSent too many packets!'
+    limits:
+      all:
+        interval: 4.0
+        max-packet-rate: 100.0
+      PacketPlayInAutoRecipe:
+        interval: 4.0
+        max-packet-rate: 5.0
+        action: DROP
+  chunk-loading:
+    min-load-radius: 2
+    max-concurrent-sends: 2
+    autoconfig-send-distance: true
+    target-player-chunk-send-rate: 100.0
+    global-max-chunk-send-rate: -1.0
+    enable-frustum-priority: false
+    global-max-chunk-load-rate: 300.0
+    player-max-concurrent-loads: 4.0
+    global-max-concurrent-loads: 500.0
 messages:
   no-permission: '&4Haha, nope...'
   kick:
@@ -97,15 +129,15 @@ timings:
   server-name: 'Project: SMP'
 world-settings:
   default:
-    map-item-frame-cursor-update-interval: 10
+    map-item-frame-cursor-update-interval: 20
     piglins-guard-chests: true
     should-remove-dragon: false
-    max-auto-save-chunks-per-tick: 2
+    max-auto-save-chunks-per-tick: 3
     baby-zombie-movement-modifier: -0.5
     optimize-explosions: true
     fixed-chunk-inhabited-time: -1
     use-vanilla-world-scoreboard-name-coloring: false
-    remove-corrupt-tile-entities: false
+    remove-corrupt-tile-entities: true
     experience-merge-max-value: -1
     prevent-moving-into-unloaded-chunks: true
     count-all-mobs-for-spawning: false
@@ -124,7 +156,7 @@ world-settings:
     update-pathfinding-on-block-update: false
     fix-wither-targeting-bug: false
     allow-player-cramming-damage: false
-    map-item-frame-cursor-limit: 128
+    map-item-frame-cursor-limit: 6
     entities-target-with-follow-range: false
     spawner-nerfed-mobs-should-jump: false
     armor-stands-tick: false
@@ -133,13 +165,13 @@ world-settings:
     seed-based-feature-search: true
     seed-based-feature-search-loads-chunks: true
     water-over-lava-flow-speed: 5
-    grass-spread-tick-rate: 8
+    grass-spread-tick-rate: 4
     use-faster-eigencraft-redstone: true
     nether-ceiling-void-damage-height: 0
     fix-items-merging-through-walls: false
     keep-spawn-loaded: true
     disable-thunder: false
-    skeleton-horse-thunder-spawn-chance: 0.01
+    skeleton-horse-thunder-spawn-chance: 0.1
     disable-ice-and-snow: false
     keep-spawn-loaded-range: 6
     parrots-are-unaffected-by-player-movement: true
@@ -149,7 +181,7 @@ world-settings:
     portal-search-radius: 128
     portal-create-radius: 16
     portal-search-vanilla-dimension-scaling: true
-    container-update-tick-rate: 16
+    container-update-tick-rate: 20
     armor-stands-do-collision-entity-lookups: false
     disable-explosion-knockback: false
     fix-climbing-bypassing-cramming-rule: true
@@ -159,12 +191,12 @@ world-settings:
     max-leash-distance: 20.0
     iron-golems-can-spawn-in-air: false
     zombie-villager-infection-chance: 1.0
-    mob-spawner-tick-rate: 16
+    mob-spawner-tick-rate: 20
     zombies-target-turtle-eggs: true
-    delay-chunk-unloads-by: 5s
+    delay-chunk-unloads-by: 7s
     all-chunks-are-slime-chunks: true
-    light-queue-size: 10
-    auto-save-interval: 500
+    light-queue-size: 5
+    auto-save-interval: 700
     enable-treasure-maps: true
     treasure-maps-return-already-discovered: false
     generator-settings:
@@ -190,7 +222,7 @@ world-settings:
       disable-relative-projectile-velocity: false
       disable-mob-spawner-spawn-egg-transformation: false
       pillager-patrols:
-        spawn-chance: 0.7
+        spawn-chance: 0.8
         spawn-delay:
           per-player: true
           ticks: 12000
@@ -217,8 +249,8 @@ world-settings:
         max: 16
         min: 11
     fishing-time-range:
-      MinimumTicks: 20
-      MaximumTicks: 400
+      MinimumTicks: 100
+      MaximumTicks: 600
     despawn-ranges:
       soft: 24
       hard: 48
@@ -272,7 +304,7 @@ world-settings:
       enabled: true
       engine-mode: 1
       max-block-height: 64
-      update-radius: 2
+      update-radius: 3
       lava-obscures: false
       use-permission: false
       hidden-blocks:
@@ -301,8 +333,20 @@ world-settings:
       - stone
       - oak_planks
     viewdistances:
-      no-tick-view-distance: 6
+      no-tick-view-distance: 7
     unsupported-settings:
       fix-invulnerable-end-crystal-exploit: true
     squid-spawn-height:
       maximum: 0.0
+    feature-seeds:
+      generate-random-seeds-for-all: false
+  world_nether:
+    keep-spawn-loaded: false
+    auto-save-interval: 850
+    anti-xray:
+      enabled: true
+  world_the_end:
+    keep-spawn-loaded: false
+    auto-save-interval: 1000
+    anti-xray:
+      enabled: false
