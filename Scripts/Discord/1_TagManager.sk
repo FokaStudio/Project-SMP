@@ -19,10 +19,11 @@ discord command tagcreator [<text>] [<text>] [<text>]:
 	permissions: administrator
 	description: Basic command for registering new quick responses
 	category: tags
+	usage: !tagcreator <help|create|edit|image|thumbnail|extra> <id> <message|url>
 	prefixes: !
 	trigger:
 		if arg-1 is "help":
-			reply to event-message with "**TAG MANAGER**%nl%*Version 1.0, by FokaStudio, for FokaStudio <3*%nl%%nl%**USAGE**``!(t[ag]c[reator]|t[ag]m[anager]) (create|edit|delete|remove|image|extra|thumbnail) %%tag's id%% [%%text, depends on arg-2%%]``%nl%%nl%***INFO***```create - registers the Tag with specified ID, 3rd argument should be used as 'title|description'%nl%%nl%remove or delete - self-explanatory%nl%%nl%edit - re-registers a tag, usage just like with 'create' ('title|description')%nl%%nl%image or thumbnail - adds an image or thumbnail to the embed of the specified tag, this is optional and 3rd argument has to be URL pointing to the image%nl%%nl%extra - removes the embed and replies with just plain text, useful for making tags that return only videos or a short string of words```"
+			reply to event-message with "**TAG MANAGER**%nl%*Version 1.1, by FokaStudio, for FokaStudio <3*%nl%%nl%**USAGE**``!(t[ag]c[reator]|t[ag]m[anager]) (create|edit|delete|remove|image|extra|thumbnail) %%tag's id%% [%%text, depends on arg-2%%]``%nl%%nl%***INFO***```create - registers the Tag with specified ID, 3rd argument should be used as 'title|description'%nl%%nl%remove or delete - self-explanatory%nl%%nl%edit - re-registers a tag, usage just like with 'create' ('title|description')%nl%%nl%image or thumbnail - adds an image or thumbnail to the embed of the specified tag, this is optional and 3rd argument has to be URL pointing to the image%nl%%nl%extra - removes the embed and replies with just plain text, useful for making tags that return only videos or a short string of words```"
 			stop
 		else if arg-1 is not "create", "delete", "image", "thumbnail", "extra", "remove" or "edit":
 			reply to event-message with ":x: **Wrong argument! You can only use ""create"", ""delete"", ""image"", ""thumbnail"", ""extra"" or ""edit""!**"
@@ -73,6 +74,7 @@ discord command tagcreator [<text>] [<text>] [<text>]:
 discord command tag <text>:
 	prefixes: !
 	aliases: t
+	usage: !tag <id>
 	category: tags
 	description: Asking me questions so I can use my quick responses
 	trigger:

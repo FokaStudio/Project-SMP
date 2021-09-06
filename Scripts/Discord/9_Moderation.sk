@@ -28,8 +28,9 @@ member property condition staff:
 		else if expr-1 has discord permission administrator:
 			continue
 
-discord command purge [<number>]:
+discord command purge [<int>]:
 	prefixes: !
+	usage: !purge <number>
 	permissions: manage server
 	permission message: **:x: You can't use that command!**
 	description: Clean a number of messages
@@ -64,7 +65,7 @@ on button click:
 # Command to ban users
 discord command ban <member> [<string>] [<number>]:
 	description: <STAFF>Ban a member. Input can be a direct mention, user id, or name##discrim. Must provide a reason. The last argument is the amount of days worth of messages to clear.
-	usage: ban <mention|user id|name##tag> <reason> [<days of messages to prune>]
+	usage: ban <user> <reason> [<days of messages to prune>]
 	prefixes: !
 	executable in: guild
 	category: moderation
@@ -91,7 +92,7 @@ discord command ban <member> [<string>] [<number>]:
 # Command to get all of the punishments a user has had
 discord command punishments <member>:
 	description: <STAFF>Get all of the punishments a user has had.
-	usage: punishments <mention|user id|name##tag>
+	usage: punishments <user>
 	executable in: guild
 	category: moderation
 	prefixes: !
@@ -165,7 +166,7 @@ discord command unban <string> [<string>]:
 # Command to warn users, keeps track of warning count	
 discord command warn <member> [<string>]:
 	description: <STAFF>Warn a user, may provide a reason
-	usage: warn <mention|user id|name##tag> <reason>
+	usage: warn <user> <reason>
 	executable in: guild
 	prefixes: !
 	category: moderation
@@ -197,7 +198,7 @@ discord command warnings [<member>] [<number>]:
 	description: <STAFF>Get either all the warnings of a user or a specific warning number from a user
 	executable in: guild
 	aliases: warns
-	usage: warnings <mention|user id|name##tag> [<warning number>]
+	usage: warnings <user> [<warning number>]
 	prefixes: !
 	category: moderation
 	trigger:
@@ -241,7 +242,7 @@ discord command warnings [<member>] [<number>]:
 discord command relieve <member> <number>:
 	description: <STAFF>Remove a warning by number from a user
 	executable in: guild
-	usage: relieve <mention|user id|name##tag> <warning number>
+	usage: relieve <user> <warning number>
 	prefixes: !
 	category: moderation
 	trigger:
@@ -264,7 +265,7 @@ discord command relieve <member> <number>:
 discord command mute <member> [<string>]:
 	description: <STAFF>Mute a user, must provide a reason.
 	executable in: guild
-	usage: mute <mention|user id|name##tag> <reason>
+	usage: mute <user> <reason>
 	prefixes: !
 	category: moderation
 	trigger:
@@ -296,7 +297,7 @@ discord command mute <member> [<string>]:
 discord command unmute <member> [<string>]:
 	description: <STAFF>Un-mute a user, must provide a reason
 	executable in: guild
-	usage: unmute <mention|user id|name##tag> <reason>
+	usage: unmute <user> <reason>
 	prefixes: !
 	category: moderation
 	trigger:
@@ -326,7 +327,7 @@ discord command unmute <member> [<string>]:
 # Command to kick users, may provide a reason 
 discord command kick <member> [<string>]:
 	description: <STAFF>kick a user, must provide a reason
-	usage: kick <mention|user id|name##tag> <reason>
+	usage: kick <user> <reason>
 	executable in: guild
 	prefixes: !
 	category: moderation

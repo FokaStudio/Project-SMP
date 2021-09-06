@@ -24,6 +24,7 @@ discord command tableflip <user=%event-user%>:
 	prefixes: !
 	description: Throw a binary table out of anger or make someone do so
 	category: image
+	usage: !tableflip [<member>]
 	trigger:
 		reply to event-message with "https://vacefron.nl/api/tableflip?user=%avatar of arg-1%?size=2048"
 
@@ -31,6 +32,7 @@ discord command wasted <user=%event-user%>:
 	prefixes: !
 	description: This one is basically a virtual sui- or homicide
 	category: image
+	usage: !wasted [<member>]
 	trigger:
 		reply to event-message with "https://some-random-api.ml/canvas/wasted?avatar=%avatar of arg-1%?size=2048"
 
@@ -39,21 +41,25 @@ discord command trigger <user=%event-user%>:
 	prefixes: !
 	description: Drive someone (or yourself) to wild fury
 	category: image
+	usage: !trigger [<member>]
 	trigger:
 		reply to event-message with "https://api.devs-hub.xyz/trigger?image=%avatar of arg-1%?size=2048"
 
 discord command rainbow <user=%event-user%>:
 	prefixes: !
+	aliases: pride
 	description: Pride month doesn't have to end with July
 	category: image
+	usage: !rainbow [<member>]
 	trigger:
 		reply to event-message with "https://api.devs-hub.xyz/rainbow?image=%avatar of arg-1%?size=2048"
 
 discord command magik <user=%event-user%> [<int=50>]:
-	aliases: magic
+	aliases: magic, magicc
 	prefixes: !
 	description: Become a true magical creature with this wacky filter
 	category: image
+	usage: !magik [<member>]
 	trigger:
 		reply to event-message with "https://api.devs-hub.xyz/magik?image=%avatar of arg-1%?size=2048&%""""%level=%arg-2%"
 
@@ -61,19 +67,24 @@ discord command glitch <user=%event-user%>:
 	prefixes: !
 	description: g̸̡̬̠̞̐̓̾̎̃͐̓͝l̸̹̥͇͎͎̰̣͖͍̝̠͈̺͋̊́̽̚ͅͅị̷̱͍̬͉͕̖̥̩̝̖̪͚̀̎̏̅̃́̂̌̐͌̓̕͘t̷̨̡̝̫̠̪̟̱̩̃͆̊͋͊͆̀̎̄́̄͊̎͒̐c̴̭̭͗̅̕h̴̭̯̜̺̗́͌̒̓̑̒͂͋͛̏͌̿̇͘͝ ̶̯̲͔̼̱̯̰̣̙̮͐̉̒̽̀̒͌͑̐̃̐̓͑̀ǫ̸̮͚̦͕͓͕̳̖̳͎̲̤͑̾̎̂̌̓̑̍̓̈́̐̎͂͘͘ų̶̢̢͉̱̦̻̬̙̤̗̪̦͕̊͂̿̊̃t̸̨̢̢͇̠͉̤͔̣͎̱̻̺̟̳̏͊̀̀̏́͠ ̶̱̬̙̜̇̀̅͛̃̑̀́̓͗o̶̪̐́͂́̔̔͂͗͆̅͗̔̐f̴̧̖̼̪̳̞̞̹͓͚̙̽̊̎̄̉̀̌́̀̚ ̸̞͙̗̯̼͇̻͙̳̻̞͉͛͌̈́̈̊̋̈́̂̑͘t̵̨̨͇̗͚̩̫̲̤̯̙̥̿̇͜ͅh̸͈͚̽͊̒̍̑̌́͌̆̊͑̕̚ȩ̷̢͙̺͖͚͖̪̙̥̩̞͌̄͋̾͋͗̿̔͑̑͘͜͠ ̷̻̲̠͚̪̖̇͆͑͌̒͋̉̔̊̀̚͝͝͝e̸̢͎̲͐͋̓́̊͆̃͆͐̈̐͘͠à̷̧̡̰̯̩͓̩̺̥̮̺̫̟̊̍̑̆͛̕̕r̸̢͙̞̗͂̅̆͒͊̀̈́̂̀͋͛͠t̸̺͖͖̲̥̘͚̅̌̃̃̋̊͜͠h̴̝̞͇͙̺̣̲̞͉̀͐͌̃͆͑̔̌̋̉̅̽̒̍͝
 	category: image
+	usage: !glitch [<member>]
 	trigger:
 		reply to event-message with "https://api.devs-hub.xyz/glitch?image=%avatar of arg-1%?size=2048"
 
 discord command communist <user=%event-user%>:
 	prefixes: !
+	aliases: ussr, zedong
 	description: The sun in the sky is red, in our hearts is the sun Mao Zedong
 	category: image
+	usage: !communist [<member>]
 	trigger:
 		reply to event-message with "https://api.devs-hub.xyz/communist?image=%avatar of arg-1%?size=2048"
 
 discord command stonks <user=%event-user%>:
 	prefixes: !
+	aliases: stuhnks, stuuuhnks
 	description: Stuuuhnks
 	category: image
+	usage: !stonks [<member>]
 	trigger:
 		reply to event-message with "https://vacefron.nl/api/stonks?user=%avatar of arg-1%?size=2048"

@@ -10,10 +10,11 @@ options:
 	version: 1.0-FOKAPATCH
 
 # > Main command
-discord command calc:
+discord command calculator:
 	prefixes: !
-	aliases: calculator
+	aliases: calc
 	category: general
+	usage: !calculator
 	description: A simple calculator
 	trigger:
 		make embed:

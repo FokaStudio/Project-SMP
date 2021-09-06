@@ -18,10 +18,10 @@ init:
 
 	# > The min and max amount of EXP an user can have per message
 	set {EXPCONFIG::MINEXP} to 15
-	set {EXPCONFIG::MAXEXP} to 30
+	set {EXPCONFIG::MAXEXP} to 40
 
 	# > The change (in percent) for the EXP system to start on a message receive.
-	set {EXPCONFIG::EXPCHANCE} to 65
+	set {EXPCONFIG::EXPCHANCE} to 50
 
 	set {EXPCONFIG::REWARD::3} to 872816416468897863
 	set {EXPCONFIG::REWARD::5} to 872820573129027615
@@ -129,6 +129,7 @@ discord command rank [<member=%event-member%>]:
 	aliases: exp, level
 	description: Returns your level
 	category: leveling
+	usage: !rank [<member>]
 	trigger:
 		if arg-1 is a discord bot:
 			reply to event-message with ":x: **Bots can't gather EXP, neither can they have their own cards...**"
@@ -149,6 +150,7 @@ discord command leaderboard [<int=1>]:
 	aliases: levels, leveltop
 	description: Returns level leaderboard of a server
 	category: leveling
+	usage: !leaderboard [<page>]
 	trigger:
 		set {_arg} to arg
 		set {_pages.max} to ({_arg}*10)

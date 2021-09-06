@@ -26,7 +26,8 @@ init:
 	set {kirumi.whitelist_guilds::*} to "727033287343734885"
 	
 discord command toggleexperimental:
-	description: Admin command that disables my experimental options
+	usage: !toggleexperimental
+	description: <STAFF>Admin command that disables my experimental options
 	aliases: te, togglex, tx
 	category: moderation
 	permissions: administrator
@@ -45,6 +46,7 @@ discord command toggleexperimental:
 discord command talk:
 	description: Enable my advanced AI functions, allowing me to talk with you freely
 	aliases: AI
+	usage: !talk
 	category: general
 	prefixes: !
 	trigger:

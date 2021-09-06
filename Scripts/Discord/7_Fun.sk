@@ -23,6 +23,7 @@
 discord command joke:
 	aliases: jokes, randomjoke
 	category: fun
+	usage: !joke
 	description: If you want me to entertain you, I know some jokes
 	prefixes: !
 	trigger:
@@ -33,6 +34,7 @@ discord command joke:
 discord command achievement [<text>]:
 	aliases: advancement
 	category: fun
+	usage: !achievement <text>
 	description: Create an achievement of your desires
 	prefixes: !
 	trigger:

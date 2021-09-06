@@ -65,8 +65,9 @@ on disky error:
 discord command log <text> <text>:
 	permissions: manage server
 	prefixes: !
+	usage: !log <error|warn|info|moderation|other> <message>
 	category: moderation
-	description: Log a message into <#730314895358165092>
+	description: <STAFF>Log a message into <#730314895358165092>
 	trigger:
 		Kirumi log "%arg-2%" as "%arg-1%"
 
@@ -74,8 +75,9 @@ discord command log <text> <text>:
 discord command announce <text>:
 	permissions: manage server
 	prefixes: !
+	usage: !announce <message>
 	category: moderation
-	description: Make me help you with making announcements
+	description: <STAFF>Make me help you with making announcements (accepts formatting codes that are accesible only to bots, such as [link](URL))
 	trigger:
 		delete discord entity event-message
 		reply with arg-1
