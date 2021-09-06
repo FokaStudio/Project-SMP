@@ -1,4 +1,5 @@
 on death of player:
+	send "&cYou died at %location of victim%&c, your grave will disappear in 5 minutes"
 	if {origin::%uuid of victim%} != "Shulk":
 		set {_misc::*} to items of victim
 		clear inventory of victim
@@ -20,7 +21,7 @@ on death of player:
 			set slot (loop-value)-1 of inventory of block to air
 	set inventory of block at {_l} to {_misc::*}
 	add location of block at {_l} to {graves::*}
-	wait 180 seconds
+	wait 300 seconds
 	if {graves::*} contains location of block at {_l}:
 		loop 54 times:
 			set {_slot} to (loop-value - 1)
