@@ -124,11 +124,11 @@ function leaderboardSort(indices: strings, values: integers, descending: boolean
 	set {_sorted::*} to reversed {_sorted::*} if {_descending} is true
 	return {_sorted::*}
 
-discord command exp [<member=%event-member%>]:
+discord command rank [<member=%event-member%>]:
 	prefixes: %{EXPCONFIG::PREFIXES}%
-	aliases: rank
+	aliases: exp, level
 	description: Returns your level
-	category: exp
+	category: leveling
 	trigger:
 		if arg-1 is a discord bot:
 			reply to event-message with ":x: **Bots can't gather EXP, neither can they have their own cards...**"
@@ -148,7 +148,7 @@ discord command leaderboard [<int=1>]:
 	prefixes: %{EXPCONFIG::PREFIXES}%
 	aliases: levels, leveltop
 	description: Returns level leaderboard of a server
-	category: exp
+	category: leveling
 	trigger:
 		set {_arg} to arg
 		set {_pages.max} to ({_arg}*10)
