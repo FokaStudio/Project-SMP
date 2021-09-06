@@ -26,7 +26,7 @@ function helpMessage(c: string, u: user) :: embed:
 			set title of embed to "Help"
 			set description of embed to "**I am Kirumi Tojo, the *Ultimate Maid*. Please let me know if you require my service.**%nl%Do `!help <category>` to learn about other commands"
 			set author of the embed to "Project: SMP Server"
-			set colour of the embed to orange
+			set colour of the embed to yellow
 			add inline field named "General" with value "General command category" to fields of embed
 			add inline field named "Fun" with value "The land of endless joy" to fields of embed
 			add inline field named "Moderation" with value "Moderation capabilities of mine" to fields of embed
@@ -36,16 +36,39 @@ function helpMessage(c: string, u: user) :: embed:
 			set footer of embed to "Requested by %discord name of {_u}%##%tag of {_u}%"
 			set footer icon of embed to avatar of {_u}
 			set timestamp of embed to now
-		return last embed
+	else if first index of "command" in {_c} = 1:
+		set {_c::*} to {_c} split at "."
+		loop all discord commands:
+			if "%loop-value%" = "%{_c::2}%":
+				make embed:
+					add "**!%loop-value%**%nl%%nl%" to {_embed::*}
+					add "*%loop-value's description%*%nl%%nl%" to {_embed::*}
+					add "*`Category:`* __%loop-value's category%__%nl%" to {_embed::*}
+					add "**`Usage:`** __%loop-value's usage%__%nl%" to {_embed::*}
+					add "`Aliases:` __%discord aliases of loop-value%__%nl%" to {_embed::*}
+				if size of {_embed::*} != 0:
+					set color of the embed to green
+					set description of embed to {_embed::*}
+					set title of embed to "Help for command %{_c::2}%"
+					set footer of embed to "Requested by %discord name of {_u}%##%tag of {_u}%"
+					set footer icon of embed to avatar of {_u}
+					set timestamp of embed to now
+				else:
+					set color of the embed to red
+					set description of embed to "I have sadly failed to find anything related to the command **""%{_c::2}%""**"
+					set title of embed to "I have failed to complete my task"
+					set footer of embed to "Requested by %discord name of {_u}%##%tag of {_u}%"
+					set footer icon of embed to avatar of {_u}
+					set timestamp of embed to now
+				set author of the embed to "Project: SMP Server"
 	else:
 		make embed:
-			append "**Project: SMP**%nl%%nl%List of all commands:%nl%%nl%" to builder {_m}
 			loop all discord command:
 				if discord command category of loop-value = {_c}:
-					add "**`!%loop-value%`** - *%description of loop-value%*%nl%**Aliases**: %aliases of loop-value% %nl%" to {_embed::*}
+					add "**`!%loop-value%`** - *%description of loop-value%*%nl%" to {_embed::*}
 			if size of {_embed::*} != 0:
 				set color of the embed to lime
-				set description of embed to join {_embed::*} with nl
+				set description of embed to {_embed::*}
 				set title of embed to "Help for %{_c}%"
 				set footer of embed to "Requested by %discord name of {_u}%##%tag of {_u}%"
 				set footer icon of embed to avatar of {_u}
@@ -58,7 +81,7 @@ function helpMessage(c: string, u: user) :: embed:
 				set footer icon of embed to avatar of {_u}
 				set timestamp of embed to now
 			set author of the embed to "Project: SMP Server"
-		return last embed
+	return last embed
 
 function helpButtons(m: message):
 	set {_row} to new buttons row
@@ -69,7 +92,7 @@ function helpButtons(m: message):
 	add new button with url "help.image" with style secondary with content "Image" with emoji "💄" to buttons of {_row}
 	
 	set {_row2} to new buttons row
-	add new button with url "help.exp" with style danger with content "Leveling" with emoji "✨" to buttons of {_row2}
+	add new button with url "help.leveling" with style danger with content "Leveling" with emoji "✨" to buttons of {_row2}
 	add new button with url "help.back" with style primary with content "Back" with emoji "◀" to buttons of {_row2}
 
 	add rows {_row} and {_row2} to message {_m}
@@ -83,13 +106,19 @@ discord command help [<string>]:
 		if arg-1 is not set:
 			reply to event-message with helpMessage("none", event-user) and store it in {_msg}
 		else:
+			loop all discord commands:
+				if "%loop-value%" = arg-1:
+					reply to event-message with helpMessage("command.%arg-1%", event-user) and store it in {_msg}
+					stop
+					exit loop
+
 			reply to event-message with helpMessage(arg-1, event-user) and store it in {_msg}
 		wait 3 ticks
 		helpButtons({_msg})
 
 on button click:
 	defer the interaction
-	first index of "help" in "%discord id of event-button%" = 1
+	first index of "help" in discord id of event-button = 1
 	if discord id of event-button = "help.general":
 		edit event-message to show helpMessage("general", event-user)
 	else if discord id of event-button = "help.fun":
@@ -102,7 +131,7 @@ on button click:
 		edit event-message to show helpMessage("tags", event-user)
 	else if discord id of event-button = "help.back":
 		edit event-message to show helpMessage("none", event-user)
-	else if discord id of event-button = "help.exp":
-		edit event-message to show helpMessage("exp", event-user)
+	else if discord id of event-button = "help.leveling":
+		edit event-message to show helpMessage("leveling", event-user)
 	wait 3 ticks
 	helpButtons(event-message)
