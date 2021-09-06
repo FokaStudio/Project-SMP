@@ -154,6 +154,9 @@ on spawn:
 	else if {lunar.event::event} = "soulscurry":
 		chance of 25%:
 			spawn 1 vex at event-entity
+			set {_vex} to last spawned vex
+			add "{LifeTicks:2600}" to the nbt of {_v}
+			{_v}.setShouldBurnInDay(true)
 	
 	# Creeper invasion
 	else if {lunar.event::event} = "strangeworld":
