@@ -230,11 +230,11 @@ world-settings:
           per-player: true
           day: 3
     wandering-trader:
-      spawn-minute-length: 120
-      spawn-day-length: 2400
+      spawn-minute-length: 240
+      spawn-day-length: 4800
       spawn-chance-failure-increment: 5
-      spawn-chance-min: 65
-      spawn-chance-max: 95
+      spawn-chance-min: 35
+      spawn-chance-max: 75
     door-breaking-difficulty:
       zombie:
       - NORMAL
