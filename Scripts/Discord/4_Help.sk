@@ -33,6 +33,7 @@ function helpMessage(c: string, u: user) :: embed:
 			add inline field named "Image" with value "Let me become your personal make-up artist" to fields of embed
 			add inline field named "Tags" with value "My quick responses if you would wish to ask me anything" to fields of embed
 			add inline field named "Leveling" with value "My leveling features" to fields of embed
+			add inline field named "Minecraft" with value "Some commands related to this famous game..." to fields of embed
 			set footer of embed to "Requested by %discord name of {_u}%##%tag of {_u}%"
 			set footer icon of embed to avatar of {_u}
 			set timestamp of embed to now
@@ -93,7 +94,8 @@ function helpButtons(m: message):
 	
 	set {_row2} to new buttons row
 	add new button with url "help.leveling" with style danger with content "Leveling" with emoji "✨" to buttons of {_row2}
-	add new button with url "help.back" with style primary with content "Back" with emoji "◀" to buttons of {_row2}
+	add new button with url "help.minecraft" with style danger with content "Minecraft" with emoji "🟩" to buttons of {_row2}
+	add new button with url "help.back" with style primary with content "Back" with emoji "◀️" to buttons of {_row2}
 
 	add rows {_row} and {_row2} to message {_m}
 
@@ -120,19 +122,7 @@ discord command help [<string>]:
 on button click:
 	defer the interaction
 	first index of "help" in discord id of event-button = 1
-	if discord id of event-button = "help.general":
-		edit event-message to show helpMessage("general", event-user)
-	else if discord id of event-button = "help.fun":
-		edit event-message to show helpMessage("fun", event-user)
-	else if discord id of event-button = "help.moderation":
-		edit event-message to show helpMessage("moderation", event-user)
-	else if discord id of event-button = "help.image":
-		edit event-message to show helpMessage("image", event-user)
-	else if discord id of event-button = "help.tags":
-		edit event-message to show helpMessage("tags", event-user)
-	else if discord id of event-button = "help.back":
-		edit event-message to show helpMessage("none", event-user)
-	else if discord id of event-button = "help.leveling":
-		edit event-message to show helpMessage("leveling", event-user)
+	set {_u::*} to discord id of event-button split at "."
+	edit event-message to show helpMessage("%{_u::2}%", event-user)
 	wait 3 ticks
 	helpButtons(event-message)
