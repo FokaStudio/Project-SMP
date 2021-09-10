@@ -45,6 +45,7 @@ discord command clyde [<text>]:
 	prefixes: !
 	executable in: guild
 	bots: Butler
+	category: general
 	description: Make my good friend Clyde say something
 	trigger:
 		if arg-1 is not set:
@@ -52,11 +53,12 @@ discord command clyde [<text>]:
 			stop
 		set {_arg1} to arg-1
 		replace all " " with "%%20" in {_arg1}
-		reply to event-message with "https://ctk-api.herokuapp.com/clyde/%{_arg1}%
+		reply to event-message with "https://ctk-api.herokuapp.com/clyde/%{_arg1}%"
 
 discord command whois [<member>]:
 	prefixes: !
 	aliases: userinfo
+	category: general
 	description: Grab info of one of the members of our server!
 	trigger:
 		if arg 1 is not set:
@@ -82,6 +84,7 @@ discord command server [<text>]:
 	prefixes: !
 	executable in: guild
 	bots: Butler
+	category: minecraft
 	usage: !server <minecraft server>
 	aliases: mcserv, mcserver, serv, serverinfo
 	description: Grab all info about any server in a form of a neat embed
