@@ -88,3 +88,54 @@ discord command stonks <user=%event-user%>:
 	usage: !stonks [<member>]
 	trigger:
 		reply to event-message with "https://vacefron.nl/api/stonks?user=%avatar of arg-1%?size=2048"
+
+discord command wide [<member=%event-member%>]:
+	prefixes: !
+	executable in: guild
+	bots: Butler
+	description: Become Chungus...? Is this what I am supposed to say about this feature?
+	usage: !wide [<member>]
+	category: image
+	trigger:
+		reply to event-message with "https://vacefron.nl/api/wide?image=%avatar of arg-1%"
+
+discord command wolverine [<member=%event-member%>]:
+	prefixes: !
+	executable in: guild
+	bots: Butler
+	description: Become an absolutely real X-Man
+	usage: !wolverine [<member>]
+	category: image
+	trigger:
+		reply to event-message with "https://vacefron.nl/api/wolverine?user=%avatar of arg-1%"
+
+discord command drip [<member=%event-member%>]:
+	prefixes: !
+	executable in: guild
+	bots: Butler
+	description: Obtain drip~~stone~~
+	usage: !drip [<member>]
+	category: image
+	trigger:
+		reply to event-message with "https://vacefron.nl/api/drip?user=%avatar of arg-1%"
+
+discord command iamspeed [<member=%event-member%>]:
+	prefixes: !
+	aliases: speed, ias
+	executable in: guild
+	bots: Butler
+	description: ***nyyyyyyyyoooooomm***
+	usage: !iamspeed [<member>]
+	category: image
+	trigger:
+		reply to event-message with "https://vacefron.nl/api/iamspeed?user=%avatar of arg-1%"
+
+discord command heaven [<member=%event-member%>]:
+	prefixes: !
+	executable in: guild
+	bots: Butler
+	description: Die and still live
+	usage: !heaven [<member>]
+	category: image
+	trigger:
+		reply to event-message with "https://vacefron.nl/api/heaven?user=%avatar of arg-1%"
