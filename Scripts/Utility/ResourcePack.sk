@@ -34,15 +34,22 @@ command updateresourcepack:
 	trigger:
 		set {_start} to now
 		send "{@emoji} {@color.primary}Downloading latest version of the resource pack..."
+		wait 5 ticks
 		download file from "https://github.com/Project-SMP/Resource-Pack/releases/latest/download/pack.zip" to file path "plugins/ItemsAdder/data/resource_pack/pack.zip":
+			wait 5 ticks
 			send "{@emoji} {@color.succes}Latest pack downloaded to {@color.secondary}""plugins/ItemsAdder/data/resource_pack/pack.zip"""
+			wait 5 ticks
 			send "{@emoji} {@color.primary}Attempting to reload {@color.secondary}ItemsAdder"
+			wait 5 ticks
 			console command "/iareload"
-			wait 6 seconds
+			wait 8 seconds
 			send "{@emoji} {@color.succes}Reloaded {@color.secondary}ItemsAdder {@color.succes}with no issues!"
+			wait 5 ticks
 			send "{@emoji} {@color.primary}Attempting to reload the resource pack"
+			wait 5 ticks
 			console command "/iatexture all"
 			send "{@emoji} {@color.succes}Reloaded resource pack for all players, sequence finished!"
+			wait 5 ticks
 			send "{@emoji.clock} {@color.finish}Total time elapsed: %difference between {_start} and now%"
 
 command iaimport:
@@ -50,17 +57,29 @@ command iaimport:
 	aliases: itemsadder:iaimport
 	trigger:
 		set {_start} to now
+		wait 5 ticks
 		delete dir path "plugins/ItemsAdder/data/resource_pack/assets":
+			wait 5 ticks
 			send "{@emoji} {@color.succes}Deleted folder {@color.secondary}""plugins/ItemsAdder/data/resource_pack/assets"""
+			wait 5 ticks
 			delete file path "plugins/ItemsAdder/data/resource_pack/pack.mcmeta":
+				wait 5 ticks
 				send "{@emoji} {@color.succes}Deleted file {@color.secondary}""plugins/ItemsAdder/data/resource_pack/pack.mcmeta"""
+				wait 5 ticks
 				delete file path "plugins/ItemsAdder/data/resource_pack/pack.png":
+					wait 5 ticks
 					send "{@emoji} {@color.succes}Deleted file {@color.secondary}""plugins/ItemsAdder/data/resource_pack/pack.png"""
+					wait 5 ticks
 					send "{@emoji} {@color.primary} Unzipping pack.png..."
+					wait 5 ticks
 					unzip all files in file path "plugins/ItemsAdder/data/resource_pack/pack.zip" to dir path "plugins/ItemsAdder/data/resource_pack":
+						wait 5 ticks
 						send "{@emoji} {@color.succes}Unzipped file {@color.secondary}""pack.zip"" {@color.succes}to directory {@color.secondary}""plugins/ItemsAdder/data/resource_pack"""
+						wait 5 ticks
 						send "{@emoji} {@color.primary}Attempting to reload {@color.secondary}ItemsAdder"
+						wait 5 ticks
 						console command "/iareload"
 						wait 6 seconds
 						send "{@emoji} {@color.succes}Reloaded imported resource pack, sequence finished!"
+						wait 5 ticks
 						send "{@emoji.clock} {@color.finish}Total time elapsed: %difference between {_start} and now%"
