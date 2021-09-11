@@ -1,8 +1,66 @@
+# Copyright 2021  FokaStudio
+
+# This program is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+
+# You should have received a copy of the GNU General Public License
+# along with this program.  If not, see <https://www.gnu.org/licenses/>.
+
+
+# Coded by: FokaStudio
+# Original by: <none>
+# Addons required: Skent
+# Other plugins: ItemsAdder
+
+
+options:
+	color.primary: <##7DB2F6>
+	color.secondary: <##7DF6DA>
+	color.succes: <##7DF684>
+	color.finish: <##F6E77D>
+	emoji: %fontimage ""mcemojis:mc_book""%
+	emoji.clock: %fontimage ""mcemojis:mc_clock""%
+
 command updateresourcepack:
 	aliases: ur, uprp
 	permission: op
 	trigger:
-		send "&9Downloading latest version of the resource pack..."
+		set {_start} to now
+		send "{@emoji} {@color.primary}Downloading latest version of the resource pack..."
 		download file from "https://github.com/Project-SMP/Resource-Pack/releases/latest/download/pack.zip" to file path "plugins/ItemsAdder/data/resource_pack/pack.zip":
-			send "&9Latest pack downloaded to ""plugins/ItemsAdder/data/resource_pack/pack.zip"""
-			
+			send "{@emoji} {@color.succes}Latest pack downloaded to {@color.secondary}""plugins/ItemsAdder/data/resource_pack/pack.zip"""
+			send "{@emoji} {@color.primary}Attempting to reload {@color.secondary}ItemsAdder"
+			console command "/iareload"
+			wait 6 seconds
+			send "{@emoji} {@color.succes}Reloaded {@color.secondary}ItemsAdder {@color.succes}with no issues!"
+			send "{@emoji} {@color.primary}Attempting to reload the resource pack"
+			console command "/iatexture all"
+			send "{@emoji} {@color.succes}Reloaded resource pack for all players, sequence finished!"
+			send "{@emoji.clock} {@color.finish}Total time elapsed: %difference between {_start} and now%"
+
+command iaimport:
+	permission: ia.admin.import
+	aliases: itemsadder:iaimport
+	trigger:
+		set {_start} to now
+		delete dir path "plugins/ItemsAdder/data/resource_pack/assets":
+			send "{@emoji} {@color.succes}Deleted folder {@color.secondary}""plugins/ItemsAdder/data/resource_pack/assets"""
+			delete file path "plugins/ItemsAdder/data/resource_pack/pack.mcmeta":
+				send "{@emoji} {@color.succes}Deleted file {@color.secondary}""plugins/ItemsAdder/data/resource_pack/pack.mcmeta"""
+				delete file path "plugins/ItemsAdder/data/resource_pack/pack.png":
+					send "{@emoji} {@color.succes}Deleted file {@color.secondary}""plugins/ItemsAdder/data/resource_pack/pack.png"""
+					send "{@emoji} {@color.primary} Unzipping pack.png..."
+					unzip all files in file path "plugins/ItemsAdder/data/resource_pack/pack.zip" to dir path "plugins/ItemsAdder/data/resource_pack":
+						send "{@emoji} {@color.succes}Unzipped file {@color.secondary}""pack.zip"" {@color.succes}to directory {@color.secondary}""plugins/ItemsAdder/data/resource_pack"""
+						send "{@emoji} {@color.primary}Attempting to reload {@color.secondary}ItemsAdder"
+						console command "/iareload"
+						wait 6 seconds
+						send "{@emoji} {@color.succes}Reloaded imported resource pack, sequence finished!"
+						send "{@emoji.clock} {@color.finish}Total time elapsed: %difference between {_start} and now%"
