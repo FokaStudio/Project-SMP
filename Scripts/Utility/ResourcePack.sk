@@ -1,0 +1,8 @@
+command updateresourcepack:
+	aliases: ur, uprp
+	permission: op
+	trigger:
+		send "&9Downloading latest version of the resource pack..."
+		download file from "https://github.com/Project-SMP/Resource-Pack/releases/latest/download/pack.zip" to file path "plugins/ItemsAdder/data/resource_pack/pack.zip":
+			send "&9Latest pack downloaded to ""plugins/ItemsAdder/data/resource_pack/pack.zip"""
+			
