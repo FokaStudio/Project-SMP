@@ -15,7 +15,7 @@
 [![Discord](https://img.shields.io/discord/727033287343734885.svg?style=for-the-badge&label=&logo=discord&logoColor=ffffff&color=7389D8&labelColor=6A7EC2)](http://links.projectsmp.tk/6659201)
 
 ![Lines of code](https://img.shields.io/tokei/lines/github/Project-SMP/Project-SMP?color=1&label=Lines%20of%20code&logo=Visual%20Studio%20Code&logoColor=blue&style=for-the-badge)
-![License](https://img.shields.io/github/license/Project-SMP/Project-SMP?logo=gnu&logoColor=orange&style=for-the-badge)
+![License](https://img.shields.io/badge/License-FSVODWTFYWWT-orange?style=for-the-badge&logo=github)
 
 The Official repository for Project: SMP server.
 
@@ -43,21 +43,21 @@ But well, it would have been boring otherwise, right?
 I have to code 70% of the stuff, (which is mostly open sourced here) so I would really apprieciate if you would hit that *Sponsor* button, so I can have some more motivation to make stuff (and break it in order to do so...)
 
 ## Example Features
-    :heavy_plus_sign: *Double Jump*;
+  :heavy_plus_sign: *Double Jump*;
   
-    :heavy_plus_sign: *New Items with unique use*;
+  :heavy_plus_sign: *New Items with unique use*;
   
-    :heavy_plus_sign: *New Blocks with unique look and crafting recipes*;
+  :heavy_plus_sign: *New Blocks with unique look and crafting recipes*;
   
-    :heavy_plus_sign: *New Entities and Structures with new Loot and even MORE new Items*;
+  :heavy_plus_sign: *New Entities and Structures with new Loot and even MORE new Items*;
   
-    :heavy_plus_sign: *Lunar Events, like Blood or Harvest Moons*;
+  :heavy_plus_sign: *Lunar Events, like Blood or Harvest Moons*;
   
-    :heavy_plus_sign: *Spigot ports of some Mods, like e.g. Blockus*;
+  :heavy_plus_sign: *Spigot ports of some Mods, like e.g. Blockus*;
   
-    :heavy_plus_sign: *Friendly community. Every toxic player is punished almost immedietaly*;
+  :heavy_plus_sign: *Friendly community. Every toxic player is punished almost immedietaly*;
   
-    :heavy_plus_sign: *Super complicated plot and pile of spaghetti I love to simply call **code**!*
+  :heavy_plus_sign: *Super complicated plot and pile of spaghetti I love to simply call **code**!*
 
 
 
@@ -65,7 +65,7 @@ Yeah, that's a lot of text, I know!
 
 # Code info
 ![Lines of code](https://img.shields.io/tokei/lines/github/Project-SMP/Project-SMP?color=1&label=Lines%20of%20code&logo=Visual%20Studio%20Code&logoColor=blue&style=for-the-badge)
-![License](https://img.shields.io/github/license/Project-SMP/Project-SMP?logo=gnu&logoColor=orange&style=for-the-badge)
+![License](https://img.shields.io/badge/License-FSVODWTFYWWT-orange?style=for-the-badge&logo=github)
 
 *I am too dumb for Java, so I use [Skript](https://github.com/Skriptlang/Skript) and its addons `:/`*
 

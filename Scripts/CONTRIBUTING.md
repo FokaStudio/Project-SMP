@@ -5,14 +5,14 @@
 
 # Contributing
 ![Lines of code](https://img.shields.io/tokei/lines/github/Project-SMP/Project-SMP?color=1&label=Lines%20of%20code&logo=Visual%20Studio%20Code&logoColor=blue&style=for-the-badge)
-
+![License](https://img.shields.io/badge/License-FSVODWTFYWWT-orange?style=for-the-badge&logo=github)
 
 As I have stated in [README.md](README.md), I use *Skript* for everything related to coding in there.
 
 I would be grateful if you would do so too! I accept *Denizen* scripts and actual plugins *(if you are smart)* too though, so no worries!
 
 # Copyright Notice
-![License](https://img.shields.io/github/license/Project-SMP/Project-SMP?logo=gnu&logoColor=orange&style=for-the-badge)
+![License](https://img.shields.io/badge/License-FSVODWTFYWWT-orange?style=for-the-badge&logo=github)
 
 This repo and all work inside it is licensed under [**FokaStudio's Very Own DO WHATEVER THE FUCK YOU WANT WITH THIS License**](../LICENSE), meaning that:
 1. You are free to download the work created here and use it for yourself *(on both private and public servers)*
