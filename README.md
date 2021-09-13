@@ -9,13 +9,12 @@
 - [Issues, suggestions, etc.](#issues-suggestions-etc)
 
 # Project-SMP
-[![License](https://img.shields.io/github/license/Project-SMP/Project-SMP?style=for-the-badge&logo=github)](LICENSE)
+[![License](https://img.shields.io/badge/License-FSVODWTFYWWT-orange?style=for-the-badge&logo=github)](LICENSE)
 [![Spoons](https://img.shields.io/github/forks/Project-SMP/Project-SMP?style=for-the-badge&logo=github)](https://github.com/Project-SMP/Project-SMP/network/members)
 [![Stars](https://img.shields.io/github/stars/Project-SMP/Project-SMP?style=for-the-badge&logo=github)](https://github.com/Project-SMP/Project-SMP/stargazers)
 [![Discord](https://img.shields.io/discord/727033287343734885.svg?style=for-the-badge&label=&logo=discord&logoColor=ffffff&color=7389D8&labelColor=6A7EC2)](http://links.projectsmp.tk/6659201)
 
 ![Lines of code](https://img.shields.io/tokei/lines/github/Project-SMP/Project-SMP?color=1&label=Lines%20of%20code&logo=Visual%20Studio%20Code&logoColor=blue&style=for-the-badge)
-![License](https://img.shields.io/badge/License-FSVODWTFYWWT-orange?style=for-the-badge&logo=github)
 
 The Official repository for Project: SMP server.
 
@@ -73,7 +72,7 @@ It may not be the most optimized thing in the world *(could go for Denizen)*, bu
 
 **If you would want to contribute anything in form of code, you need to use *Skript* for this!**
 
-More info about contributing is in 
+More info about contributing is in [CONTRIBUTING.MD](Scripts/CONTRUBITNG.MD)
 # Issues, suggestions, etc.
 [![Discord](https://img.shields.io/discord/727033287343734885.svg?style=for-the-badge&label=&logo=discord&logoColor=ffffff&color=7389D8&labelColor=6A7EC2)](http://links.projectsmp.tk/6659201)
 
