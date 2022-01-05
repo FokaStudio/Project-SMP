@@ -1,3 +1,0 @@
-on server list ping:
-    set the motd to "%gradient(""Project: SMP"", (245, 183 and 30), (255, 225 and 130))% &7- &r%gradient(""Perfect Survival Experience"", (249, 249 and 249), (220, 220 and 220))%"
-    set the fake max players count to 100

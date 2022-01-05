@@ -1,9 +1,0 @@
-expression [a] random (1¦cat|2¦dog) (image|picture|photo[graph]):
-    get:
-        if parse mark = 1:
-            set {_json::*} to text from "https://api.thecatapi.com/v1/images/search" split at """url"":"""
-        else:
-            set {_json::*} to text from "https://api.thedogapi.com/v1/images/search" split at """url"":"""
-        set {_jsonTempA} to {_json::2}
-        set {_jsonTempList::*} to {_jsonTempA} split at ""","""
-        return {_jsonTempList::1} # This is the link to the image, I'd use it in a Vixio Discord bot but /shrug - - do whatever c:

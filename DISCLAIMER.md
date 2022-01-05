@@ -1,6 +1,0 @@
-# DISCLAIMER
-The 'coding' as advanced as it sounds, is actually made in plugin called [Skript](https://github.com/skriptlang/Skript), which looks like writing broken english to a dictator that runs inside of your server and exeutes those...
-Yes, I am waaay too dumb for Java, not that the language is hard, but all those things... Maven, YMLs, etc. You can learn java almost by reading the code of different plugins :/
-
-Sooo... I made things easier for myself and went with Skript...
-The scripts aren't too advanced and alost every single one of them has comments that explain what the certain parts of code do, so you can somewhat understand my spaghetti pile of text I love to simply call *code*.
